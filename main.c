@@ -1,9 +1,4 @@
-#include <stdio.h>
-#include <termcap.h>
-#include <termios.h>
-#include <unistd.h>
-#include <string.h>
-#include <term.h>
+#include "minishell.h"
 
 int    ft_putchar(int c)
 {
