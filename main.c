@@ -24,30 +24,26 @@ int main(int argc, char const *argv[], char const *envp[])
     tgetent(0, term_name);
     while (strcmp(str, "\4"))
     {
-        write(1, "MSHELL-1.0->", 12);
+        write(1, "MSHELL-1.0-> ", 13);
         tputs(save_cursor, 1, ft_putchar);
         do
         {
             l = read(0, str, 100);
             str[l] = 0;
-            // printf("%d\n", strcmp(str, key_backspace));
             if (!strcmp(str, "\e[A"))
             {
-                // printf("here1\n");
                 tputs(restore_cursor, 1, ft_putchar);
                 tputs(tigetstr("ed"), 1, ft_putchar);
                 write(1, "previous", 8);
             }
             else if (!strcmp(str, "\e[B"))
             {
-                // printf("here2\n");
                 tputs(restore_cursor, 1, ft_putchar);
                 tputs(tigetstr("ed"), 1, ft_putchar);
                 write(1, "next", 4);
             }
-            else if (!strcmp(str, key_backspace))
+            else if (!strcmp(str, "\177"))
             {
-                printf("here3\n");
                 tputs(cursor_left, 1, ft_putchar);
                 tputs(tgetstr("dc", 0), 1, ft_putchar);
             }
