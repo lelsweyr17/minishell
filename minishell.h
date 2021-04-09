@@ -56,6 +56,6 @@ char				**add_new_str(char **envp, int size, t_command *com);
 char				**unset_command(t_command *com, char **envp);
 int					search_key(char **envp, char *arg);
 char				**add_oldpwd(char **envp);
-
+void				write_error(char *com, char *arg, char *comment);
 
 #endif

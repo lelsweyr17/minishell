@@ -31,11 +31,11 @@ void	exit_command(t_command *com)
 	if (!com->arg)
 	{
 		write(1, "exit\n", 5);
-		exit(errno);
+		exit(com->error);
 	}
 	else if (com->arg && ft_strrchr(com->arg, ' '))
 	{
-		write (1, "exit: too many arguments\n", 25);
+		write_error("exit", NULL, "too many arguments");
 	}
 	else
 	{
@@ -43,14 +43,11 @@ void	exit_command(t_command *com)
 		if (res != -1)
 		{
 			write(1, "exit\n", 5);
-			printf("%d\n", res);
 			exit(res % 256);
 		}
 		else
 		{
-			write(1, "exit: ", 7);
-			write(1, com->arg, ft_strlen(com->arg));
-			write(1, ": numeric argument required\n", 28);
+			write_error("exit", com->arg, "numeric argument required");
 			exit(255);
 		}
 	}
@@ -100,8 +97,9 @@ void	sign_flags(char *a, t_command *com)
 		com->exit = 1;
 	else
 	{
-		write(1, a, ft_strlen(a));
-		write(1, ": command not found\n", 20);
+		write_error(a, NULL, "command not found");
+		// write(1, a, ft_strlen(a));
+		// write(1, ": command not found\n", 20);
 	}
 }
 

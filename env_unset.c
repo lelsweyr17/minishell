@@ -50,9 +50,7 @@ char	**unset_command(t_command *com, char **envp)
 		i++;
 	if (com->arg && ft_strchr(com->arg, '='))
 	{
-		write(1, "unset: ", 7);
-		write(1, com->arg, ft_strlen(com->arg));
-		write(1, ": invalid parameter name\n", 25);
+		write_error("unset", com->arg, "invalid parameter name");
 	}
 	if (com->arg)
 		num_str = search_key(envp, com->arg);

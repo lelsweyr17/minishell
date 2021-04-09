@@ -1,5 +1,23 @@
 #include "minishell.h"
 
+void	write_error(char *com, char *arg, char *comment)
+{
+	write(1, "minishell: ", 11);
+	if (com)
+	{
+		write(1, com, ft_strlen(com));
+		write(1, ": ", 2);
+	}
+	if (arg)
+	{
+		write(1, arg, ft_strlen(arg));
+		write(1, ": ", 2);
+	}
+	if (comment)
+		write(1, comment, ft_strlen(comment));
+	write(1, "\n", 1);
+}
+
 void	pwd_command(t_command *com)
 {
 	char	*a;
@@ -33,7 +51,7 @@ char	**cd_command(t_command *com, char **envp)
 		if (i != -1 && envp[i][6] == '=')
 			chdir(envp[i] + 7);
 		else
-			write(1, "cd: OLDPWD not set\n", 19);
+			write_error("cd", NULL, "OLDPWD not set");
 	}
 	else
 	{
@@ -41,16 +59,10 @@ char	**cd_command(t_command *com, char **envp)
 		if (tmp)
 			chdir(tmp);
 		else
-			write(1, "cd: HOME not set\n", 17);
+			write_error("cd", NULL, "HOME not set");
 	}
 	if (errno != 0 && com->arg)
-	{
-		write(1, "cd: ", 4);
-		write(1, com->arg, ft_strlen(com->arg));
-		write(1, ": ", 2);
-		write(1, strerror(errno), ft_strlen(strerror(errno)));
-		write(1, "\n", 1);
-	}
+		write_error("cd", com->arg, strerror(errno));
 	pwd = getcwd(pwd, 0);
 	if (ft_strncmp(oldpwd, pwd, ft_strlen(pwd)) || ft_strncmp(oldpwd, pwd, ft_strlen(oldpwd)))
 	{
