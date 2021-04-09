@@ -25,6 +25,7 @@ typedef	struct		s_env
 typedef struct		s_command
 {	
 	int				echo;
+	int				echo_n;
 	int				cd;
 	int				pwd;
 	int				exp;
@@ -43,6 +44,7 @@ typedef struct		s_command
 
 void				pwd_command(t_command *com);
 char				**cd_command(t_command *com, char **envp);
+void				echo_command(t_command *com, char **envp);
 char				*ft_getenv(char **envp, char *key);
 char				**exp_command(t_command *com, char **envp);
 int					array_size(char **ar);
