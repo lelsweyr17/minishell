@@ -2,7 +2,7 @@
 # define MINISHELL_H
 
 # include "libft/libft.h"
-// # include "parser.h"
+// # include "minishell_parser.h"
 # include <term.h>
 # include <termios.h>
 # include <termcap.h>
@@ -46,5 +46,6 @@ typedef struct	s_all
 
 void			parser(t_all *all); //, char **line);
 int				pars_split_commands(t_all *all, char *line);
+void			pars_get_command(t_all *all);
 
 #endif

@@ -1,4 +1,4 @@
-// #include "parser.h"
+// #include "minishell_parser.h"
 #include "minishell.h"
 
 char			*strtrim_free(char *str)
@@ -164,4 +164,9 @@ int			pars_split_commands(t_all *all, char *line)
 	// }
 	// printf("EXT %d\n", i);
 	return (i);
+}
+
+void		pars_get_command(t_all *all)
+{
+
 }

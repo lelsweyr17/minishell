@@ -6,7 +6,7 @@
 #    By: cmarsha <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/28 13:42:48 by cmarsha           #+#    #+#              #
-#    Updated: 2021/02/07 21:03:05 by cmarsha          ###   ########.fr        #
+#    Updated: 2021/04/05 18:31:47 by cmarsha          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ CFILES = ft_putchar.c ft_putnbr.c ft_putstr.c ft_strcmp.c ft_atoi.c ft_swap.c \
 		 ft_putstr_fd.c ft_itoa.c ft_strmapi.c ft_putendl_fd.c \
 		 get_next_line.c ft_strcpy.c ft_lstnew.c ft_lstadd_front.c \
 		 ft_lstsize.c ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c \
-		 ft_lstclear.c ft_lstiter.c ft_lstmap.c
+		 ft_lstclear.c ft_lstiter.c ft_lstmap.c ft_iputchar.c
 
 OBJ = $(CFILES:.c=.o)
 

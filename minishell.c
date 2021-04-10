@@ -24,7 +24,7 @@ void		parser(t_all *all) //, char **line)
 
 	// i = 0;
 	pars_split_commands(all, all->input);
-	
+	pars_get_command(all);
 	// // printf("p %d i %d line %s\n", len, i, *line);
 	// while ((all->input)[i] != '\n')
 	// {
@@ -47,6 +47,7 @@ int			main(int argc, char *argv[], char *envp[])
 	struct termios term;
 	char	*term_name = "xterm-256color";
 	t_com	*com;
+	t_list	*tmp;
 
     // ft_putnbr(ft_strlen(*envp));
 	// write(1, &ft_strlen(envp), 200);
@@ -115,12 +116,15 @@ int			main(int argc, char *argv[], char *envp[])
 		while (all.lst)
 		{
 			com = all.lst->content;
+			// write(1, "WAT?", 4);
 			ft_putendl_fd(com->line, 1);
 			// if (com->line)
 			ft_lstdelone(all.lst, del(com->line));
 			// ft_lstdelone(all.lst, del(com->comm));
 			ft_lstdelone(all.lst, del(com));
+			tmp = all.lst;
 			all.lst = all.lst->next;
+			free(tmp);
 		}
 		if (all.input)
 		{

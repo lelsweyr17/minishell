@@ -58,3 +58,7 @@ deb:
 debb:
 	$(CC) $(CFLAGS) -g -o debb *.c libft/*.c $(TFLAGS)
 	./debb
+
+s:
+	cp Makefile minishell* .gitignore l/
+	cp libft/* l/libft/
