@@ -24,6 +24,7 @@ void		parser(t_all *all) //, char **line)
 
 	// i = 0;
 	pars_split_commands(all, all->input);
+	
 	pars_get_command(all);
 	// // printf("p %d i %d line %s\n", len, i, *line);
 	// while ((all->input)[i] != '\n')
@@ -48,7 +49,12 @@ int			main(int argc, char *argv[], char *envp[])
 	char	*term_name = "xterm-256color";
 	t_com	*com;
 	t_list	*tmp;
+	t_dlist	*hist;
 
+	hist = 0;
+	all.env = envp;
+	if (!argc || !argv)
+		exit(0);
     // ft_putnbr(ft_strlen(*envp));
 	// write(1, &ft_strlen(envp), 200);
 	// while (*envp)
@@ -81,22 +87,25 @@ int			main(int argc, char *argv[], char *envp[])
 			// line[res] = 0;
 			// if (gnl > 0)
 			// parser(envp, line);
-			if (!ft_strcmp(buf, "\e[A"))
+			if (!ft_strcmp(buf, "\e[A") && hist->prev)
 			{
 				tputs(restore_cursor, 1, ft_iputchar);
 				tputs(tigetstr("ed"), 1, ft_iputchar);
-				write(1, "prev", 4);
+				hist = hist->prev; // UP
+				write(1, hist->content, ft_strlen(hist->content));
 			}
-			else if (!ft_strcmp(buf, "\e[B"))
+			else if (!ft_strcmp(buf, "\e[B") && hist->next)
 			{
 				tputs(restore_cursor, 1, ft_iputchar);
 				tputs(tigetstr("ed"), 1, ft_iputchar);
-				write(1, "next", 4);
+				hist = hist->next; // DOWN
+				write(1, hist->content, ft_strlen(hist->content));
 			}
-			else if (!strcmp(buf, "\177"))
+			else if (!strcmp(buf, "\177") && res > 0)
 			{
 				tputs(cursor_left, 1, ft_iputchar);
 				tputs(tgetstr("dc", 0), 1, ft_iputchar);
+				all.input[--res] = '\0';
 			}
 			else if (ft_strcmp(buf, "\4"))
 			{
@@ -117,7 +126,7 @@ int			main(int argc, char *argv[], char *envp[])
 		{
 			com = all.lst->content;
 			// write(1, "WAT?", 4);
-			ft_putendl_fd(com->line, 1);
+			// ft_putendl_fd(com->line, 1);
 			// if (com->line)
 			ft_lstdelone(all.lst, del(com->line));
 			// ft_lstdelone(all.lst, del(com->comm));
@@ -128,9 +137,20 @@ int			main(int argc, char *argv[], char *envp[])
 		}
 		if (all.input)
 		{
-			// history(all.input);
-			free(all.input);
+			ft_dlstadd_back(&hist, ft_dlstnew(all.input));
+			// hist.hist = all.input;
+			// printf("hist: ___%s___\n", hist->content);
+			// free(all.input);
 		}
+		// while (hist->next)
+		// {
+		// 	write(1, "\nhist: __", 9);
+		// 	write(1, hist->content, ft_strlen(hist->content));
+		// 	write(1, "__\n", 3);
+		// 	hist = hist->next;
+		// }
+		// while (hist->prev)
+		// 	hist = hist->prev;
 	}
 	write(1, "\n", 1);
 	return (0);

@@ -73,6 +73,8 @@ t_com		*command(char *line, int start, int end)
 	if (!com)
 		errorfunction();
 	// write(1, "aaa\n", 4);
+	com->type = 0;
+	com->pipsem = '\0';
 	com->line = ft_substr(line, start, 1 + end - start);
 	if (!com->line)
 		errorfunction();
@@ -95,36 +97,36 @@ int			pars_split_commands(t_all *all, char *line)
 	cc = 0;
 	lst = 0;
 	// write(1, line, ft_strlen(line));
-	while (line[i] != '\n')
+	while (all->input[i] != '\n')
 	{
-		ft_bzero(&all->par, 8);
-		c = ft_strchr("\"';|&", line[i]);
-		// write(1, line, ft_strlen(line));
+		// ft_bzero(&all->par, 8);
+		c = ft_strchr("\"';|&", all->input[i]);
+		// write(1, all->input, ft_strlen(all->input));
     	// printf("as");
 		if (c)
 		{
 			cc = *c;
 			if (cc == '\"' || cc == '\'')
 			{
-				i = pars_find_quotes(line, &cc, i);
+				i = pars_find_quotes(all->input, &cc, i);
 				printf("%d\t%c\n", i, cc);
 			}
 			else if (cc == ';')
 			{
-				com = command(line, st, i - 1);
+				com = command(all->input, st, i - 1);
 				// write(1, "WTF", 3);
 				ft_lstadd_back(&lst, ft_lstnew(com));
 				// write(1, "WTF2", 4);
-				all->par.sem++;
+				com->pipsem = cc;
 				i++;
 				st = i;
 			}
 			/*TODO Ctrl+D sempip infinite loop*/
 			else if (cc == '|')
 			{
-				com = command(line, st, i - 1);
+				com = command(all->input, st, i - 1);
 				ft_lstadd_back(&lst, ft_lstnew(com));
-				all->par.pip++;
+				com->pipsem = cc;
 				i++;
 				st = i;
 			}
@@ -135,9 +137,9 @@ int			pars_split_commands(t_all *all, char *line)
 		}
 		else
 			i++;
-		if (line[i] == '\n')
+		if (all->input[i] == '\n')
 		{
-			com = command(line, st, i - 1);
+			com = command(all->input, st, i - 1);
 			// write(1, "WTF3", 4);
 			ft_lstadd_back(&lst, ft_lstnew(com));
 			// write(1, "WTF4", 4);
@@ -168,5 +170,63 @@ int			pars_split_commands(t_all *all, char *line)
 
 void		pars_get_command(t_all *all)
 {
+	// t_list	*begin;
+	t_com	*com;
+	int		i;
+	int		n;
+	char	str[10];
+	char	*commands[7];
 
+	commands[0] = "echo";
+	commands[1] = "cd";
+	commands[2] = "pwd";
+	commands[3] = "export";
+	commands[4] = "unset";
+	commands[5] = "env";
+	commands[6] = "exit";
+	while (all->lst)
+	{
+		i = 0;
+		com = all->lst->content;
+		// printf("getcom\t_%s_\t_%d_\t_%c_\n", com->line, com->type, com->pipsem);
+		while (com->line[i] != ' ' && com->line[i] != '\0' && i < 9)
+		{
+			// if (com->line[i] > 96 && com->line[i] < 123)
+			str[i] = ft_tolower(com->line[i]);
+			str[++i] = '\0';
+		}
+		// write(1, com->line, ft_strlen(com->line));
+		// write(1, str, i);
+		// ft_putnbr_fd(i, 1);
+		n = 0;
+		while (n < 7)
+		{
+			// write(1, commands[n], ft_strlen(commands[n]));
+			// write(1, str, ft_strlen(str));
+			if (ft_strncmp(str, &commands[n++][0], i) == 0)
+			{
+				com->type = n;
+				// write(1, str, i);
+				printf("%s\t%d\n", str, i);
+				// ft_putnbr_fd(i, 1);
+				// write(1, "\n", 1);
+				break ;
+			}
+			// else
+			// 	break ;
+		}
+		printf("getcom\t_%s_\t_%d_\t_%c_%d\n", com->line, com->type, com->pipsem, i);
+		all->lst = all->lst->next;
+	}
+	// n = 0;
+	// while (commands[n] != '\0')
+	// {
+	// 	m = 0;
+	// 	while(commands[m] != ' ')
+	// 	{
+	// 		ft_strncmp();
+	// 		commands
+	// 	}
+	// }
+	return ;
 }
