@@ -1,59 +1,6 @@
 #include "minishell.h"
 
-int		ft_is_number(char *a)
-{
-	int i;
-	int res;
-	int count;
-
-	i = -1;
-	res = 0;
-	count = 1;
-	while (a[++i])
-	{
-		if (ft_isdigit(a[i]))
-		{
-			res = res * count + (a[i] - '0');
-			count = 10;
-		}
-		else
-			return (-1);
-	}
-	return (res);
-}
-
-void	exit_command(t_command *com)
-{
-	int i;
-	int res;
-
-	i = -1;
-	if (!com->arg)
-	{
-		write(1, "exit\n", 5);
-		exit(com->error);
-	}
-	else if (com->arg && ft_strrchr(com->arg, ' '))
-	{
-		write_error("exit", NULL, "too many arguments");
-	}
-	else
-	{
-		res = ft_is_number(com->arg);
-		if (res != -1)
-		{
-			write(1, "exit\n", 5);
-			exit(res % 256);
-		}
-		else
-		{
-			write_error("exit", com->arg, "numeric argument required");
-			exit(255);
-		}
-	}
-}
-
-char	**commands(t_command *com, char **envp)
+char	**build_in_commands(t_command *com, char **envp)
 {
 	if (com->echo)
 		echo_command(com, envp);
@@ -97,113 +44,50 @@ void	sign_flags(char *a, t_command *com)
 		com->exit = 1;
 	else
 	{
-		write_error(a, NULL, "command not found");
-		// write(1, a, ft_strlen(a));
-		// write(1, ": command not found\n", 20);
+		com->com = ft_strdup(a);
+		// write_error(a, NULL, "command not found");
+		// init_error(127, &com->error);
 	}
 }
 
-void	null_flags(t_command *com)
+void	free_array(char **array)
 {
-	com->echo = 0;
-	com->echo_n = 0;
-	com->cd = 0;
-	com->pwd = 0;
-	com->env = 0;
-	com->exp = 0;
-	com->unset = 0;
-	com->error = 0;
-	com->exit = 0;
-	com->no_quotes = 0;
-	com->arg = 0;
-	com->double_quotes = 0;
-	com->quote = 0;
-	com->arg = 0;
-}
-
-char	*arg_res(char **res, t_command *com)
-{
-	int i;
-	char *arg;
-
-	i = 0;
-	arg = (char *)ft_calloc(1, sizeof(char));
-	arg[0] = 0;
-	if (com->echo_n)
-		i++;
-	while (res[++i])
-	{
-		arg = ft_strjoin(arg, res[i]);
-		if (res[i + 1])
-			arg = ft_strjoin(arg, " ");
-	}
-	if (!ft_strlen(arg))
-	{
-		free(arg);
-		arg = NULL;
-	}
-	return (arg);
-}
-
-char	**add_oldpwd(char **envp)
-{
-	int i;
-	int size;
-	char **tmp;
-
-	i = -1;
-	size = array_size(envp);
-	tmp = envp;
-	envp = (char **)ft_calloc(size + 1, sizeof(char *));
-	envp[size] = NULL;
-	while (tmp[++i])
-		envp[i] = tmp[i];
-	envp[i] = "OLDPWD";
-	return (envp);
-}
-
-void	com_export(t_command *com, char **envp)
-{
-	int len;
 	int i;
 
 	i = -1;
-	len = array_size(envp);
-	com->ex_port = (char **)ft_calloc(len + 1, sizeof(char *));
-	com->ex_port[len] = NULL;
-	while (++i < len)
-		com->ex_port[i] = envp[i];
+	if (array)
+	{
+		while (array[++i])
+			free(array[i]);
+		free(array);
+	}
 }
 
 int	main(int argc, char **argv, char **envp)
 {
 	int i;
-	int j;
 	t_command	*com;
 	char		*line;
 	char **res;
-	int len;
 
 	com = (t_command *)ft_calloc(1, sizeof(t_command));
 	envp = add_oldpwd(envp);
-	j = -1;
 	i = -1;
-	write(1, "ʕ•ᴥ•ʔ -> ", 18);
-	while ((i = get_next_line(0, &line)))
+	while (write(1, "ʕ•ᴥ•ʔ -> ", 18) && (i = get_next_line(0, &line)))
 	{
-		null_flags(com);
-		com_export(com, envp);
 		if (i == -1)
 			break ;
-		res = ft_split(line, ' ');
-		sign_flags(res[0], com);
-		if (res && res[1] && !(ft_strncmp(res[1], "-n", 3)))
-			com->echo_n = 1;
-		com->arg = arg_res(res, com);
-		envp = commands(com, envp);
-		free(line);
-		free(com->ex_port);
-		write(1, "ʕ•ᴥ•ʔ -> ", 18);
+		prepare_function(com, envp, line);
+		envp = build_in_commands(com, envp);
+		char **arg = ft_split(line, ' ');
+		if (!bin_command(com, envp) && com->com)
+			execve_command(com, arg, envp);
+		// free(line);
+		// if (com->com)
+			// free(com->com);
+		if (arg)
+			free_array(arg);
+		// free(com->arg);
 	}
 	free(com);
 	return (0);

@@ -14,25 +14,38 @@ char	**add_new_str(char **envp, int size, t_command *com)
 	return (new);
 }
 
-int	export_equal_args(t_command *com, char **envp)
+char	**exp_command(t_command *com, char **envp)
 {
+	int k;
 	int	i;
+	char **args;
 	int	len;
 
-	i = 0;
-	while (com->arg[i] && com->arg[i] != '=')
-		i++;
-	len = i;
 	i = -1;
-	while (envp[++i])
+	if (com->arg)							// разделяет на несколько аргументов
 	{
-		if (!(ft_strncmp(envp[i], com->arg, len)))
+		args = ft_split(com->arg, ' ');
+		while (args[++i])
 		{
-			if ((com->arg[len] == '=' && envp[i][len] != '=') || \
-				(com->arg[len] == '=' && envp[i][len] == '=') )
-				envp[i] = com->arg;
-			return (i);
+			com->arg = args[i];
+			if (ft_isdigit(com->arg[0]))
+			{
+				write_error("export", com->arg, "not a valid identifier");
+				init_error(1, &com->error);
+			}
+			else
+			{
+				k = search_key(envp, com->arg);									//
+				len = array_size(envp);											//
+				if (k == -1)													//
+					envp = add_new_str(envp, len + 1, com);						//
+				else if (k >= 0 && com->arg[ft_strlen(com->arg)] == '=')		//
+					envp[k] = com->arg;											//
+			}
 		}
+		free_array(args);
 	}
-	return (-1);
+	else
+		export_sort(com, envp);
+	return (envp);
 }

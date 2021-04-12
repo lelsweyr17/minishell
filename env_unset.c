@@ -22,7 +22,7 @@ int		search_key(char **envp, char *arg)
 	int len;
 
 	i = 0;
-	while (arg[i])
+	while (arg[i] && arg[i] != '=')
 		i++;
 	len = i;
 	i = -1;
@@ -42,6 +42,7 @@ char	**unset_command(t_command *com, char **envp)
 	int i;
 	int len;
 	int num_str;
+	char **args;
 
 	i = 0;
 	num_str = 0;
@@ -51,17 +52,38 @@ char	**unset_command(t_command *com, char **envp)
 	if (com->arg && ft_strchr(com->arg, '='))
 	{
 		write_error("unset", com->arg, "invalid parameter name");
+		init_error(1, &com->error);
 	}
-	if (com->arg)
-		num_str = search_key(envp, com->arg);
-	if (num_str != -1)
-		envp = delete_str(envp, len, com, num_str);
+	if (com->arg)					// разделяет на несколько аргументов
+	{
+		i = -1;
+		args = ft_split(com->arg, ' ');
+		while (args[++i])
+		{
+			com->arg = args[i];
+			len = array_size(envp);
+			if (ft_isdigit(com->arg[0]))
+			{
+				write_error("export", com->arg, "not a valid identifier");
+				init_error(1, &com->error);
+			}
+			else
+			{
+				if (com->arg)														// оставить только эти 4 строчки после парсера
+					num_str = search_key(envp, com->arg);							//
+				if (num_str != -1)													//
+					envp = delete_str(envp, len, com, num_str);						//
+			}
+		}
+		free_array(args);
+	}
 	return (envp);
 }
 
 char	**delete_str(char **envp, int size, t_command *com, int num_str)
 {
 	char **new;
+	char *tmp;
 	int i;
 	int j;
 	

@@ -70,17 +70,3 @@ void	export_sort(t_command *com, char **envp)
 	export_output(com);
 	free(num);
 }
-
-char	**exp_command(t_command *com, char **envp)
-{
-	int	i;
-	int	len;
-
-	i = -1;
-	len = array_size(envp);
-	if (com->arg && (export_equal_args(com, envp)) == -1)
-		envp = add_new_str(envp, len + 1, com);
-	if (!com->arg)
-		export_sort(com, envp);
-	return (envp);
-}

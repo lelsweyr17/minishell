@@ -16,22 +16,31 @@ int	echo_dollar(t_command *com, int i, char **envp)
 	int		len;
 	char	*s;
 
-	if (com->arg[++i] == '?')
-		ft_putnbr_fd(com->error, 1);
 	j = -1;
 	len = 0;
+	if (com->arg[++i] == '?')
+	{
+		ft_putnbr_fd(com->error, 1);
+		init_error(0, &com->error);
+	}
 	while (com->arg[i + len] != ' ' && com->arg[i + len] && \
 		com->arg[i + len] != '$' && com->arg[i + len] != '\n')
 		len++;
 	if (len == 0)
+	{
 		write(1, "$", 1);
+		init_error(0, &com->error);
+	}
 	s = ft_substr(com->arg, i, len + 1);
 	s[len++] = '=';
 	while (envp[++j])
 		if (!ft_strncmp(s, envp[j], len))
 			break ;
 	if (envp[j])
+	{
 		write(1, envp[j] + len, ft_strlen(envp[j]) - len);
+		init_error(0, &com->error);
+	}
 	free(s);
 	return (i += len - 1);
 }
