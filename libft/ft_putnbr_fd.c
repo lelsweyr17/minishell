@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelsweyr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 18:14:26 by lelsweyr          #+#    #+#             */
-/*   Updated: 2020/11/05 12:49:29 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/04/12 18:38:07 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void		ft_output(int nb, long int count, int fd)
+static void	ft_output(int nb, long int count, int fd)
 {
-	int			n;
+	int	n;
 
 	n = nb;
 	if (nb < 0)
@@ -36,7 +36,7 @@ static void		ft_output(int nb, long int count, int fd)
 		ft_putchar_fd(nb + 48, fd);
 }
 
-void			ft_putnbr_fd(int n, int fd)
+void	ft_putnbr_fd(int n, int fd)
 {
 	int			nb;
 	int			nb2;

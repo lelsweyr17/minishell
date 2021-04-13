@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "header_commands.h"
 
 void	cd_minus(t_command *com, char **envp)
 {
@@ -21,7 +21,7 @@ void	cd_home(t_command *com, char **envp)
 {
 	char *tmp;
 
-	tmp = ft_getenv(envp, "HOME");
+	tmp = getenv("HOME");
 	if (tmp)
 	{
 		chdir(tmp);

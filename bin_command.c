@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "header_commands.h"
 
 char	*path_with_bin(char *path, char *com)
 {
@@ -48,6 +48,19 @@ int	find_bin_command(char **array, char *command, t_command *com)
 	return (0);
 }
 
+char	*from_up_to_low(char *arg)
+{
+	int i;
+
+	i = -1;
+	while (arg[++i])
+	{
+		if (arg[i]>= 'A' && arg[i] <= 'Z')
+			arg[i] += 32;
+	}
+	return (arg);
+}
+
 int	bin_command(t_command *com, char **envp)
 {
 	int		i;
@@ -60,7 +73,8 @@ int	bin_command(t_command *com, char **envp)
 		if (envp[i][4] == '=')
 		{
 			com->bin = ft_split(envp[i], ':');
-			if (!find_bin_command(com->bin, com->com, com) && (check_bin_file(com->com, envp, com)))
+			if (!find_bin_command(com->bin, from_up_to_low(com->com), com) && \
+			(check_bin_file(from_up_to_low(com->com), envp, com)))
 			{
 				write_error(com->com, NULL, "command not found");
 				init_error(1, &com->error);
@@ -75,17 +89,16 @@ int	bin_command(t_command *com, char **envp)
 	return (0);
 }
 
-void    execve_command(t_command *com, char **arg, char **envp)
+void	execve_command(t_command *com, char **arg, char **envp)
 {
 	pid_t	pid;
 	int		er;
 
 	pid = fork();
-	// signal(SIGINT, proc_signal_handler);
 	if (pid == 0)
 	{
 		er = execve(com->bin_exec.path, arg, envp);
-		if (errno)
+		if (errno == 2)
 		{
 			write_error(com->com, NULL, strerror(errno));
 			exit(1);

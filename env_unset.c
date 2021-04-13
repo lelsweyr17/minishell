@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "header_commands.h"
 
 void	env_command(char **envp, t_command *com)
 {
@@ -37,6 +37,19 @@ int		search_key(char **envp, char *arg)
 	return (-1);
 }
 
+char	*change_arg_for_unset(char *arg)
+{
+	char *tmp;
+
+	tmp = arg;
+	arg = ft_strjoin("`", arg);
+	free(tmp);
+	tmp = arg;
+	arg = ft_strjoin(arg, "'");
+	free(tmp);
+	return (arg);
+}
+
 char	**unset_command(t_command *com, char **envp)
 {
 	int i;
@@ -64,6 +77,7 @@ char	**unset_command(t_command *com, char **envp)
 			len = array_size(envp);
 			if (ft_isdigit(com->arg[0]))
 			{
+				com->arg = change_arg_for_unset(com->arg);
 				write_error("export", com->arg, "not a valid identifier");
 				init_error(1, &com->error);
 			}

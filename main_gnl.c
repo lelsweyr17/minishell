@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "header_commands.h"
 
 char	**build_in_commands(t_command *com, char **envp)
 {
@@ -43,11 +43,7 @@ void	sign_flags(char *a, t_command *com)
 	else if (!(ft_strncmp(a, "exit", 5)))
 		com->exit = 1;
 	else
-	{
 		com->com = ft_strdup(a);
-		// write_error(a, NULL, "command not found");
-		// init_error(127, &com->error);
-	}
 }
 
 void	free_array(char **array)
@@ -82,11 +78,12 @@ int	main(int argc, char **argv, char **envp)
 		char **arg = ft_split(line, ' ');
 		if (!bin_command(com, envp) && com->com)
 			execve_command(com, arg, envp);
-		// free(line);
+		line = NULL;
+		free(line);
 		// if (com->com)
-			// free(com->com);
-		if (arg)
-			free_array(arg);
+		// 	free(com->com);
+		// if (arg)
+		// 	free_array(arg);
 		// free(com->arg);
 	}
 	free(com);

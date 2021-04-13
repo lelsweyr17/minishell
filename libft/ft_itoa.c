@@ -3,23 +3,24 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelsweyr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/04 15:08:41 by lelsweyr          #+#    #+#             */
-/*   Updated: 2020/11/04 17:39:44 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/04/12 18:34:14 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static void		ft_full(char *nbr, long int count, int nb, int count3)
+static void	ft_full(char *nbr, long int count, int nb, int count3)
 {
-	int			i;
-	int			n;
+	int	i;
+	int	n;
 
 	i = 0;
 	n = nb;
-	while ((count /= 10) >= 1)
+	count /= 10;
+	while (count >= 1)
 	{
 		if (nb < 0)
 		{
@@ -35,13 +36,14 @@ static void		ft_full(char *nbr, long int count, int nb, int count3)
 		else
 			nbr[i++] = nb / count + 48;
 		nb %= count;
+		count /= 10;
 	}
 	nbr[i] = 0;
 }
 
-static int		ft_count(int nb)
+static int	ft_count(int nb)
 {
-	int			count;
+	int	count;
 
 	count = 1;
 	if (nb < 0)
@@ -60,7 +62,7 @@ static int		ft_count(int nb)
 	return (count);
 }
 
-char			*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char		*nbr;
 	int			nb;

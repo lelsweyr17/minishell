@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_bzero.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelsweyr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/29 13:44:16 by lelsweyr          #+#    #+#             */
-/*   Updated: 2020/11/01 13:04:44 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/04/12 18:32:10 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void				*ft_bzero(void *s, size_t n)
+void	*ft_bzero(void *s, size_t n)
 {
 	unsigned int	i;
 	unsigned char	*p;

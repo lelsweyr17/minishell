@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="mini"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/Users/lelsweyr/Desktop/mini/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="rebuild_cache">
+				<Option working_dir="/Users/lelsweyr/Desktop/mini/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="edit_cache">
+				<Option working_dir="/Users/lelsweyr/Desktop/mini/cmake-build-debug"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="mini">
+				<Option output="/Users/lelsweyr/Desktop/mini/cmake-build-debug/mini" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lelsweyr/Desktop/mini/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/lelsweyr/Desktop/mini/."/>
+					<Add directory="/Users/lelsweyr/Desktop/mini/get_next_line"/>
+					<Add directory="/Users/lelsweyr/Desktop/mini/libft"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 mini"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="mini/fast">
+				<Option output="/Users/lelsweyr/Desktop/mini/cmake-build-debug/mini" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/Users/lelsweyr/Desktop/mini/cmake-build-debug"/>
+				<Option object_output="./"/>
+				<Option type="1"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add directory="/Users/lelsweyr/Desktop/mini/."/>
+					<Add directory="/Users/lelsweyr/Desktop/mini/get_next_line"/>
+					<Add directory="/Users/lelsweyr/Desktop/mini/libft"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/clang/11.0.0/include"/>
+					<Add directory="/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include"/>
+					<Add directory="/System/Library/Frameworks"/>
+					<Add directory="/Library/Frameworks"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 mini/fast"/>
+					<CompileFile command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j6 -f &quot;/Users/lelsweyr/Desktop/mini/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/bin_command.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/bin_command2.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/cd.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/echo.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/env_unset.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/errors.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/exit.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/export.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/export2.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/get_next_line/get_next_line.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/get_next_line/get_next_line.h">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/get_next_line/get_next_line_utils.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/getenv.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/header_commands.h">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/libft/ft_calloc.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/libft/ft_isdigit.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/libft/ft_putchar_fd.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/libft/ft_putnbr_fd.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/libft/ft_split.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/libft/ft_strlcpy.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/libft/ft_strncmp.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/libft/ft_strrchr.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/libft/ft_strtrim.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/libft/ft_substr.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/libft/libft.h">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/main_gnl.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/pre_processor.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/pwd.c">
+			<Option target="mini"/>
+		</Unit>
+		<Unit filename="/Users/lelsweyr/Desktop/mini/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>

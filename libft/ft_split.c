@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/23 03:16:25 by student           #+#    #+#             */
-/*   Updated: 2021/04/08 14:23:14 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/04/12 18:40:35 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 
 static int	ft_count(char const *s, char c)
 {
-	int i;
-	int count;
+	int	i;
+	int	count;
 
 	if (!s[0])
 		return (0);
@@ -42,7 +42,7 @@ static int	ft_count(char const *s, char c)
 
 static void	ft_len(char **str, int *str_len, char c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	*str += *str_len;
@@ -60,7 +60,7 @@ static void	ft_len(char **str, int *str_len, char c)
 
 static char	**ft_free(char **res)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (res[i])
@@ -74,7 +74,7 @@ static char	**ft_free(char **res)
 
 static void	ft_full(char *res, char *str, int len)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i] && i < (len - 1))
@@ -85,26 +85,26 @@ static void	ft_full(char *res, char *str, int len)
 	res[i] = 0;
 }
 
-char		**ft_split(char const *s, char c)
+char	**ft_split(char const *s, char c)
 {
-	char		**res;
-	char		*str;
-	int			str_len;
-	int			count;
-	int			i;
+	char	**res;
+	char	*str;
+	int		str_len;
+	int		i;
 
 	if (!s)
 		return (NULL);
-	count = ft_count(s, c);
-	if (!(res = malloc(sizeof(char *) * (count + 1))))
+	res = malloc(sizeof(char *) * (ft_count(s, c) + 1));
+	if (!res)
 		return (NULL);
 	i = 0;
 	str = (char *)s;
 	str_len = 0;
-	while (i < count)
+	while (i < ft_count(s, c))
 	{
 		ft_len(&str, &str_len, c);
-		if (!(res[i] = malloc(sizeof(char) * (str_len + 1))))
+		res[i] = malloc(sizeof(char) * (str_len + 1));
+		if (!res[i])
 			return (ft_free(res));
 		ft_full(res[i], str, str_len + 1);
 		i++;

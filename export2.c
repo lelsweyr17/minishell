@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "header_commands.h"
 
 char	**add_new_str(char **envp, int size, t_command *com)
 {
@@ -20,16 +20,22 @@ char	**exp_command(t_command *com, char **envp)
 	int	i;
 	char **args;
 	int	len;
+	int arg_len;
 
-	i = -1;
+	i = 0;
 	if (com->arg)							// разделяет на несколько аргументов
 	{
+		while (com->arg[i] && com->arg[i] != '=')
+			i++;
+		arg_len = i;
 		args = ft_split(com->arg, ' ');
+		i = -1;
 		while (args[++i])
 		{
 			com->arg = args[i];
 			if (ft_isdigit(com->arg[0]))
 			{
+				com->arg = change_arg_for_unset(com->arg);
 				write_error("export", com->arg, "not a valid identifier");
 				init_error(1, &com->error);
 			}
@@ -39,7 +45,7 @@ char	**exp_command(t_command *com, char **envp)
 				len = array_size(envp);											//
 				if (k == -1)													//
 					envp = add_new_str(envp, len + 1, com);						//
-				else if (k >= 0 && com->arg[ft_strlen(com->arg)] == '=')		//
+				else if (k >= 0 && com->arg[arg_len] == '=')					//
 					envp[k] = com->arg;											//
 			}
 		}

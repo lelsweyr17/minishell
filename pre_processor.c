@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "header_commands.h"
 
 void	null_flags(t_command *com)
 {

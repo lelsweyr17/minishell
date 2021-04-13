@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelsweyr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/30 14:38:15 by lelsweyr          #+#    #+#             */
-/*   Updated: 2020/11/06 19:25:03 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/04/12 18:31:54 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,26 +28,26 @@ static long long	res(char *str, int i)
 	return (n);
 }
 
-static int			count(char *str, int i)
+static int	count(char *str, int i)
 {
-	int				n;
+	int	n;
 
 	n = 0;
 	while (str[i + n] >= '0' && str[i + n] <= '9' && str[i + n] > 32)
 		n++;
-	if ((str[i] < '0' || str[i] > '9') && (str[i] != '\0'
-		|| str[i] != '+' || str[i] != '-' || str[i] == '\e'))
+	if ((str[i] < '0' || str[i] > '9') && (str[i] != '\0' \
+	|| str[i] != '+' || str[i] != '-' || str[i] == '\e'))
 		return (0);
 	if (n > 19)
 		return (-1);
 	return (1);
 }
 
-int					ft_atoi(char *str)
+int	ft_atoi(char *str)
 {
-	int				i;
-	int				z;
-	long long		re;
+	int			i;
+	int			z;
+	long long	re;
 
 	i = 0;
 	re = 0;

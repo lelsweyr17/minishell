@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "header_commands.h"
 
 void	export_output(t_command *com)
 {

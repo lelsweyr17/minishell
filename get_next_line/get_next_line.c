@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelsweyr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/11 12:44:55 by lelsweyr          #+#    #+#             */
-/*   Updated: 2020/11/11 12:44:59 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/04/12 18:48:32 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static char			*ft_rem(char **line, char *re)
+static char	*ft_rem(char **line, char *re)
 {
-	char			*p_re;
+	char	*p_re;
 
 	p_re = NULL;
 	if (re)
@@ -34,9 +34,9 @@ static char			*ft_rem(char **line, char *re)
 	return (p_re);
 }
 
-static char			*ft_free(char **line, char *buf)
+static char	*ft_free(char **line, char *buf)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = *line;
 	*line = ft_strjoin(*line, buf);
@@ -44,12 +44,12 @@ static char			*ft_free(char **line, char *buf)
 	return (*line);
 }
 
-int					get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
-	char			*buf;
-	char			*p_n;
-	int				bytes_count;
-	static char		*re;
+	char	*buf;
+	char	*p_n;
+	int			bytes_count;
+	static char	*re;
 
 	buf = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (fd < 0 || BUFFER_SIZE < 0 || !line || read(fd, buf, 0) < 0 || !buf)

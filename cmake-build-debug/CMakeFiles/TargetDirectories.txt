@@ -1,0 +1,3 @@
+/Users/lelsweyr/Desktop/mini/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/Users/lelsweyr/Desktop/mini/cmake-build-debug/CMakeFiles/edit_cache.dir
+/Users/lelsweyr/Desktop/mini/cmake-build-debug/CMakeFiles/mini.dir

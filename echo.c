@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "header_commands.h"
 
 int	array_size(char **ar)
 {

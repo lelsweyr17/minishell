@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "header_commands.h"
 
 int    ft_putchar(int c)
 {

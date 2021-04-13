@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "header_commands.h"
 
 void	pwd_command(t_command *com)
 {

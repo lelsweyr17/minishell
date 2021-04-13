@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "header_commands.h"
 
 char	*skip_spaces(char *str)
 {

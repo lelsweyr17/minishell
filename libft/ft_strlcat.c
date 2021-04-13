@@ -3,20 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: lelsweyr <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/29 17:58:25 by lelsweyr          #+#    #+#             */
-/*   Updated: 2020/11/07 15:17:55 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/04/12 18:41:24 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t		ft_strlcat(char *dst, const char *src, size_t dstsize)
+size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
-	size_t ssize;
-	size_t dsize;
-	size_t dd;
+	size_t	ssize;
+	size_t	dsize;
+	size_t	dd;
 
 	if (!dst && !src)
 		return (0);
