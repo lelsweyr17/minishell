@@ -46,3 +46,11 @@ void	ft_dlstadd_back(t_dlist **dlst, t_dlist *new)
 		dlist->prev = dprev;
 	}
 }
+
+// void	ft_dlstadd_front(t_dlist **dlst, t_dlist *new)
+// {
+// 	t_dlist	*t_dlist;
+// 	t_dlist	*dnext;
+
+// 	if (dlst)
+// }
