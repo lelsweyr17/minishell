@@ -6,6 +6,7 @@
 # include <term.h>
 # include <termios.h>
 # include <termcap.h>
+# include <math.h>
 
 typedef struct		s_comm
 {
@@ -27,9 +28,10 @@ typedef struct		s_com
 {
 	// t_comm			*comm;
 	int				type;
-	int				n;
+	// int				n;
 	char			pipsem;
 	char			*line;
+	char			**args;
 }					t_com;
 
 typedef struct		s_par
@@ -47,7 +49,10 @@ typedef struct		s_all
 }					t_all;
 
 void				parser(t_all *all); //, char **line);
-int					pars_split_commands(t_all *all, char *line);
+int					pars_split_commands(t_all *all);
 void				pars_get_command(t_all *all);
+void				pars_split_args(t_all *all);
+char				*str_free(char **line, char *tmp);
+int					pars_escape_backslash(char *line, int i);
 
 #endif

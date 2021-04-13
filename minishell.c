@@ -2,19 +2,15 @@
 
 void	*del(void *content)
 {
-	// content = 0;
+	content = 0;
 	free(content);
 	return (0);
 }
 
-char	*strjoin_free(char **line, char *ln)
+char	*str_free(char **line, char *tmp) // вторым аргументом отправляешь функцию которая возвращает указатель на строку # line = str_free(&line, ft_strjoin(line1, line2));
 {
-	char				*tmp;
-
-	tmp = ft_strjoin(*line, ln);
 	free(*line);
-	*line = tmp;
-	return (*line);
+	return (tmp);
 }
 
 void		parser(t_all *all) //, char **line)
@@ -23,9 +19,9 @@ void		parser(t_all *all) //, char **line)
 	// int		i;
 
 	// i = 0;
-	pars_split_commands(all, all->input);
-	
+	pars_split_commands(all);
 	pars_get_command(all);
+	// pars_split_args(all);
 	// // printf("p %d i %d line %s\n", len, i, *line);
 	// while ((all->input)[i] != '\n')
 	// {
@@ -111,7 +107,7 @@ int			main(int argc, char *argv[], char *envp[])
 			{
 				write(1, buf, res);
 				// write(1, "asdf", 4);
-				all.input = strjoin_free(&all.input, buf);
+				all.input = str_free(&all.input, ft_strjoin(all.input, buf));
 				// write(1, &line, ft_strlen(all.line));
 			}
 			if (!ft_strcmp(buf, "\4"))
@@ -120,21 +116,7 @@ int			main(int argc, char *argv[], char *envp[])
 				// exit (0);
 			}
 		} while (ft_strcmp(buf, "\n") && ft_strcmp(buf, "\4"));
-		parser(&all); //, &all.input);
-		// write(1, "shit", 4);
-		while (all.lst)
-		{
-			com = all.lst->content;
-			// write(1, "WAT?", 4);
-			// ft_putendl_fd(com->line, 1);
-			// if (com->line)
-			ft_lstdelone(all.lst, del(com->line));
-			// ft_lstdelone(all.lst, del(com->comm));
-			ft_lstdelone(all.lst, del(com));
-			tmp = all.lst;
-			all.lst = all.lst->next;
-			free(tmp);
-		}
+		// tmp = all.lst;
 		if (all.input)
 		{
 			ft_dlstadd_back(&hist, ft_dlstnew(all.input));
@@ -142,6 +124,24 @@ int			main(int argc, char *argv[], char *envp[])
 			// printf("hist: ___%s___\n", hist->content);
 			// free(all.input);
 		}
+		if (ft_strcmp(buf, "\4"))
+			parser(&all); //, &all.input);
+		// write(1, "shit", 4);
+		// all.lst = tmp;
+		while (all.lst)
+		{
+			com = all.lst->content;
+			// write(1, "WAT?", 4);
+			ft_putendl_fd(com->line, 1);
+			// if (com->line)
+			ft_lstdelone(all.lst, del(&com->line));
+			// ft_lstdelone(all.lst, del(com->comm));
+			ft_lstdelone(all.lst, del(&com));
+			tmp = all.lst;
+			all.lst = all.lst->next;
+			free(tmp);
+		}
+		
 		// while (hist->next)
 		// {
 		// 	write(1, "\nhist: __", 9);

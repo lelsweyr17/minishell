@@ -71,6 +71,7 @@ void				ft_putnbr_fd(int nb, int fd);
 void				ft_putstr(char *str);
 void				ft_putstr_fd(char *s, int fd);
 char				**ft_split(char const *s, char c);
+/* String functions */
 int					ft_strcmp(char *s1, char *s2);
 size_t				ft_strlcat(char *dst, const char *src, size_t dstsize);
 size_t				ft_strlcpy(char *dst, const char *src, size_t dstsize);
@@ -80,6 +81,8 @@ char				*ft_strchr(const char *s, int c);
 char				*ft_strcpy(char *dst, char *src);
 char				*ft_strdup(const char *s1);
 char				*ft_strjoin(char const *s1, char const *s2);
+char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
+char				*ft_strndup(const char *s1, size_t n);
 char				*ft_strnstr(const char *haystack, const char *needle,
 						size_t len);
 char				*ft_strrchr(const char *s, int c);
@@ -88,7 +91,6 @@ char				*ft_substr(char const *s, unsigned int start, size_t len);
 void				ft_swap(int *a, int *b);
 int					ft_tolower(int c);
 int					ft_toupper(int c);
-char				*ft_strmapi(char const *s, char (*f)(unsigned int, char));
 void				ft_putendl_fd(char *s, int fd);
 /* Linked lists */
 void				ft_dlstadd_back(t_dlist **dlst, t_dlist *new);
