@@ -16,7 +16,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 TFLAGS = -ltermcap
 HEADERF = minishell.h parser.h
-CFILES = minishell.c minishell_utils.c
+CFILES = minishell.c minishell_parser.c minishell_utils.c
 BFILES = bonus_minishell.c
 OBJ := $(CFILES:.c=.o)
 BOBJ := $(BFILES:.c=.o)
@@ -53,7 +53,8 @@ run:
 
 deb:
 	$(CC) -g -o deb *.c libft/*.c $(TFLAGS)
-	./deb
+
+#	./deb
 
 debb:
 	$(CC) $(CFLAGS) -g -o debb *.c libft/*.c $(TFLAGS)

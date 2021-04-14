@@ -23,3 +23,15 @@ size_t	ft_strlen(const char *s)
 		n++;
 	return (n);
 }
+
+size_t	ft_arrlen(char **s)
+{
+	size_t	n;
+
+	n = 0;
+	if (!s)
+		return (0);
+	while (s[n] != '\0')
+		n++;
+	return (n);
+}

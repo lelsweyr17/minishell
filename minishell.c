@@ -88,7 +88,7 @@ int			main(int argc, char *argv[], char *envp[])
 			// line[res] = 0;
 			// if (gnl > 0)
 			// parser(envp, line);
-			if (!ft_strcmp(buf, "\e[A") && hist->content)
+			if (!ft_strcmp(buf, "\e[A") && hist->content && hist->prev)
 			{
 				tputs(restore_cursor, 1, ft_iputchar);
 				tputs(tigetstr("ed"), 1, ft_iputchar);
@@ -122,7 +122,9 @@ int			main(int argc, char *argv[], char *envp[])
 				// exit (0);
 			}
 		} while (ft_strcmp(buf, "\n") && ft_strcmp(buf, "\4"));
-		if (!isnotempty(all.input))
+
+        // all.input = "echo 1\n";
+        if (!isnotempty(all.input))
 		{
 			// write(1, "FUCK", 4);
 			// all.input = 0;

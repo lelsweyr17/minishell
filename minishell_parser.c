@@ -114,7 +114,7 @@ int			pars_split_commands(t_all *all)
 		// ft_bzero(&all->par, 8);
 		c = ft_strchr("\"';|&", all->input[i]);
 		// write(1, all->input, ft_strlen(all->input));
-    	// printf("as");
+		// printf("as");
 		if (c)
 		{
 			cc = *c;
@@ -250,42 +250,36 @@ void		pars_get_command(t_all *all)
 
 char		*pars_line_to_args(char **line)
 {
-	int 	i;
+	int		i;
 	char	*new;
 	char	*c;
 	char	cc;
 
 	i = 0;
 	new = 0;
-	if (*line[i] != '\0')
+	while ((*line)[i] == ' ')
+		*line += 1;
+	while ((*line)[i] != '\0' && (*line)[i] != ' ')
 	{
-		c = ft_strchr("\"';|&", *line[i]);
-		cc = *c;
-		if (cc == '\"')
-		{
-			i = pars_find_quotes(*line, &cc, i);
-			new = ft_strndup(*line, i);
-		}
-		else if (cc == '\'')
-		{
-			i = pars_find_quotes(*line, &cc, i);
-		}
-		else if (cc == '>')
+		c = ft_strchr("\"'", (*line)[i]);
+		if (c)
+			cc = *c;
+		if ((*line)[i] == '\"')
+			i = pars_find_quotes((*line), &cc, i);
+		else if ((*line)[i] == '\'')
+			i = pars_find_quotes((*line), &cc, i);
+		else if ((*line)[i] == '>')
 		{
 			i++;
 		}
-		else if (cc == '<')
+		else if ((*line)[i] == '<')
 		{
 			i++;
 		}
 		else
-		{
-			while(*line[++i] != '\0' && *line[i] != ' ');
-			new = ft_strndup(*line, i - 1);
-		}
-		if (cc == ' ')
-			while(*line[++i] == ' ');
+			i++;
 	}
+	new = ft_strndup(*line, i);
 	*line += i;
 	return (new);
 }
@@ -296,7 +290,8 @@ void		pars_split_args(t_all *all)
 	int		i;
 	int		l;
 	int		n;
-	// char	*
+	char	*new;
+	char	**tmp;
 
 	i = 0;
 	l = 0;
@@ -304,7 +299,7 @@ void		pars_split_args(t_all *all)
 	com = all->lst->content;
 	while (com->line[i] != ' ' && com->line[i++] != '\0');
 
-	com->args = (char **)ft_calloc(2, sizeof(char *));
+	com->args = ft_calloc(2, sizeof(char **));
 	com->args[l++] = com->line;
 	com->line += i;
 	// while (*com->line == ' ')
@@ -313,12 +308,16 @@ void		pars_split_args(t_all *all)
 	int f = 0;
 	while (*com->line != '\0')
 	{
-		printf("ent %s\n", com->args[f++]);
-		com->args = (char **)ft_strjoin((char *)com->args, pars_line_to_args(&com->line));
+		// printf("ent %s\n", com->args[f++]);
+		new = pars_line_to_args(&com->line);
+		tmp = (char **)ft_calloc(2, sizeof(char *));
+		*tmp = new;
+		com->args = ft_arrjoin(com->args, tmp);
 	}
 	int m = -1;
 	while (com->args[++m])
 		printf("args %d\t%s\n", m, com->args[m]);
 	while (com->args[0][i] != '\0')
 		com->args[0][i++] = '\0';
+	com->line = 0;
 }

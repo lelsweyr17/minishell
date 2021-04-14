@@ -48,6 +48,8 @@ typedef struct s_dlist
 	struct s_dlist	*prev;
 }					t_dlist;
 
+char				**ft_arrjoin(char **s1, char **s2);
+size_t				ft_arrlen(char **s);
 int					ft_atoi(const char *str);
 void				ft_bzero(void *s, size_t n);
 void				*ft_calloc(size_t count, size_t size);
