@@ -94,6 +94,9 @@ int					ft_toupper(int c);
 void				ft_putendl_fd(char *s, int fd);
 /* Linked lists */
 void				ft_dlstadd_back(t_dlist **dlst, t_dlist *new);
+void				ft_dlstadd_front(t_dlist **dlst, t_dlist *new);
+void				ft_dlstadd_next(t_dlist **dlst, t_dlist *new);
+int					ft_dlstsize(t_dlist *dlst);
 t_dlist				*ft_dlstnew(void *content);
 t_list				*ft_lstlast(t_list *lst);
 t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),

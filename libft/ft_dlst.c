@@ -47,10 +47,49 @@ void	ft_dlstadd_back(t_dlist **dlst, t_dlist *new)
 	}
 }
 
-// void	ft_dlstadd_front(t_dlist **dlst, t_dlist *new)
-// {
-// 	t_dlist	*t_dlist;
-// 	t_dlist	*dnext;
+void	ft_dlstadd_next(t_dlist **dlst, t_dlist *new)
+{
+	t_dlist	*dlist;
+	t_dlist *dprev;
 
-// 	if (dlst)
-// }
+	if (dlst && !*dlst)
+	{
+		*dlst = new;
+		return ;
+	}
+	if (dlst && *dlst)
+	{
+		dlist = *dlst;
+		dlist->next = new;
+		dprev = dlist;
+		dlist = dlist->next;
+		dlist->prev = dprev;
+	}
+}
+
+void	ft_dlstadd_front(t_dlist **dlst, t_dlist *new)
+{
+	if (dlst && !*dlst)
+	{
+		*dlst = new;
+		return ;
+	}
+	new->next = *dlst;
+	(*dlst)->prev = new;
+	*dlst = new;
+}
+
+int	ft_dlstsize(t_dlist *dlst)
+{
+	int	len;
+
+	len = 0;
+	while (dlst)
+		dlst = dlst->next;
+	while (dlst)
+	{
+		dlst = dlst->prev;
+		len++;
+	}
+	return (len);
+}
