@@ -46,25 +46,35 @@ void	cd_with_arg(t_command *com, char **envp)
 	init_error(0, &com->error);
 }
 
+void	cd_in_current_dir(t_command *com, char **envp, int *flag)
+{
+	*flag = 1;
+	init_error(0, &com->error);
+}
+
 char	**cd_command(t_command *com, char **envp)
 {
-    char *oldpwd;
-	char *pwd;
+	int		flag;
+    char	*oldpwd;
+	char	*pwd;
 
-	oldpwd = NULL;
-	pwd = NULL;
-    oldpwd = getcwd(oldpwd, 0);
+	flag = 1;
+    oldpwd = getcwd(NULL, 0);
 	errno = 0;
-	if (com->arg && com->arg[0] != '-')
+	if (com->arg && com->arg[0] != '-' && com->arg[1] == 0)
 		cd_with_arg(com, envp);
-	else if (com->arg && com->arg[0] == '-')
+	else if (com->arg && com->arg[0] == '-' && com->arg[1] == 0)
 		cd_minus(com, envp);
-	else
+	else if (com->arg && com->arg[0] == '.' && com->arg[1] == 0)
+		cd_in_current_dir(com, envp, &flag);
+	else if (com->arg && com->arg[0] == '-' && com->arg[1] == '-' && com->arg[2] == 0)
 		cd_home(com, envp);
+	else
+		chdir(com->arg);
 	if (errno != 0 && com->arg)
 		cd_errno(com, envp);
-	pwd = getcwd(pwd, 0);
-	if (ft_strncmp(oldpwd, pwd, ft_strlen(pwd)) || ft_strncmp(oldpwd, pwd, ft_strlen(oldpwd)))
+	pwd = getcwd(NULL, 0);
+	if (ft_strncmp(oldpwd, pwd, ft_strlen(pwd)) || ft_strncmp(oldpwd, pwd, ft_strlen(oldpwd)) || flag)
 		envp = change_pwd(com, envp, pwd, oldpwd);
 	free(oldpwd);
 	free(pwd);

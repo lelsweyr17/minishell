@@ -1,49 +1,29 @@
 #include "header_commands.h"
 
-char	**build_in_commands(t_command *com, char **envp)
+char	**build_in_commands(t_command *com, char **envp, char **arg)
 {
-	if (com->echo)
+	if (!(ft_strncmp(arg[0], "echo", 5)))
 		echo_command(com, envp);
-	else if (com->cd)
+	else if (!(ft_strncmp(arg[0], "cd", 3)))
 		envp = cd_command(com, envp);
-	else if (com->pwd)
+	else if (!(ft_strncmp(arg[0], "pwd", 4)))
 		pwd_command(com);
-	else if (com->exp)
-		envp = exp_command(com, envp);
-	else if (com->unset)
-	    envp = unset_command(com, envp);
-	else if (com->env)
+	else if (!(ft_strncmp(arg[0], "export", 7)))
+		envp = exp_command(com, envp, arg + 1);
+	else if (!(ft_strncmp(arg[0], "unset", 6)))
+	    envp = unset_command(com, envp, arg + 1);
+	else if (!(ft_strncmp(arg[0], "env", 4)))
 		env_command(envp, com);
-	else if (com->exit)
+	else if (!(ft_strncmp(arg[0], "exit", 5)))
 	    exit_command(com);
-	// else
-	// 	execve_command(com, envp);
+	else
+		com->com = ft_strdup(arg[0]);
 	return (envp);
 }
 
 int    ft_putchar(int c)
 {
     return (write(1, &c, 1));
-}
-
-void	sign_flags(char *a, t_command *com)
-{
-	if (!(ft_strncmp(a, "echo", 5)))
-		com->echo = 1;
-	else if (!(ft_strncmp(a, "cd", 3)))
-		com->cd = 1;
-	else if (!(ft_strncmp(a, "pwd", 4)))
-		com->pwd = 1;
-	else if (!(ft_strncmp(a, "export", 7)))
-		com->exp = 1;
-	else if (!(ft_strncmp(a, "unset", 6)))
-		com->unset = 1;
-	else if (!(ft_strncmp(a, "env", 4)))
-		com->env = 1;
-	else if (!(ft_strncmp(a, "exit", 5)))
-		com->exit = 1;
-	else
-		com->com = ft_strdup(a);
 }
 
 void	free_array(char **array)
@@ -73,10 +53,10 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (i == -1)
 			break ;
-		prepare_function(com, envp, line);
-		envp = build_in_commands(com, envp);
 		char **arg = ft_split(line, ' ');
-		if (!bin_command(com, envp) && com->com)
+		prepare_function(com, envp, arg);
+		envp = build_in_commands(com, envp, arg);
+		if (com->com && !bin_command(com, envp))
 			execve_command(com, arg, envp);
 		line = NULL;
 		free(line);

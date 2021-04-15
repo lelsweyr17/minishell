@@ -3,6 +3,7 @@
 
 # include <sys/types.h>
 # include <sys/wait.h>
+#include <sys/stat.h>
 # include <stdio.h>
 # include <termcap.h>
 # include <termios.h>
@@ -22,14 +23,7 @@ typedef	struct		s_bin
 
 typedef struct		s_command
 {	
-	int				echo;
 	int				echo_n;
-	int				cd;
-	int				pwd;
-	int				exp;
-	int				unset;
-	int				env;
-	int				exit;
 	char			*arg;
 	int				no_quotes;
 	int				quote;
@@ -42,25 +36,25 @@ typedef struct		s_command
 	t_bin			bin_exec;
 }					t_command;
 
+int					ft_is_str(char *str);
 void				pwd_command(t_command *com);
 char				**cd_command(t_command *com, char **envp);
 void				echo_command(t_command *com, char **envp);
 char				*ft_getenv(char **envp, char *key);
-char				**exp_command(t_command *com, char **envp);
+char				**exp_command(t_command *com, char **envp, char **arg);
 int					array_size(char **ar);
 int					export_equal_args(t_command *com, char **envp);
 void				export_sort(t_command *com, char **envp);
 void				env_command(char **envp, t_command *com);
 char				**delete_str(char **envp, int size, t_command *com, int num_str);
 char				**add_new_str(char **envp, int size, t_command *com);
-char				**unset_command(t_command *com, char **envp);
+char				**unset_command(t_command *com, char **envp, char **arg);
 int					search_key(char **envp, char *arg);
 char				**add_oldpwd(char **envp);
 void				write_error(char *com, char *arg, char *comment);
 void				init_error(int err, int *error);
 void				exit_command(t_command *com);
-void				prepare_function(t_command *com, char **envp, char *line);
-void				sign_flags(char *a, t_command *com);
+void				prepare_function(t_command *com, char **envp, char **res);
 void				free_array(char **array);
 int					bin_command(t_command *com, char **envp);
 void				com_export(t_command *com, char **envp);

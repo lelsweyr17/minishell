@@ -34,7 +34,10 @@ void	exit_command(t_command *com)
 		exit(com->error);
 	}
 	else if (com->arg && ft_strrchr(com->arg, ' '))
+	{
 		write_error("exit", NULL, "too many arguments");
+		init_error(1, &com->error);
+	}
 	else
 	{
 		res = ft_is_number(com->arg);

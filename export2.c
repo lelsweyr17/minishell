@@ -1,5 +1,20 @@
 #include "header_commands.h"
 
+int	ft_is_str(char *str)
+{
+	int i;
+
+	i = 0;
+	if (!ft_isalpha(str[0]) && str[0] != '_')
+		return (0);
+	while (str[++i] && str[i] != '=')
+	{
+		if (!ft_isalpha(str[i]) && !ft_isdigit(str[i]) && str[i] != '_')
+			return (0);
+	}
+	return (1);
+}
+
 char	**add_new_str(char **envp, int size, t_command *com)
 {
 	char	**new;
@@ -14,11 +29,10 @@ char	**add_new_str(char **envp, int size, t_command *com)
 	return (new);
 }
 
-char	**exp_command(t_command *com, char **envp)
+char	**exp_command(t_command *com, char **envp, char **args)
 {
 	int k;
 	int	i;
-	char **args;
 	int	len;
 	int arg_len;
 
@@ -28,12 +42,11 @@ char	**exp_command(t_command *com, char **envp)
 		while (com->arg[i] && com->arg[i] != '=')
 			i++;
 		arg_len = i;
-		args = ft_split(com->arg, ' ');
 		i = -1;
 		while (args[++i])
 		{
 			com->arg = args[i];
-			if (ft_isdigit(com->arg[0]))
+			if (!ft_is_str(com->arg))
 			{
 				com->arg = change_arg_for_unset(com->arg);
 				write_error("export", com->arg, "not a valid identifier");
@@ -41,15 +54,14 @@ char	**exp_command(t_command *com, char **envp)
 			}
 			else
 			{
-				k = search_key(envp, com->arg);									//
-				len = array_size(envp);											//
-				if (k == -1)													//
-					envp = add_new_str(envp, len + 1, com);						//
-				else if (k >= 0 && com->arg[arg_len] == '=')					//
-					envp[k] = com->arg;											//
+				k = search_key(envp, com->arg);
+				len = array_size(envp);
+				if (k == -1)
+					envp = add_new_str(envp, len + 1, com);
+				else if (k >= 0 && com->arg[arg_len] == '=')
+					envp[k] = com->arg;
 			}
 		}
-		free_array(args);
 	}
 	else
 		export_sort(com, envp);

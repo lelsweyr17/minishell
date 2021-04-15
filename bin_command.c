@@ -21,6 +21,7 @@ char	*path_with_bin(char *path, char *com)
 
 int	find_bin_command(char **array, char *command, t_command *com)
 {
+	int				start;
 	int				i;
 	DIR				*ptr;
 	struct dirent	*dir;
@@ -68,16 +69,25 @@ int	bin_command(t_command *com, char **envp)
 	char	*arg;
 
 	i = search_key(envp, "PATH");
-	if (i != -1 && com->com)
+	if (i != -1)
 	{
 		if (envp[i][4] == '=')
 		{
-			com->bin = ft_split(envp[i], ':');
+			com->bin = ft_split(envp[i] + 5, ':');		// move from PATH="/...." to "/...."
+			// printf("%d\n", find_bin_command(com->bin, from_up_to_low(com->com), com));
+			// printf("%d\n", check_bin_file(from_up_to_low(com->com), envp, com));
 			if (!find_bin_command(com->bin, from_up_to_low(com->com), com) && \
-			(check_bin_file(from_up_to_low(com->com), envp, com)))
+			(check_bin_file(from_up_to_low(com->com), envp, com) == 1))
 			{
 				write_error(com->com, NULL, "command not found");
-				init_error(1, &com->error);
+				init_error(127, &com->error);
+				free_array(com->bin);
+				return (1);
+			}
+			else if (check_bin_file(from_up_to_low(com->com), envp, com) == 2)
+			{
+				write_error(com->com, NULL, "No such file or directory");
+				init_error(127, &com->error);
 				free_array(com->bin);
 				return (1);
 			}
@@ -86,19 +96,24 @@ int	bin_command(t_command *com, char **envp)
 			free_array(com->bin);
 		}
 	}
+	else
+	{
+		write_error(com->com, NULL, "command not found");
+		init_error(127, &com->error);
+		return (1);
+	}
 	return (0);
 }
 
 void	execve_command(t_command *com, char **arg, char **envp)
 {
 	pid_t	pid;
-	int		er;
 
 	pid = fork();
 	if (pid == 0)
 	{
-		er = execve(com->bin_exec.path, arg, envp);
-		if (errno == 2)
+		execve(com->bin_exec.path, arg, envp);
+		if (errno)
 		{
 			write_error(com->com, NULL, strerror(errno));
 			exit(1);

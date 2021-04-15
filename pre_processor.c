@@ -2,14 +2,7 @@
 
 void	null_flags(t_command *com)
 {
-	com->echo = 0;
 	com->echo_n = 0;
-	com->cd = 0;
-	com->pwd = 0;
-	com->env = 0;
-	com->exp = 0;
-	com->unset = 0;
-	com->exit = 0;
 	com->no_quotes = 0;
 	com->arg = 0;
 	com->double_quotes = 0;
@@ -33,15 +26,9 @@ char	*arg_res(char **res, t_command *com)
 		i++;
 	while (res[++i])
 	{
-		// tmp = arg;
 		arg = ft_strjoin(arg, res[i]);
-		// free(tmp);
 		if (res[i + 1])
-		{
-			// tmp = arg;
 			arg = ft_strjoin(arg, " ");
-			// free(tmp);
-		}
 	}
 	if (!ft_strlen(arg))
 	{
@@ -60,11 +47,12 @@ char	**add_oldpwd(char **envp)
 	i = -1;
 	size = array_size(envp);
 	tmp = envp;
-	envp = (char **)ft_calloc(size + 1, sizeof(char *));
+	envp = (char **)ft_calloc(size + 2, sizeof(char *));
 	envp[size] = NULL;
 	while (tmp[++i])
 		envp[i] = ft_strdup(tmp[i]);
 	envp[i] = ft_strdup("OLDPWD");
+	envp[i + 1] = NULL;
 	return (envp);
 }
 
@@ -81,16 +69,11 @@ void	com_export(t_command *com, char **envp)
 		com->ex_port[i] = envp[i];
 }
 
-void	prepare_function(t_command *com, char **envp, char *line)
+void	prepare_function(t_command *com, char **envp, char **res)
 {
-	char **res;
-
 	null_flags(com);
 	com_export(com, envp);
-	res = ft_split(line, ' ');
-	sign_flags(res[0], com);
 	if (res && res[1] && !(ft_strncmp(res[1], "-n", 3)))
 		com->echo_n = 1;
 	com->arg = arg_res(res, com);
-	free_array(res);
 }

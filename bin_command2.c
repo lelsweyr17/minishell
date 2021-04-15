@@ -33,10 +33,9 @@ char	*relative_way_to_bin(char *line)
 	char *pwd;
 
 	str = line;
-	pwd = NULL;
-	pwd = getcwd(pwd, 0);
+	pwd = getcwd(NULL, 0);
 	line = path_with_bin(pwd, line);
-	free(str);
+	// free(str);
 	free(pwd);
 	return (line);
 }
@@ -48,10 +47,12 @@ int	check_bin_file(char *line, char **envp, t_command *com)
 
 	i = 0;
 	line = skip_spaces(line);
-	if (line[0] == '/')
+	if (line[0] == '/' && line[ft_strlen(line) - 1] != '/')
 		com->bin_exec.path = absolute_way_to_bin(line);
-	else if (line[0] == '.' && line[1] == '/')
+	else if (line[0] == '.' && line[1] == '/' && line[ft_strlen(line) - 1] != '/')
 		com->bin_exec.path = relative_way_to_bin(line);
+	else if (line[ft_strlen(line) - 1] == '/')
+		return (2);
 	else
 		return (1);
 	return (0);

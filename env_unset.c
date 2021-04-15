@@ -50,12 +50,11 @@ char	*change_arg_for_unset(char *arg)
 	return (arg);
 }
 
-char	**unset_command(t_command *com, char **envp)
+char	**unset_command(t_command *com, char **envp, char **args)
 {
 	int i;
 	int len;
 	int num_str;
-	char **args;
 
 	i = 0;
 	num_str = 0;
@@ -67,29 +66,24 @@ char	**unset_command(t_command *com, char **envp)
 		write_error("unset", com->arg, "invalid parameter name");
 		init_error(1, &com->error);
 	}
-	if (com->arg)					// разделяет на несколько аргументов
+	if (com->arg)
 	{
 		i = -1;
-		args = ft_split(com->arg, ' ');
 		while (args[++i])
 		{
 			com->arg = args[i];
 			len = array_size(envp);
-			if (ft_isdigit(com->arg[0]))
+			if (!ft_is_str(com->arg))
 			{
 				com->arg = change_arg_for_unset(com->arg);
 				write_error("export", com->arg, "not a valid identifier");
 				init_error(1, &com->error);
 			}
-			else
-			{
-				if (com->arg)														// оставить только эти 4 строчки после парсера
-					num_str = search_key(envp, com->arg);							//
-				if (num_str != -1)													//
-					envp = delete_str(envp, len, com, num_str);						//
-			}
+			else if (com->arg)
+				num_str = search_key(envp, com->arg);
+			else if (num_str != -1)
+					envp = delete_str(envp, len, com, num_str);
 		}
-		free_array(args);
 	}
 	return (envp);
 }
