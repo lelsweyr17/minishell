@@ -37,7 +37,7 @@ char	**exp_command(t_command *com, char **envp, char **args)
 	int arg_len;
 
 	i = 0;
-	if (com->arg)							// разделяет на несколько аргументов
+	if (com->arg)
 	{
 		while (com->arg[i] && com->arg[i] != '=')
 			i++;

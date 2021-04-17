@@ -82,7 +82,7 @@ char	**unset_command(t_command *com, char **envp, char **args)
 			else if (com->arg)
 				num_str = search_key(envp, com->arg);
 			else if (num_str != -1)
-					envp = delete_str(envp, len, com, num_str);
+				envp = delete_str(envp, len, com, num_str);
 		}
 	}
 	return (envp);

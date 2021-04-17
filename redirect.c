@@ -1,28 +1,42 @@
 #include "header_commands.h"
 
-void    redirect_command(char *arg1, char *arg2)
+void    redirect_output(char *com, char *file, char **envp)
 {
-    int fd1;
-    int fd2;
-    char buf[100] = {0};
+    int stdin_0;
+    int stdout_1;
+    int fd;
+    char *argv[2] = {"pwd", NULL};
 
-    fd1 = open(arg1, O_RDWR | O_RDONLY | O_CREAT, 0755);
-    fd2 = open(arg2, O_RDWR | O_RDONLY | O_CREAT, 0755);
-    printf("%d\n", fd1);
-    printf("%d\n", fd2);
-    // while (read(fd1, buf, 1))
-    // {
-    //     write(fd2, buf, 1);
-    // }
-    printf("%d\n", dup2(fd1, fd2));
-    printf("%d\n", fd1);
-    printf("%d\n", fd2);
-    close(fd2);
-    close(fd1);
+    stdin_0 = dup(0);
+    stdout_1 = dup(1);
+    fd = open(file, O_RDWR | O_RDONLY | O_CREAT | O_TRUNC, 0755);
+    dup2(fd, 1);
+    execve(com, argv, envp);
+    dup2(stdin_0, 0);
+    dup2(stdout_1, 1);
+    close(fd);
 }
 
-int main()
+void    redirect_input(char *com, char *file, char **envp)
 {
-    redirect_command("test", "test1");
+    int stdin_0;
+    int stdout_1;
+    int fd;
+    char *argv[2] = {"pwd", NULL};
+
+    stdin_0 = dup(0);
+    stdout_1 = dup(1);
+    fd = open(file, O_RDWR | O_RDONLY | O_CREAT | O_TRUNC, 0755);
+    dup2(fd, 0);
+    execve(com, argv, envp);
+    dup2(stdin_0, 0);
+    dup2(stdout_1, 1);
+    close(fd);
+}
+
+int main(int argc, char **argv, char **envp)
+{
+    redirect_output("/bin/ls", "test", envp);
+    redirect_input("", "", envp);
     return (0);
 }
