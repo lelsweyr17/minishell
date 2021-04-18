@@ -1,25 +1,39 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strlen.c                                        :+:      :+:    :+:   */
+/*   ft_arrjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmarsha <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/10/30 19:22:16 by cmarsha           #+#    #+#             */
-/*   Updated: 2020/10/31 14:02:12 by cmarsha          ###   ########.fr       */
+/*   Created: 2021/04/15 12:38:05 by cmarsha           #+#    #+#             */
+/*   Updated: 2021/04/15 12:38:27 by cmarsha          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-size_t	ft_strlen(const char *s)
+char	**ft_arrjoin(char **s1, char **s2)
 {
-	unsigned long n;
+	char	**res;
+	size_t	l1;
+	size_t	l2;
+	int		i;
 
-	n = 0;
-	if (!s)
+	i = -1;
+	if (!s1 || !s2)
 		return (0);
-	while (s[n] != '\0')
-		n++;
-	return (n);
+	l1 = ft_arrlen(s1);
+	l2 = ft_arrlen(s2);
+	res = malloc(sizeof(char **) * (l1 + l2 + 1));
+	if (!res)
+		return (0);
+	while(++i < l1)
+		res[i] = s1[i];
+	res += l1;
+	i = -1;
+	while(++i < l2)
+		res[i] = s2[i];
+	res -= l1;
+	res[l1 + l2] = 0;
+	return (res);
 }

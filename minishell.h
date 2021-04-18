@@ -28,7 +28,7 @@ typedef struct		s_com
 {
 	// t_comm			*comm;
 	int				type;
-	// int				n;
+	int				n;
 	char			pipsem;
 	char			*line;
 	char			**args;
@@ -36,7 +36,7 @@ typedef struct		s_com
 
 typedef struct		s_par
 {
-	int				re;
+	int				i;
 	int				sem;
 }					t_par;
 
@@ -53,7 +53,7 @@ int					pars_split_commands(t_all *all);
 void				pars_get_command(t_all *all);
 void				pars_split_args(t_all *all);
 char				*str_free(char **line, char *tmp);
-int					pars_escape_backslash(char *line, int i);
+int					pars_shift_line(char **line, int i);
 int					isnotempty(char *str);
 
 #endif

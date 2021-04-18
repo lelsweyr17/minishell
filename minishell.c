@@ -19,9 +19,11 @@ void		parser(t_all *all) //, char **line)
 	// int		i;
 
 	// i = 0;
+	if (all->input[0] == '#')
+		return ;
 	pars_split_commands(all);
-	pars_get_command(all);
 	pars_split_args(all);
+	pars_get_command(all);
 	// // printf("p %d i %d line %s\n", len, i, *line);
 	// while ((all->input)[i] != '\n')
 	// {
@@ -49,6 +51,9 @@ int			main(int argc, char *argv[], char *envp[])
 	t_dlist *empty;
 	int		len;
 
+	// write(1, argv[0], ft_strlen(argv[0]));
+	all.lst = 0;
+	empty = 0;
 	empty = ft_dlstnew(empty);
 	len = 0;
 	hist = 0;
@@ -66,9 +71,12 @@ int			main(int argc, char *argv[], char *envp[])
 	// line = NULL;
 	tcgetattr(0, &term);
 	term.c_lflag &= ~(ECHO);
+	// term.c_lflag &= ~(ISIG);
 	term.c_lflag &= ~(ICANON);
+	// tcsetattr(1, TCSANOW, &term);
 	tcsetattr(0, TCSANOW, &term);
 	tgetent(0, term_name);
+	// execve("/bin/bash", NULL, NULL);
 	// term.c_cc[VMIN] = 1;
 	// term.c_cc[VTIME] = 0;
 	// write(1, "sh: ", 4);
@@ -88,7 +96,7 @@ int			main(int argc, char *argv[], char *envp[])
 			// line[res] = 0;
 			// if (gnl > 0)
 			// parser(envp, line);
-			if (!ft_strcmp(buf, "\e[A") && hist->content && hist->prev)
+			if (!ft_strcmp(buf, "\e[A") && hist->content)// && hist->prev)
 			{
 				tputs(restore_cursor, 1, ft_iputchar);
 				tputs(tigetstr("ed"), 1, ft_iputchar);
@@ -99,15 +107,36 @@ int			main(int argc, char *argv[], char *envp[])
 			else if (!ft_strcmp(buf, "\e[B") && hist->next)
 			{
 				tputs(restore_cursor, 1, ft_iputchar);
-				// tputs(tigetstr("ed"), 1, ft_iputchar);
+				tputs(tigetstr("ed"), 1, ft_iputchar);
 				hist = hist->next; // DOWN
 				write(1, hist->content, ft_strlen(hist->content));
+			}
+			else if (!ft_strcmp(buf, "\e[C"))
+			{
+				continue ;
+				// tputs(restore_cursor, 1, ft_iputchar);
+				// tputs(tigetstr("ed"), 1, ft_iputchar);
+			}
+			else if (!ft_strcmp(buf, "\e[D"))
+			{
+				continue ;
+				// tputs(restore_cursor, 1, ft_iputchar);
+				// tputs(tigetstr("ed"), 1, ft_iputchar);
 			}
 			else if (!strcmp(buf, "\177") && len > 0 && res > 0)
 			{
 				tputs(cursor_left, 1, ft_iputchar);
-				tputs(tgetstr("dc", 0), 1, ft_iputchar);
+				tputs(tigetstr("ed"), 1, ft_iputchar);
 				all.input[--len] = '\0';
+			}
+			else if (!ft_strcmp(buf, "\3"))
+			{
+				write(1, "^C\n", 4);
+				break ;
+			}
+			else if (!ft_strcmp(buf, "\34"))
+			{
+				write(1, "^\\Quit: 3\n", 10);
 			}
 			else if (ft_strcmp(buf, "\4") && strcmp(buf, "\177"))
 			{
@@ -122,8 +151,14 @@ int			main(int argc, char *argv[], char *envp[])
 				// exit (0);
 			}
 		} while (ft_strcmp(buf, "\n") && ft_strcmp(buf, "\4"));
-
-        // all.input = "echo 1\n";
+		term.c_lflag |= (ICANON);
+		term.c_lflag |= (ECHO);
+        // all.input = "\"e\" \"c\\\"\"h\\\"o\\' '1\\'\n";
+		// all.input = "ec\"\"H'O' \\' 5 \"#f\\\" ; | \\\\\" ' \\f\\' ; env";
+		// all.input = "\"E\"c'h'O \' '\\dfa\"\'\"\\\"df\" | env";
+		// all.input = "\n";
+		// all.input = "echo bb cc; E\"c\"'h'O \"d\" '\\' ee ff\n";
+		// all.input = "echo '-' \"n\" -nnnn -nnnf df";
         if (!isnotempty(all.input))
 		{
 			// write(1, "FUCK", 4);
@@ -148,11 +183,11 @@ int			main(int argc, char *argv[], char *envp[])
 			// printf("hist: ___%s___\n", hist->content);
 			// free(all.input);
 		}
-		if (all.input && ft_strcmp(buf, "\4"))
+		if (all.input && ft_strcmp(buf, "\4") && *all.input != '\n')
 			parser(&all); //, &all.input);
 		// write(1, "shit", 4);
 		// all.lst = tmp;
-		while (all.lst)
+		while (all.lst && *all.input != '\n')
 		{
 			com = all.lst->content;
 			// write(1, "WAT?", 4);
@@ -165,7 +200,7 @@ int			main(int argc, char *argv[], char *envp[])
 			all.lst = all.lst->next;
 			free(tmp);
 		}
-		
+		// exit (0);
 		// while (hist->next)
 		// {
 		// 	write(1, "\nhist: __", 9);

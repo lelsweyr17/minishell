@@ -1,6 +1,51 @@
 // #include "minishell_parser.h"
 #include "minishell.h"
 
+void	pars_shift_array(char **args, int a)
+{
+	char	*tmp;
+
+	tmp = args[a];
+	while (args[a] != 0)
+	{
+		args[a] = args[a + 1];
+		a++;
+	}
+	free(tmp);
+}
+
+void			pars_echo_n(t_com *com)//, char **args)
+{
+	int		a;
+	int		i;
+	char	**args;
+
+	a = 1;
+	com->n = 0;
+	args = com->args;
+	while (args && args[a][0] == '-')// && com->n == 0)
+	{
+		i = 1;
+		if (args[a][0] == '-' && args[a][1] == 'n')
+		{
+			while (args[a][i] == 'n')
+				i++;
+			if (args[a][i] == '\0')
+			{
+				com->n = 1;
+				pars_shift_array(args, a);
+				continue ;
+			}
+			else
+				return ;
+		}
+		else
+			return ;
+		a++;
+	}
+	// com->n = 2;
+}
+
 char			*strtrim_free(char *str)
 {
 	int		i;
@@ -31,32 +76,42 @@ int			pars_check_slash(char *line, int i)
 	return (0);
 }
 
-// int			pars_escape_backslash(char *line, int i)
-// {
-// 	int	n;
-
-// 	n = i;
-// 	while (line[n] != '\0')
-// 	{
-// 		line[n] = line[n + 1];
-// 		n++;
-// 	}
-// 	return (i + 1);
-// }
-
-int			pars_find_quotes(char *line, char *c, int i)
+int			pars_shift_line(char **line, int i)
 {
-	while (line[++i] != '\n' && line[i] != *c)
+	int	n;
+
+	n = i;
+	if ((*line)[i] == '\\')
+		i += 2;
+	while ((*line)[n] != '\0')
 	{
-		if (line[i] == '\\')
-			i++;
+		(*line)[n] = (*line)[n + 1];
+		n++;
 	}
-	if (line[i] == *c)
+	return (i - 1);
+}
+
+int	pars_find_quotes(char **line, char c, int i, int delete_escape)
+{
+	if (delete_escape == 1 && (*line)[i] == c)
+		i = pars_shift_line(line, i);
+	while ((*line)[++i] != '\n' && (*line)[i] != '\0' && (*line)[i] != c)
 	{
-		*c = 0;
-		// ft_putnbr_fd(i, 1);
+		if ((*line)[i] == '\\')
+		{
+			if (c == '\"')
+			{
+				if (delete_escape == 0)
+					i++;
+				else
+					pars_shift_line(line, i);
+			}
+		}
+	}
+	if (delete_escape == 1 && (*line)[i] == c)
+		pars_shift_line(line, i);
+	if ((*line)[i] == c)
 		return (++i);
-	}
 	return (i); // error
 }
 
@@ -84,14 +139,12 @@ t_com		*pars_command(char *line, int start, int end)
 	com = malloc(sizeof(t_com));
 	if (!com)
 		errorfunction();
-	// write(1, "aaa\n", 4);
 	com->type = 0;
 	com->pipsem = '\0';
 	com->line = ft_substr(line, start, 1 + end - start);
 	if (!com->line)
 		errorfunction();
-	com->line = str_free(&com->line, ft_strtrim(com->line, " ")); //strtrim_free(com->line);
-	// write(1, "bbb\n", 4);
+	com->line = str_free(&com->line, ft_strtrim(com->line, " "));
 	return (com);
 }
 
@@ -100,59 +153,71 @@ int			pars_split_commands(t_all *all)
 	int		i;
 	int		st;
 	char	*c;
-	char	cc;
+	// char	cc;
 	t_com	*com;
 	t_list	*lst;
 
 	i = 0;
 	st = 0;
-	cc = 0;
+	// cc = 0;
 	lst = 0;
 	// write(1, line, ft_strlen(line));
-	while (all->input[i] != '\n')
+	while (all->input[i] != '\n')// && *c != '#')
 	{
 		// ft_bzero(&all->par, 8);
-		c = ft_strchr("\"';|&", all->input[i]);
+		c = ft_strchr("\"'\\;|&#", all->input[i]);
 		// write(1, all->input, ft_strlen(all->input));
 		// printf("as");
 		if (c)
 		{
-			cc = *c;
-			if (cc == '\"' || cc == '\'')
+			// cc = *c;
+			if (*c == '\"' || *c == '\'')
 			{
-				i = pars_find_quotes(all->input, &cc, i);
+				i = pars_find_quotes(&all->input, *c, i, 0);
 				ft_putnbr(i);
-				write(1, &cc, 1);
-				// printf("%d\t%c\n", i, cc);
+				write(1, c, 1);
+				// printf("%d\t%c\n", i, *c);
 			}
-			else if (cc == ';')
+			else if (*c == ';')
 			{
 				com = pars_command(all->input, st, i - 1);
 				// write(1, "WTF", 3);
 				ft_lstadd_back(&lst, ft_lstnew(com));
 				// write(1, "WTF2", 4);
-				com->pipsem = cc;
+				com->pipsem = *c;
 				i++;
 				st = i;
 			}
 			/*TODO Ctrl+D sempip infinite loop*/
-			else if (cc == '|')
+			else if (*c == '|')
 			{
 				com = pars_command(all->input, st, i - 1);
 				ft_lstadd_back(&lst, ft_lstnew(com));
-				com->pipsem = cc;
+				com->pipsem = *c;
 				i++;
 				st = i;
 			}
-			else if (cc == '&')
+			else if (*c == '\\' && all->input[i + 1] != '\n')
+				i += 2;
+			else if (*c == '#')
+			{
+				if (all->input[i - 1] == ' ')
+				{
+					com = pars_command(all->input, st, i - 1);
+					ft_lstadd_back(&lst, ft_lstnew(com));
+					break ;
+				}
+				else
+					i++;
+			}
+			else if (*c == '&')
 				i++;
-			// else if (cc == '\0')
-			// 	i++;
 		}
 		else
 			i++;
 		if (all->input[i] == '\n')
 		{
+			// all->input[i] = '\0';
 			com = pars_command(all->input, st, i - 1);
 			// write(1, "WTF3", 4);
 			ft_lstadd_back(&lst, ft_lstnew(com));
@@ -222,7 +287,6 @@ void		pars_get_command(t_all *all)
 			if (ft_strcmp(str, &commands[++n][0]) == 0)
 			{
 				com->type = powf(2, n);
-				// write(1, str, i);
 				printf("%s\t%d\n", str, i);
 				// ft_putnbr_fd(i, 1);
 				// write(1, "\n", 1);
@@ -234,40 +298,41 @@ void		pars_get_command(t_all *all)
 		printf("getcom\t_%s_\t_%d_\t_%c_%d\n", com->line, com->type, com->pipsem, i);
 		all->lst = all->lst->next;
 	}
+	if (com->type == 1)
+		pars_echo_n(com);//, com->args);
+	int m = -1;
+	while (com->args[++m])
+		printf("ECHO %d\t_%s_\n", m, com->args[m]);
 	all->lst = begin;
-	// n = 0;
-	// while (commands[n] != '\0')
-	// {
-	// 	m = 0;
-	// 	while(commands[m] != ' ')
-	// 	{
-	// 		ft_strncmp();
-	// 		commands
-	// 	}
-	// }
 	return ;
 }
 
-char		*pars_line_to_args(char **line)
+char		*pars_line_to_args(t_com *com, char **line)
 {
 	int		i;
+	int		s;
 	char	*new;
-	char	*c;
-	char	cc;
+	// char	*line;
+	// char	*c;
+	// char	cc;
 
 	i = 0;
+	s = 0;
 	new = 0;
+	// line = com->line;
 	while ((*line)[i] == ' ')
 		*line += 1;
 	while ((*line)[i] != '\0' && (*line)[i] != ' ')
 	{
-		c = ft_strchr("\"'", (*line)[i]);
-		if (c)
-			cc = *c;
-		if ((*line)[i] == '\"')
-			i = pars_find_quotes((*line), &cc, i);
+		// c = ft_strchr("\"'", (*line)[i]);
+		// if (c)
+			// cc = *c;
+		if ((*line)[i] == '\\')
+			i = pars_shift_line(line, i);
+		else if ((*line)[i] == '\"')
+			i = pars_find_quotes(line, '\"', i, 1);
 		else if ((*line)[i] == '\'')
-			i = pars_find_quotes((*line), &cc, i);
+			i = pars_find_quotes(line, '\'', i, 1);
 		else if ((*line)[i] == '>')
 		{
 			i++;
@@ -278,8 +343,21 @@ char		*pars_line_to_args(char **line)
 		}
 		else
 			i++;
+		// if ((*line)[i] == ' ' && com->args[0] == 0)
+		// {
+		// 	s = i;
+		// 	while ((*line)[i] == ' ')
+		// 		i++;
+		// }
 	}
+	// if (com->args[0] == 0)
+	// {
+	// 	new = ft_strdup(line);
+	// 	*line += s;
+	// 	return (new);
+	// }
 	new = ft_strndup(*line, i);
+	// new = str_free(&new, ft_strtrim(new, &cc));
 	*line += i;
 	return (new);
 }
@@ -288,36 +366,37 @@ void		pars_split_args(t_all *all)
 {
 	t_com	*com;
 	int		i;
-	int		l;
-	int		n;
 	char	*new;
 	char	**tmp;
+	t_list	*begin;
+	char	*line;
 
-	i = 0;
-	l = 0;
-	n = 0;
-	com = all->lst->content;
-	while (com->line[i] != ' ' && com->line[i++] != '\0');
-
-	com->args = ft_calloc(2, sizeof(char **));
-	com->args[l++] = com->line;
-	com->line += i;
-	// while (*com->line == ' ')
-	// 	com->line++;
-	printf("fir %d\t%s\n", 0, com->args[0]);
-	int f = 0;
-	while (*com->line != '\0')
+	begin = all->lst;
+	while (all->lst)
 	{
-		// printf("ent %s\n", com->args[f++]);
-		new = pars_line_to_args(&com->line);
-		tmp = (char **)ft_calloc(2, sizeof(char *));
-		*tmp = new;
-		com->args = ft_arrjoin(com->args, tmp);
+		i = 0;
+		com = all->lst->content;
+		line = com->line;
+		// while (com->line[i] != ' ' && com->line[i++] != '\0');
+		com->args = ft_calloc(1, sizeof(char **));
+		// com->args[0] = pars_line_to_args(com);//, &com->line);
+		// com->line += i;
+		while (*com->line != '\0') //&& com->type != 1)
+		{
+			printf("ent: %s\n", com->line);
+			new = pars_line_to_args(com, &com->line);
+			tmp = (char **)ft_calloc(2, sizeof(char *));
+			*tmp = new;
+			com->args = ft_arrjoin(com->args, tmp);
+		}
+		// while (com->args[0][i] != '\0')
+		// 	com->args[0][i++] = '\0';
+		int m = -1;
+		while (com->args[++m])
+			printf("args %d\t_%s_\n", m, com->args[m]);
+		// com->line = 0;
+		com->line = line;
+		all->lst = all->lst->next;
 	}
-	int m = -1;
-	while (com->args[++m])
-		printf("args %d\t%s\n", m, com->args[m]);
-	while (com->args[0][i] != '\0')
-		com->args[0][i++] = '\0';
-	com->line = 0;
+	all->lst = begin;
 }
