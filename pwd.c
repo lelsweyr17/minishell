@@ -11,18 +11,18 @@ void	pwd_command(t_command *com)
 	free(a);
 }
 
-char    *str_free(char **line, char *tmp)
+char	*str_free(char **line, char *tmp)
 {
-    free(*line);
-    return (tmp);
+	free(*line);
+	return (tmp);
 }
 
 char	**change_pwd(t_command *com, char **envp, char *pwd, char *oldpwd)
 {
-	char *tmp;
-	int k;
-	int l;
-	int len;
+	char	*tmp;
+	int		k;
+	int		l;
+	int		len;
 
 	if (search_key(envp, "OLDPWD") == -1)
 		envp = add_oldpwd(envp);

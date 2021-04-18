@@ -11,24 +11,24 @@ char	**build_in_commands(t_command *com, char **envp, char **arg)
 	else if (!(ft_strncmp(arg[0], "export", 7)))
 		envp = exp_command(com, envp, arg + 1);
 	else if (!(ft_strncmp(arg[0], "unset", 6)))
-	    envp = unset_command(com, envp, arg + 1);
+		envp = unset_command(com, envp, arg + 1);
 	else if (!(ft_strncmp(arg[0], "env", 4)))
 		env_command(envp, com);
 	else if (!(ft_strncmp(arg[0], "exit", 5)))
-	    exit_command(com);
+		exit_command(com);
 	else
 		com->com = ft_strdup(arg[0]);
 	return (envp);
 }
 
-int    ft_putchar(int c)
+int	ft_putchar(int c)
 {
-    return (write(1, &c, 1));
+	return (write(1, &c, 1));
 }
 
 void	free_array(char **array)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	if (array)
@@ -41,10 +41,11 @@ void	free_array(char **array)
 
 int	main(int argc, char **argv, char **envp)
 {
-	int i;
+	int			i;
 	t_command	*com;
 	char		*line;
-	char **res;
+	char		**res;
+	char		**arg;
 
 	com = (t_command *)ft_calloc(1, sizeof(t_command));
 	envp = add_oldpwd(envp);
@@ -53,7 +54,7 @@ int	main(int argc, char **argv, char **envp)
 	{
 		if (i == -1)
 			break ;
-		char **arg = ft_split(line, ' ');
+		arg = ft_split(line, ' ');
 		prepare_function(com, envp, arg);
 		envp = build_in_commands(com, envp, arg);
 		if (com->com && !bin_command(com, envp))

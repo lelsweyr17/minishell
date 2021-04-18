@@ -24,8 +24,8 @@ int	ft_is_number(char *a)
 
 void	exit_command(t_command *com)
 {
-	int	i;
-	int	res;
+	int			i;
+	long long	res;
 
 	i = -1;
 	if (!com->arg)
@@ -41,12 +41,20 @@ void	exit_command(t_command *com)
 	else
 	{
 		res = ft_is_number(com->arg);
+		res = ft_atoi(com->arg);
+		if (com->arg[0] == '-')
+		{
+			res += __LONG_LONG_MAX__;
+			res += 1;
+		}
 		if (res != -1)
 		{
 			write(1, "exit\n", 5);
+			init_error(res % 256, &com->error);
 			exit(res % 256);
 		}
 		write_error("exit", com->arg, "numeric argument required");
+		init_error(255, &com->error);
 		exit(255);
 	}
 }

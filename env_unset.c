@@ -3,7 +3,7 @@
 void	env_command(char **envp, t_command *com)
 {
 	int	i;
-	int num_str;
+	int	num_str;
 
 	i = -1;
 	while (envp[++i])
@@ -16,10 +16,10 @@ void	env_command(char **envp, t_command *com)
 	}
 }
 
-int		search_key(char **envp, char *arg)
+int	search_key(char **envp, char *arg)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	i = 0;
 	while (arg[i] && arg[i] != '=')
@@ -39,7 +39,7 @@ int		search_key(char **envp, char *arg)
 
 char	*change_arg_for_unset(char *arg)
 {
-	char *tmp;
+	char	*tmp;
 
 	tmp = arg;
 	arg = ft_strjoin("`", arg);
@@ -50,23 +50,66 @@ char	*change_arg_for_unset(char *arg)
 	return (arg);
 }
 
+char	**unset_dollar(char *arg, t_command *com, char **envp, int flag)
+{
+	int		i;
+	int		len;
+	int		num_str;
+	char	*str;
+	int		start;
+
+	i = 0;
+	num_str = 0;
+	str = NULL;
+	str = get_dollar_arg(arg, &start, flag);
+	if (str && ft_strchr(str, '='))
+	{
+		str = change_arg_for_unset(str);
+		write_error("unset", str, "invalid parameter name");
+		init_error(1, &com->error);
+	}
+	else if (str && ft_strlen(str))
+	{
+		len = array_size(envp);
+		if (!ft_is_str(str))
+		{
+			str = change_arg_for_unset(str);
+			write_error("unset", str, "not a valid identifier");
+			init_error(1, &com->error);
+		}
+		else
+			num_str = search_key(envp, str);
+		if (num_str != -1)
+			envp = delete_str(envp, len, com, num_str);
+	}
+	return (envp);
+}
+
 char	**unset_command(t_command *com, char **envp, char **args)
 {
-	int i;
-	int len;
-	int num_str;
+	int	i;
+	int	len;
+	int	num_str;
 
 	i = 0;
 	num_str = 0;
 	len = array_size(envp);
 	while (com->arg && com->arg[i] && com->arg[i] != '=')
 		i++;
-	if (com->arg && ft_strchr(com->arg, '='))
+	if (com->arg[0] == '$' && com->arg[1])
 	{
+		if (ft_isdigit(com->arg[1]))
+			envp = unset_dollar(com->arg + 2, com, envp, 1);
+		else
+			envp = unset_dollar(com->arg + 1, com, envp, 0);
+	}
+	else if (com->arg && ft_strchr(com->arg, '='))
+	{
+		com->arg = change_arg_for_unset(com->arg);
 		write_error("unset", com->arg, "invalid parameter name");
 		init_error(1, &com->error);
 	}
-	if (com->arg)
+	else if (com->arg)
 	{
 		i = -1;
 		while (args[++i])
@@ -76,12 +119,12 @@ char	**unset_command(t_command *com, char **envp, char **args)
 			if (!ft_is_str(com->arg))
 			{
 				com->arg = change_arg_for_unset(com->arg);
-				write_error("export", com->arg, "not a valid identifier");
+				write_error("unset", com->arg, "not a valid identifier");
 				init_error(1, &com->error);
 			}
-			else if (com->arg)
+			else
 				num_str = search_key(envp, com->arg);
-			else if (num_str != -1)
+			if (num_str != -1)
 				envp = delete_str(envp, len, com, num_str);
 		}
 	}
@@ -90,11 +133,11 @@ char	**unset_command(t_command *com, char **envp, char **args)
 
 char	**delete_str(char **envp, int size, t_command *com, int num_str)
 {
-	char **new;
-	char *tmp;
-	int i;
-	int j;
-	
+	char	**new;
+	char	*tmp;
+	int		i;
+	int		j;
+
 	i = -1;
 	j = -1;
 	new = (char **)ft_calloc(size, sizeof(char *));
