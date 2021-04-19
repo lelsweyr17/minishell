@@ -21,7 +21,7 @@ BFILES = bonus_minishell.c
 OBJ := $(CFILES:.c=.o)
 BOBJ := $(BFILES:.c=.o)
 
-.PHONY: all clean fclean re run deb debb lin w s
+.PHONY: all clean fclean re run deb debb s
 
 all: $(NAME)
 
@@ -53,7 +53,8 @@ run:
 
 deb:
 	$(CC) -g -o deb *.c libft/*.c $(TFLAGS)
-	./deb
+
+#	./deb
 
 cl:
 	$(CC) -g -o cl *.c libft/*.c $(TFLAGS)

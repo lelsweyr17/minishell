@@ -79,25 +79,28 @@ int	pars_check_slash(char *line, int i)
 	return (0);
 }
 
-int	pars_shift_line(char **line, int i)
+int	pars_shift_line(char **line, int n)
 {
-	int	n;
+	// int	n;
 
-	n = i;
-	if ((*line)[i] == '\\')
-		i += 2;
-	while ((*line)[n] != '\0')
+	// n = i;
+	// if ((*line)[n] == '\\' && (*line)[n + 1] == '\0')
+	// {
+	// 	write(1, "ERROR!\n", 7);
+	// 	return (0);
+	// }
+	while ((*line)[n])
 	{
 		(*line)[n] = (*line)[n + 1];
 		n++;
 	}
-	return (i - 1);
+	return (1);
 }
 
 int	pars_find_quotes(char **line, char c, int i, int delete_escape)
 {
 	if (delete_escape == 1 && (*line)[i] == c)
-		i = pars_shift_line(line, i);
+		i -= pars_shift_line(line, i);
 	while ((*line)[++i] != '\n' && (*line)[i] != '\0' && (*line)[i] != c)
 	{
 		if ((*line)[i] == '\\')
@@ -106,8 +109,13 @@ int	pars_find_quotes(char **line, char c, int i, int delete_escape)
 			{
 				if (delete_escape == 0)
 					i++;
-				else if ((*line)[i + 1] == '\\')
-					pars_shift_line(line, i);
+				else
+				{
+					if ((*line)[i + 1] == '\\' || (*line)[i + 1] == '\"' || (*line)[i + 1] == '$')
+						pars_shift_line(line, i);
+					else
+						i++;
+				}
 			}
 		}
 	}
@@ -200,8 +208,16 @@ int	pars_split_commands(t_all *all)
 				i++;
 				st = i;
 			}
-			else if (*c == '\\' && all->input[i + 1] != '\0')
-				i += 2;
+			else if (*c == '\\')
+			{
+				if (all->input[i + 1] != '\0')
+					i += 2;
+				else
+				{
+					write(1, "ERROR!\n", 7);
+					break ;
+				}
+			}
 			else if (*c == '#')
 			{
 				if (all->input[i - 1] == ' ')
@@ -307,6 +323,7 @@ void	pars_get_command(t_all *all)
 			while (com->args[m + 1])
 			{
 				printf("ECHO %d\t_%s_\n", 1, com->args[1]);
+				com->args[1] = str_free(&com->args[1], ft_strjoin(com->args[1], ft_strdup(" ")));
 				com->args[1] = str_free(&com->args[1], ft_strjoin(com->args[1], com->args[m++ + 1]));
 				// m++;
 			}
@@ -318,24 +335,60 @@ void	pars_get_command(t_all *all)
 	return ;
 }
 
+char	*pars_get_env_var(char **line, int i)
+{
+	char	*envar;
+	int		n;
+	char	*env;
+	char	*end;
+	char	*new;
+
+	n = i;
+	while (ft_isalnum((*line)[i]) || (*line)[i] == '_')
+	{
+		write(1, &(*line)[i], 1);
+		i++;
+	}
+	// write(1, (*line)[i], 1);
+	envar = ft_strndup(&((*line)[n]), i - n);
+	if (!envar)
+		return (0);
+	end = &(*line)[i];
+	env = getenv(envar);
+	env = ft_strjoin(env, end);
+	(*line)[n] = '\0';
+	new = ft_strjoin(*line, env);
+	// write(1, "\nVAR:_", 6);
+	// write(1, envar, i - n);
+	// write(1, "\nENV:_", 6);
+	// write(1, env, ft_strlen(env));
+	// write(1, "\nEND:_", 6);
+	// write(1, end, ft_strlen(end));
+	// write(1, "\nNEW:_", 6);
+	// write(1, new, ft_strlen(new));
+	// write(1, "\n", 1);
+	free(envar);
+	return (new);
+}
+
 char	*pars_line_to_args(t_com *com, char **line)
 {
 	int		i;
 	char	*new;
-	// char	*c;
+	char	*c;
 	// char	cc;
 
 	i = 0;
 	new = 0;
 	while ((*line)[i] == ' ')
 		*line += 1;
-	while ((*line)[i] != '\0')// && (*line)[i] != ' ')
+	while ((*line)[i] != '\0' && (*line)[i] != ' ')
 	{
-		// c = ft_strchr("\"'", (*line)[i]);
+		c = ft_strchr("\"\\'", (*line)[i]);
 		// if (c)
 			// cc = *c;
 		if ((*line)[i] == '\\')
-			i = pars_shift_line(line, i);
+			i += pars_shift_line(line, i);
 		else if ((*line)[i] == '\"')
 			i = pars_find_quotes(line, '\"', i, 1);
 		else if ((*line)[i] == '\'')
@@ -348,13 +401,19 @@ char	*pars_line_to_args(t_com *com, char **line)
 		{
 			i++;
 		}
+		else if ((*line)[i] == '$')
+		{
+			// (*line)[i] = '#';
+			*line = pars_get_env_var(line, ++i);
+			i++;	
+		}
 		else
 			i++;
-		if ((*line)[i] == ' ')
-		{
-			i += 1;
-			break ;
-		}
+		// if ((*line)[i] == ' ')
+		// {
+		// 	i += 1;
+		// 	break ;
+		// }
 	}
 	new = ft_strndup(*line, i);
 	// new = str_free(&new, ft_strtrim(new, &cc));

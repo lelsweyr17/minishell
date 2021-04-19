@@ -50,8 +50,8 @@ int			main(int argc, char *argv[], char *envp[])
 	t_dlist	*hist;
 	t_dlist *empty;
 	int		len;
+	char	*copy;
 
-	// write(1, argv[0], ft_strlen(argv[0]));
 	all.lst = 0;
 	empty = 0;
 	empty = ft_dlstnew(empty);
@@ -83,9 +83,12 @@ int			main(int argc, char *argv[], char *envp[])
 	// char *ss = key_right;
 	// char *ss = tgetstr("kr", 0);
 	// hist = ft_dlstnew(all.input);
+	copy = 0;
+	ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 	while (ft_strcmp(buf, "\4"))
 	{
-		ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
+		if (((char *)hist->content)[0] != '\0')
+			ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 		while (hist->next)
 			hist = hist->next;
 		// all.input = ft_strdup("");
@@ -93,19 +96,15 @@ int			main(int argc, char *argv[], char *envp[])
 		tputs(save_cursor, 1, ft_iputchar);
 		do
 		{
+            ft_memset(buf, 0, res);
 			res = read(0, buf, 100);
-			// gnl = get_next_line(0, &line);
-			// printf("%d", res);
-			// line[res] = 0;
-			// if (gnl > 0)
-			// parser(envp, line);
 			if (!ft_strcmp(buf, "\e[A") && hist->content)// && hist->prev)
 			{
 				tputs(restore_cursor, 1, ft_iputchar);
 				tputs(tigetstr("ed"), 1, ft_iputchar);
-				write(1, hist->content, ft_strlen(hist->content));
 				if (hist->prev)
 					hist = hist->prev; // UP
+				write(1, hist->content, ft_strlen(hist->content));
 			}
 			else if (!ft_strcmp(buf, "\e[B") && hist->next)
 			{
@@ -143,24 +142,21 @@ int			main(int argc, char *argv[], char *envp[])
 			}
 			else if (ft_strcmp(buf, "\4") && strcmp(buf, "\177"))
 			{
-				write(1, buf, res);
-				// write(1, "asdf", 4);
+			    write(1, buf, res);
+				if (!hist->next && !copy)
+				{
+					copy = ft_strdup(hist->content);
+				}
 				// all.input = str_free(&all.input, ft_strjoin(all.input, buf));
 				hist->content = str_free((char **)&hist->content, ft_strjoin(hist->content, buf));
 				len = ft_strlen(hist->content);
-				// ft_putnbr_fd(len, 1);
 				if (!ft_strcmp(buf, "\n"))
-				{
 					((char *)hist->content)[len - 1] = '\0';
-					// hist = hist->next;
-				}
-				// write(1, hist->content, len);
-				// write(1, &all.input, len);
 			}
 			if (!ft_strcmp(buf, "\4"))
 			{
 				write(1, "exit", 4);
-				// exit (0);
+				exit (0);
 			}
 		} while (ft_strcmp(buf, "\n") && ft_strcmp(buf, "\4"));
 		all.input = (char *)hist->content;
@@ -172,59 +168,32 @@ int			main(int argc, char *argv[], char *envp[])
 		// all.input = "\"E\"c'h'O \' '\\dfa\"\'\"\\\"df\" | env";
 		// all.input = "\n";
 		// all.input = "echo bb cc; E\"c\"'h'O \"d\" '\\' ee ff\n";
-		// all.input = "echo '-' \"n\" -nnnn -nnnf df";
+		// all.input = "echo '-'\"n\" -nnnn -nnnf df";
 		// all.input = "echo   -nn'n'    -nn  -n   -nnnnnnnf ldfj f                   aa55   \"ff\\'df\"  '\\ dfdf'   \n";
+		// all.input = "echo df      fdfd \"\\\" | \\\\ l  \"";
+		// all.input = "\\\\";
+		// all.input = "fdfj $USER+sf fjf";
         if (!isnotempty(all.input))
 		{
-			// write(1, "FUCK", 4);
-			// all.input = 0;
+			write(1, "FUCK", 4);
+			ft_memset(all.input, 0, len);
 			free(all.input);
 		}
-		// if (all.input && *all.input != '\n')
-		// {
-		// 	// if (!ft_dlstsize(hist))
-		// 	// {
-		// 	// 	ft_putnbr_fd(ft_dlstsize(hist), 1);
-		// 	// 	// write(1, "FUCK", 4);
-		// 		ft_dlstadd_back(&hist, ft_dlstnew(all.input));
-		// 	// }
-		// 	// else
-		// 	// 	ft_dlstadd_next(&hist->prev, ft_dlstnew(all.input));
-		// 	if (hist->next)
-		// 		hist = hist->next;
-		// 	// ft_dlstadd_back(&hist, empty);
-		// 	// hist = hist->next;
-		// 	// hist.hist = all.input;
-		// 	// printf("hist: ___%s___\n", hist->content);
-		// 	// free(all.input);
-		// }
-		if (all.input && !ft_strcmp(buf, "\n") && *all.input != '\n')
-			parser(&all); //, &all.input);
-		// write(1, "shit", 4);
-		// all.lst = tmp;
+		buf[0] = '\n';
+		if (all.input[0] != '\0' && !ft_strcmp(buf, "\n") && *all.input != '\n')
+			parser(&all);
+		// exit (0);
 		while (all.lst && *all.input != '\n')
 		{
 			com = all.lst->content;
-			// write(1, "WAT?", 4);
-			ft_putendl_fd(com->line, 1);
+			// ft_putendl_fd(com->line, 1);
 			if (com->line)
 				ft_lstdelone(all.lst, del(&com->line));
-			// ft_lstdelone(all.lst, del(com->comm));
 			ft_lstdelone(all.lst, del(&com));
 			tmp = all.lst;
 			all.lst = all.lst->next;
 			free(tmp);
 		}
-		// exit (0);
-		// while (hist->next)
-		// {
-		// 	write(1, "\nhist: __", 9);
-		// 	write(1, hist->content, ft_strlen(hist->content));
-		// 	write(1, "__\n", 3);
-		// 	hist = hist->next;
-		// }
-		// while (hist->prev)
-		// 	hist = hist->prev;
 	}
 	write(1, "\n", 1);
 	return (0);
