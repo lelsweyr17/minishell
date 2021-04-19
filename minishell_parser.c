@@ -1,6 +1,15 @@
 // #include "minishell_parser.h"
 #include "minishell.h"
 
+void	pars_delete_last_spaces(char **line)
+{
+	int	len;
+
+	len = ft_strlen(*line);
+	while ((*line)[len] == ' ' && len > 0)
+		(*line)[len--] = '\0';
+}
+
 void	pars_shift_array(char **args, int a)
 {
 	char	*tmp;
@@ -14,7 +23,7 @@ void	pars_shift_array(char **args, int a)
 	free(tmp);
 }
 
-void			pars_echo_n(t_com *com)//, char **args)
+void	pars_echo_n(t_com *com)
 {
 	int		a;
 	int		i;
@@ -23,30 +32,24 @@ void			pars_echo_n(t_com *com)//, char **args)
 	a = 1;
 	com->n = 0;
 	args = com->args;
-	while (args && args[a][0] == '-')// && com->n == 0)
+	while (args[a] && args[a][0] == '-' && args[a][1] == 'n')
 	{
 		i = 1;
-		if (args[a][0] == '-' && args[a][1] == 'n')
+		while (args[a][i] == 'n')
+			i++;
+		if (args[a][i] == '\0' || args[a][i] == ' ')
 		{
-			while (args[a][i] == 'n')
-				i++;
-			if (args[a][i] == '\0')
-			{
-				com->n = 1;
-				pars_shift_array(args, a);
-				continue ;
-			}
-			else
-				return ;
+			com->n = 1;
+			pars_shift_array(args, a);
+			continue ;
 		}
 		else
 			return ;
 		a++;
 	}
-	// com->n = 2;
 }
 
-char			*strtrim_free(char *str)
+char	*strtrim_free(char *str)
 {
 	int		i;
 	char	*tmp;
@@ -67,7 +70,7 @@ char			*strtrim_free(char *str)
 	return (str);
 }
 
-int			pars_check_slash(char *line, int i)
+int	pars_check_slash(char *line, int i)
 {
 	// if (i == 0)
 	// 	errorfunc(line[i]); // если спецсимвол первый, вызывать ошибку syntax error...
@@ -76,7 +79,7 @@ int			pars_check_slash(char *line, int i)
 	return (0);
 }
 
-int			pars_shift_line(char **line, int i)
+int	pars_shift_line(char **line, int i)
 {
 	int	n;
 
@@ -103,7 +106,7 @@ int	pars_find_quotes(char **line, char c, int i, int delete_escape)
 			{
 				if (delete_escape == 0)
 					i++;
-				else
+				else if ((*line)[i + 1] == '\\')
 					pars_shift_line(line, i);
 			}
 		}
@@ -132,7 +135,7 @@ void		errorfunction()
 // {
 // }
 
-t_com		*pars_command(char *line, int start, int end)
+t_com	*pars_command(char *line, int start, int end)
 {
 	t_com	*com;
 
@@ -148,7 +151,7 @@ t_com		*pars_command(char *line, int start, int end)
 	return (com);
 }
 
-int			pars_split_commands(t_all *all)
+int	pars_split_commands(t_all *all)
 {
 	int		i;
 	int		st;
@@ -162,7 +165,7 @@ int			pars_split_commands(t_all *all)
 	// cc = 0;
 	lst = 0;
 	// write(1, line, ft_strlen(line));
-	while (all->input[i] != '\n')// && *c != '#')
+	while (all->input[i] != '\0')// && *c != '#')
 	{
 		// ft_bzero(&all->par, 8);
 		c = ft_strchr("\"'\\;|&#", all->input[i]);
@@ -197,7 +200,7 @@ int			pars_split_commands(t_all *all)
 				i++;
 				st = i;
 			}
-			else if (*c == '\\' && all->input[i + 1] != '\n')
+			else if (*c == '\\' && all->input[i + 1] != '\0')
 				i += 2;
 			else if (*c == '#')
 			{
@@ -215,7 +218,7 @@ int			pars_split_commands(t_all *all)
 		}
 		else
 			i++;
-		if (all->input[i] == '\n')
+		if (all->input[i] == '\0')
 		{
 			// all->input[i] = '\0';
 			com = pars_command(all->input, st, i - 1);
@@ -247,7 +250,7 @@ int			pars_split_commands(t_all *all)
 	return (i);
 }
 
-void		pars_get_command(t_all *all)
+void	pars_get_command(t_all *all)
 {
 	// t_list	*begin;
 	t_com	*com;
@@ -296,33 +299,37 @@ void		pars_get_command(t_all *all)
 				com->type = 128;
 		}
 		printf("getcom\t_%s_\t_%d_\t_%c_%d\n", com->line, com->type, com->pipsem, i);
+		if (com->type == 1)
+		{
+			pars_echo_n(com);
+			printf("ECHO %d\t_%s_\n", 0, com->args[0]);
+			int m = 1;
+			while (com->args[m + 1])
+			{
+				printf("ECHO %d\t_%s_\n", 1, com->args[1]);
+				com->args[1] = str_free(&com->args[1], ft_strjoin(com->args[1], com->args[m++ + 1]));
+				// m++;
+			}
+			printf("ECHO FINAL %d\t_%s_\n", 1, com->args[1]);
+		}
 		all->lst = all->lst->next;
 	}
-	if (com->type == 1)
-		pars_echo_n(com);//, com->args);
-	int m = -1;
-	while (com->args[++m])
-		printf("ECHO %d\t_%s_\n", m, com->args[m]);
-	all->lst = begin;
+		all->lst = begin;
 	return ;
 }
 
-char		*pars_line_to_args(t_com *com, char **line)
+char	*pars_line_to_args(t_com *com, char **line)
 {
 	int		i;
-	int		s;
 	char	*new;
-	// char	*line;
 	// char	*c;
 	// char	cc;
 
 	i = 0;
-	s = 0;
 	new = 0;
-	// line = com->line;
 	while ((*line)[i] == ' ')
 		*line += 1;
-	while ((*line)[i] != '\0' && (*line)[i] != ' ')
+	while ((*line)[i] != '\0')// && (*line)[i] != ' ')
 	{
 		// c = ft_strchr("\"'", (*line)[i]);
 		// if (c)
@@ -343,26 +350,19 @@ char		*pars_line_to_args(t_com *com, char **line)
 		}
 		else
 			i++;
-		// if ((*line)[i] == ' ' && com->args[0] == 0)
-		// {
-		// 	s = i;
-		// 	while ((*line)[i] == ' ')
-		// 		i++;
-		// }
+		if ((*line)[i] == ' ')
+		{
+			i += 1;
+			break ;
+		}
 	}
-	// if (com->args[0] == 0)
-	// {
-	// 	new = ft_strdup(line);
-	// 	*line += s;
-	// 	return (new);
-	// }
 	new = ft_strndup(*line, i);
 	// new = str_free(&new, ft_strtrim(new, &cc));
 	*line += i;
 	return (new);
 }
 
-void		pars_split_args(t_all *all)
+void	pars_split_args(t_all *all)
 {
 	t_com	*com;
 	int		i;

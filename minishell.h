@@ -24,6 +24,12 @@ typedef struct		s_comm
 	char			**ex_port;
 }					t_comm;
 
+typedef struct		s_re
+{
+	char			*fn;
+	int				type;
+}					t_re;
+
 typedef struct		s_com
 {
 	// t_comm			*comm;
@@ -32,6 +38,7 @@ typedef struct		s_com
 	char			pipsem;
 	char			*line;
 	char			**args;
+	t_list			*re;
 }					t_com;
 
 typedef struct		s_par
