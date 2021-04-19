@@ -97,6 +97,30 @@ int	pars_shift_line(char **line, int n)
 	return (1);
 }
 
+char	*pars_get_env_var(char **line, int i)
+{
+	char	*envar;
+	int		n;
+	char	*env;
+	char	*end;
+	char	*new;
+
+	n = i;
+	while (ft_isalnum((*line)[i]) || (*line)[i] == '_')
+		i++;
+	envar = ft_strndup(&((*line)[n]), i - n);
+	if (!envar)
+		return (0);
+	end = &(*line)[i];
+	env = getenv(envar);
+	env = ft_strjoin(env, end);
+	(*line)[n - 1] = '\0';
+	new = ft_strjoin(*line, env);
+	// free(line[0]);
+	free(envar);
+	return (new);
+}
+
 int	pars_find_quotes(char **line, char c, int i, int delete_escape)
 {
 	if (delete_escape == 1 && (*line)[i] == c)
@@ -117,6 +141,10 @@ int	pars_find_quotes(char **line, char c, int i, int delete_escape)
 						i++;
 				}
 			}
+		}
+		else if (c == '\"' && delete_escape == 1 && (*line)[i] == '$')
+		{
+			*line = pars_get_env_var(line, ++i);
 		}
 	}
 	if (delete_escape == 1 && (*line)[i] == c)
@@ -185,8 +213,8 @@ int	pars_split_commands(t_all *all)
 			if (*c == '\"' || *c == '\'')
 			{
 				i = pars_find_quotes(&all->input, *c, i, 0);
-				ft_putnbr(i);
-				write(1, c, 1);
+				// ft_putnbr(i);
+				// write(1, c, 1);
 				// printf("%d\t%c\n", i, *c);
 			}
 			else if (*c == ';')
@@ -306,7 +334,7 @@ void	pars_get_command(t_all *all)
 			if (ft_strcmp(str, &commands[++n][0]) == 0)
 			{
 				com->type = powf(2, n);
-				printf("%s\t%d\n", str, i);
+				// printf("%s\t%d\n", str, i);
 				// ft_putnbr_fd(i, 1);
 				// write(1, "\n", 1);
 				break ;
@@ -314,61 +342,25 @@ void	pars_get_command(t_all *all)
 			else
 				com->type = 128;
 		}
-		printf("getcom\t_%s_\t_%d_\t_%c_%d\n", com->line, com->type, com->pipsem, i);
+		// printf("getcom\t_%s_\t_%d_\t_%c_%d\n", com->line, com->type, com->pipsem, i);
 		if (com->type == 1)
 		{
 			pars_echo_n(com);
-			printf("ECHO %d\t_%s_\n", 0, com->args[0]);
+			// printf("ECHO %d\t_%s_\n", 0, com->args[0]);
 			int m = 1;
 			while (com->args[m + 1])
 			{
-				printf("ECHO %d\t_%s_\n", 1, com->args[1]);
+				// printf("ECHO %d\t_%s_\n", 1, com->args[1]);
 				com->args[1] = str_free(&com->args[1], ft_strjoin(com->args[1], ft_strdup(" ")));
 				com->args[1] = str_free(&com->args[1], ft_strjoin(com->args[1], com->args[m++ + 1]));
 				// m++;
 			}
-			printf("ECHO FINAL %d\t_%s_\n", 1, com->args[1]);
+			// printf("ECHO FINAL %d\t_%s_\n", 1, com->args[1]);
 		}
 		all->lst = all->lst->next;
 	}
 		all->lst = begin;
 	return ;
-}
-
-char	*pars_get_env_var(char **line, int i)
-{
-	char	*envar;
-	int		n;
-	char	*env;
-	char	*end;
-	char	*new;
-
-	n = i;
-	while (ft_isalnum((*line)[i]) || (*line)[i] == '_')
-	{
-		write(1, &(*line)[i], 1);
-		i++;
-	}
-	// write(1, (*line)[i], 1);
-	envar = ft_strndup(&((*line)[n]), i - n);
-	if (!envar)
-		return (0);
-	end = &(*line)[i];
-	env = getenv(envar);
-	env = ft_strjoin(env, end);
-	(*line)[n] = '\0';
-	new = ft_strjoin(*line, env);
-	// write(1, "\nVAR:_", 6);
-	// write(1, envar, i - n);
-	// write(1, "\nENV:_", 6);
-	// write(1, env, ft_strlen(env));
-	// write(1, "\nEND:_", 6);
-	// write(1, end, ft_strlen(end));
-	// write(1, "\nNEW:_", 6);
-	// write(1, new, ft_strlen(new));
-	// write(1, "\n", 1);
-	free(envar);
-	return (new);
 }
 
 char	*pars_line_to_args(t_com *com, char **line)
@@ -405,7 +397,7 @@ char	*pars_line_to_args(t_com *com, char **line)
 		{
 			// (*line)[i] = '#';
 			*line = pars_get_env_var(line, ++i);
-			i++;	
+			// i++;	
 		}
 		else
 			i++;
@@ -442,7 +434,7 @@ void	pars_split_args(t_all *all)
 		// com->line += i;
 		while (*com->line != '\0') //&& com->type != 1)
 		{
-			printf("ent: %s\n", com->line);
+			// printf("ent: %s\n", com->line);
 			new = pars_line_to_args(com, &com->line);
 			tmp = (char **)ft_calloc(2, sizeof(char *));
 			*tmp = new;
@@ -450,9 +442,9 @@ void	pars_split_args(t_all *all)
 		}
 		// while (com->args[0][i] != '\0')
 		// 	com->args[0][i++] = '\0';
-		int m = -1;
-		while (com->args[++m])
-			printf("args %d\t_%s_\n", m, com->args[m]);
+		// int m = -1;
+		// while (com->args[++m])
+		// 	printf("args %d\t_%s_\n", m, com->args[m]);
 		// com->line = 0;
 		com->line = line;
 		all->lst = all->lst->next;

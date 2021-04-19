@@ -60,16 +60,7 @@ int			main(int argc, char *argv[], char *envp[])
 	all.env = envp;
 	if (!argc || !argv)
 		exit(0);
-    // ft_putnbr(ft_strlen(*envp));
-	// write(1, &ft_strlen(envp), 200);
-	// while (*envp)
-	// {
-	// 	write(1, *envp, ft_strlen(*envp));
-	// 	write(1, "\n", 1);
-	// 	envp++;
-	// }
-	// line = NULL;
-	tcgetattr(0, &term);
+    tcgetattr(0, &term);
 	term.c_lflag &= ~(ECHO);
 	// term.c_lflag &= ~(ISIG);
 	term.c_lflag &= ~(ICANON);
