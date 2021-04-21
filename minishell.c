@@ -23,7 +23,7 @@ void		parser(t_all *all) //, char **line)
 		return ;
 	pars_split_commands(all);
 	pars_split_args(all);
-	pars_get_command(all);
+	// pars_get_command(all);
 	// // printf("p %d i %d line %s\n", len, i, *line);
 	// while ((all->input)[i] != '\n')
 	// {
@@ -43,6 +43,7 @@ int			main(int argc, char *argv[], char *envp[])
 	t_all	all;
 	int		res;
 	char	buf[1000];
+	char	*bf;
 	struct termios term;
 	char	*term_name = "xterm-256color";
 	t_com	*com;
@@ -87,8 +88,15 @@ int			main(int argc, char *argv[], char *envp[])
 		tputs(save_cursor, 1, ft_iputchar);
 		do
 		{
-            ft_memset(buf, 0, res);
+			// if (!ft_strchr(buf, '\n'))
+            	ft_memset(buf, 0, res);
+			// bf = buf;
 			res = read(0, buf, 100);
+			// buf[res] = '\0';
+			// bf = ft_strchr(buf, '\n')
+			// if (*bf == '\n')
+			// 	*bf = '\0';
+			// res = get_next_line(0, &buf);
 			if (!ft_strcmp(buf, "\e[A") && hist->content)// && hist->prev)
 			{
 				tputs(restore_cursor, 1, ft_iputchar);
@@ -164,7 +172,12 @@ int			main(int argc, char *argv[], char *envp[])
 		// all.input = "echo df      fdfd \"\\\" | \\\\ l  \"";
 		// all.input = "\\\\";
 		// all.input = "fdfj $USER+sf fjf";
-        if (!isnotempty(all.input))
+		// all.input = "echo $USER $trt";
+		// all.input = "echo $USER ; ";
+		// all.input = "echo $TERM$USER$PWD ; \\";
+		// all.input= "\\'";
+		// all.input= "\\'\\"; // TODO
+		if (!isnotempty(all.input))
 		{
 			write(1, "FUCK", 4);
 			ft_memset(all.input, 0, len);
@@ -174,13 +187,19 @@ int			main(int argc, char *argv[], char *envp[])
 		if (all.input[0] != '\0' && !ft_strcmp(buf, "\n") && *all.input != '\n')
 			parser(&all);
 		// exit (0);
-		while (all.lst && *all.input != '\n')
+		while (all.lst != 0)// && *all.input != '\n')
 		{
 			com = all.lst->content;
 			// ft_putendl_fd(com->line, 1);
 			if (com->line)
-				ft_lstdelone(all.lst, del(&com->line));
-			ft_lstdelone(all.lst, del(&com));
+				free(com->line);
+			int m = -1;
+			while (com->args[++m] != '\0')
+			{
+				free(com->args[m]);
+			}
+			free(com->args);
+			free(com);
 			tmp = all.lst;
 			all.lst = all.lst->next;
 			free(tmp);

@@ -10,20 +10,12 @@
 
 typedef struct		s_comm
 {
-	int				echo;
-	int				cd;
-	int				pwd;
-	int				exp;
-	int				unset;
-	int				env;
-	int				exit;
 	char			*arg;
-	int				quote;
-	int				double_quotes;
 	int				error;
 	char			**ex_port;
 }					t_comm;
 
+/* REDIRECT */
 typedef struct		s_re
 {
 	char			*fn;
