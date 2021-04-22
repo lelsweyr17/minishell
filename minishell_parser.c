@@ -307,48 +307,48 @@ void	pars_get_command(t_all *all)
 	return ;
 }
 
-char	*pars_line_to_args(t_com *com, char **line)
+char	*pars_line_to_args(t_com *com, char **line, int *i)
 {
-	int		i;
+	// int		i;
 	char	*new;
 	char	*c;
 	// char	cc;
 
-	i = 0;
-	new = 0;
-	while ((*line)[i] == ' ')
-		*line += 1;
-	new = ft_strdup(*line);
-	while (new[i] != '\0' && new[i] != ' ')
+	// i = 0;
+	new = *line;
+	while ((*line)[*i] == ' ')
+		*i += 1;
+	// new = ft_strdup(*line);
+	while ((*line)[*i] != '\0' && (*line)[*i] != ' ')
 	{
-		c = ft_strchr("\"\\'", new[i]);
+		c = ft_strchr("\"\\'", (*line)[*i]);
 		// if (c)
 			// cc = *c;
-		if (new[i] == '\\')
+		if ((*line)[*i] == '\\')
+			*i += pars_shift_line(line, *i);
+		else if ((*line)[*i] == '\"')
+			*i = pars_find_quotes(line, '\"', *i, 1);
+		else if ((*line)[*i] == '\'')
+			*i = pars_find_quotes(line, '\'', *i, 1);
+		else if ((*line)[*i] == '>')
 		{
-			i += pars_shift_line(&new, i);
-			*line += 1;
+			*i += 1;
 		}
-		else if (new[i] == '\"')
-			i = pars_find_quotes(&new, '\"', i, 1);
-		else if (new[i] == '\'')
-			i = pars_find_quotes(&new, '\'', i, 1);
-		else if (new[i] == '>')
+		else if ((*line)[*i] == '<')
 		{
-			i++;
+			*i += 1;
 		}
-		else if (new[i] == '<')
-		{
-			i++;
-		}
-		else if (new[i] == '$')
-			new = str_free(&new, pars_get_env_var(&new, ++i));
+		else if ((*line)[*i] == '$')
+			*line = pars_get_env_var(line, ++*i);
 		else
-			i++;
+			*i += 1;
 	}
+	// if (new != *line)
+	// 	// free(*line);
 	// free(new);
-	new = str_free(&new, ft_strndup(new, i));
-	*line += i;
+	new = ft_strndup(*line, *i);
+	// free(*line);
+	// *line += i;
 	return (new);
 }
 
@@ -369,11 +369,14 @@ void	pars_split_args(t_all *all)
 		com = all->lst->content;
 		line = com->line;
 		com->args = ft_calloc(1, sizeof(char **));
-		while (*com->line != '\0')
+		while (com->line[i] != '\0')
 		{
 			// printf("ent: %s\n", com->line);
 			tmp2 = com->args;
-			new = pars_line_to_args(com, &com->line);
+			new = pars_line_to_args(com, &com->line, &i);
+			if (line != com->line)
+				free(line);
+			line = com->line;
 			tmp = (char **)ft_calloc(2, sizeof(char *));
 			*tmp = new;
 			com->args = ft_arrjoin(com->args, tmp);

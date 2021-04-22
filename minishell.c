@@ -177,6 +177,7 @@ int			main(int argc, char *argv[], char *envp[])
 		// all.input = "echo $TERM$USER$PWD ; \\";
 		// all.input= "\\'";
 		// all.input= "\\'\\"; // TODO
+		// all.input = "echo $USER+$PWD";
 		if (!isnotempty(all.input))
 		{
 			write(1, "FUCK", 4);
