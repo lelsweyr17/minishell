@@ -48,6 +48,9 @@ typedef struct		s_all
 }					t_all;
 
 void				parser(t_all *all); //, char **line);
+void				pars_shift_array(char **args, int a);
+int					pars_shift_line(char **line, int n);
+char				*strtrim_free(char *str);
 int					pars_split_commands(t_all *all);
 void				pars_get_command(t_all *all);
 void				pars_split_args(t_all *all);

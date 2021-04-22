@@ -9,7 +9,8 @@ void	*del(void *content)
 
 char	*str_free(char **line, char *tmp) // вторым аргументом отправляешь функцию которая возвращает указатель на строку # line = str_free(&line, ft_strjoin(line1, line2));
 {
-	free(*line);
+	if (*line != tmp)
+		free(*line);
 	return (tmp);
 }
 
@@ -23,7 +24,7 @@ void		parser(t_all *all) //, char **line)
 		return ;
 	pars_split_commands(all);
 	pars_split_args(all);
-	// pars_get_command(all);
+	pars_get_command(all);
 	// // printf("p %d i %d line %s\n", len, i, *line);
 	// while ((all->input)[i] != '\n')
 	// {
@@ -45,17 +46,16 @@ int			main(int argc, char *argv[], char *envp[])
 	char	buf[1000];
 	char	*bf;
 	struct termios term;
-	char	*term_name = "xterm-256color";
 	t_com	*com;
 	t_list	*tmp;
 	t_dlist	*hist;
-	t_dlist *empty;
+	// t_dlist *empty;
 	int		len;
 	char	*copy;
 
 	all.lst = 0;
-	empty = 0;
-	empty = ft_dlstnew(empty);
+	// empty = 0;
+	// empty = ft_dlstnew(empty);
 	len = 0;
 	hist = 0;
 	all.env = envp;
@@ -67,7 +67,7 @@ int			main(int argc, char *argv[], char *envp[])
 	term.c_lflag &= ~(ICANON);
 	// tcsetattr(1, TCSANOW, &term);
 	tcsetattr(0, TCSANOW, &term);
-	tgetent(0, term_name);
+	tgetent(0, getenv("TERM"));
 	// execve("/bin/bash", NULL, NULL);
 	// term.c_cc[VMIN] = 1;
 	// term.c_cc[VTIME] = 0;
@@ -79,7 +79,7 @@ int			main(int argc, char *argv[], char *envp[])
 	ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 	while (ft_strcmp(buf, "\4"))
 	{
-		if (((char *)hist->content)[0] != '\0')
+		if (isnotempty(hist->content))
 			ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 		while (hist->next)
 			hist = hist->next;
@@ -97,15 +97,15 @@ int			main(int argc, char *argv[], char *envp[])
 			// if (*bf == '\n')
 			// 	*bf = '\0';
 			// res = get_next_line(0, &buf);
-			if (!ft_strcmp(buf, "\e[A") && hist->content)// && hist->prev)
+			if (!ft_strcmp(buf, "\e[A") && hist->prev)// && hist->prev) // "\e[A"
 			{
 				tputs(restore_cursor, 1, ft_iputchar);
 				tputs(tigetstr("ed"), 1, ft_iputchar);
-				if (hist->prev)
+//				if (hist->prev)
 					hist = hist->prev; // UP
 				write(1, hist->content, ft_strlen(hist->content));
 			}
-			else if (!ft_strcmp(buf, "\e[B") && hist->next)
+			else if (!ft_strcmp(buf, "\e[B") && hist->next) // "\e[B"
 			{
 				tputs(restore_cursor, 1, ft_iputchar);
 				tputs(tigetstr("ed"), 1, ft_iputchar);
@@ -124,7 +124,7 @@ int			main(int argc, char *argv[], char *envp[])
 				// tputs(restore_cursor, 1, ft_iputchar);
 				// tputs(tigetstr("ed"), 1, ft_iputchar);
 			}
-			else if (!strcmp(buf, "\177") && len > 0 && res > 0)
+			else if (!strcmp(buf, "\177") && len > 0) // && res > 0) // "\177" BACKSPACE
 			{
 				tputs(cursor_left, 1, ft_iputchar);
 				tputs(tigetstr("ed"), 1, ft_iputchar);
@@ -159,6 +159,12 @@ int			main(int argc, char *argv[], char *envp[])
 			}
 		} while (ft_strcmp(buf, "\n") && ft_strcmp(buf, "\4"));
 		all.input = (char *)hist->content;
+		if (!isnotempty(hist->content))
+		{
+			write(1, "EMPTY\n", 6);
+			// ft_memset(all.input, 0, len);
+			ft_memset(hist->content, 0, len);
+		}
 		// all.input[len] = '\0';
 		// term.c_lflag |= (ICANON);
 		// term.c_lflag |= (ECHO);
@@ -178,12 +184,7 @@ int			main(int argc, char *argv[], char *envp[])
 		// all.input= "\\'";
 		// all.input= "\\'\\"; // TODO
 		// all.input = "echo $USER+$PWD";
-		if (!isnotempty(all.input))
-		{
-			write(1, "FUCK", 4);
-			ft_memset(all.input, 0, len);
-			free(all.input);
-		}
+		// all.input = "echo $y";
 		buf[0] = '\n';
 		if (all.input[0] != '\0' && !ft_strcmp(buf, "\n") && *all.input != '\n')
 			parser(&all);
@@ -197,7 +198,13 @@ int			main(int argc, char *argv[], char *envp[])
 			int m = -1;
 			while (com->args[++m] != '\0')
 			{
+				// write(1, com->args[m], ft_strlen(com->args[m]));
+				// write(1, "__2\n", 4);
 				free(com->args[m]);
+				// write(1, com->args[m], ft_strlen(com->args[m]));
+				// write(1, "__3\n", 4);
+				// write(1, com->args[m], ft_strlen(com->args[m]));
+				// write(1, "__4\n", 4);
 			}
 			free(com->args);
 			free(com);
