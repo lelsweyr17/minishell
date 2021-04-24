@@ -1,66 +1,14 @@
 #include "minishell.h"
 
-void	*del(void *content)
+void		parser(t_all *all)
 {
-	content = 0;
-	free(content);
-	return (0);
-}
-
-char	*str_free(char **line, char *tmp) // вторым аргументом отправляешь функцию которая возвращает указатель на строку # line = str_free(&line, ft_strjoin(line1, line2));
-{
-	if (*line != tmp)
-		free(*line);
-	return (tmp);
-}
-
-void		parser(t_all *all) //, char **line)
-{
-	// int		len;
-	// int		i;
-
-	// i = 0;
-	if (all->input[0] == '#')
+	if (!isnotempty(all->input, 1))
 		return ;
 	ft_bzero(&all->par, 12);
 	all->lst = 0;
 	pars_split_commands(all);
 	pars_split_args(all);
 	pars_get_command(all);
-	// // printf("p %d i %d line %s\n", len, i, *line);
-	// while ((all->input)[i] != '\n')
-	// {
-	// 	// printf("i %d %c\n", i, (*line)[i]);
-	// 	if ((all->input)[i++] == 34)
-	// 		write(1, "SS\n", 3);
-	// }
-	// // write(1, "nn", 2);
-	// // ft_putnbr_fd(i, 1);
-	// // write(1, &(*line)[i], 1);
-	// write(1, "nothingtodo\n", 12);
-	// return ;
-}
-
-void	pars_free(t_all *all)
-{
-	t_com	*com;
-	t_list	*tmp;
-
-	while (all->lst != 0)// && *all.input != '\n')
-	{
-		com = all->lst->content;
-		// ft_putendl_fd(com->line, 1);
-		if (com->line)
-			free(com->line);
-		int m = -1;
-		while (com->args && com->args[++m] != '\0')
-			free(com->args[m]);
-		free(com->args);
-		free(com);
-		tmp = all->lst;
-		all->lst = all->lst->next;
-		free(tmp);
-	}
 }
 
 int			main(int argc, char *argv[], char *envp[])
@@ -103,7 +51,7 @@ int			main(int argc, char *argv[], char *envp[])
 	while (ft_strcmp(buf, "\4"))
 	{
 		len = 0;
-		if (isnotempty(hist->content))
+		if (isnotempty(hist->content, 0))
 			ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 		while (hist->next)
 			hist = hist->next;
@@ -183,7 +131,7 @@ int			main(int argc, char *argv[], char *envp[])
 			}
 		} while (ft_strcmp(buf, "\n") && ft_strcmp(buf, "\4"));
 		all.input = (char *)hist->content;
-		if (!isnotempty(hist->content))
+		if (!isnotempty(hist->content, 0))
 		{
 			write(1, "EMPTY\n", 6);
 			// ft_memset(all.input, 0, len);
@@ -214,8 +162,8 @@ int			main(int argc, char *argv[], char *envp[])
 		buf[0] = '\n';
 		if (all.input[0] != '\0' && !ft_strcmp(buf, "\n") && *all.input != '\n')
 			parser(&all);
-		// exit (0);
 		pars_free(&all);
+		// exit (0);
 	}
 	write(1, "\n", 1);
 	return (0);

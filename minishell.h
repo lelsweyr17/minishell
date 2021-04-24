@@ -59,7 +59,7 @@ void				pars_get_command(t_all *all);
 void				pars_split_args(t_all *all);
 char				*str_free(char **line, char *tmp);
 int					pars_shift_line(char **line, int i);
-int					isnotempty(char *str);
+int					isnotempty(char *str, int hash);
 void				pars_free(t_all *all);
 
 #endif
