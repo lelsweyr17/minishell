@@ -53,8 +53,7 @@ run:
 
 deb:
 	$(CC) -g -o deb *.c libft/*.c $(TFLAGS)
-
-	# ./deb
+	./deb
 
 cl:
 	$(CC) -g -o cl *.c libft/*.c $(TFLAGS)

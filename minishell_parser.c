@@ -39,6 +39,14 @@ char	*pars_get_env_var(char **line, int i, int n)
 	char	*end;
 	char	*new;
 
+	if (ft_isdigit((*line)[i + 1]))
+	{
+		pars_shift_line(line, i);
+		pars_shift_line(line, i);
+		return (*line);
+	}
+	else if (!ft_isalnum((*line)[i + 1]))
+		return (*line);
 	i++;
 	n++;
 	while (ft_isalnum((*line)[i]) || (*line)[i] == '_')
@@ -48,9 +56,6 @@ char	*pars_get_env_var(char **line, int i, int n)
 		return (0);
 	end = &(*line)[i];
 	env = getenv(new);
-	// write(1, "WHA_", 4);
-	// write(1, env, ft_strlen(env));
-	// write(1, "\n", 1);
 	free(new);
 	if (!env)
 		return (*line);
@@ -75,15 +80,13 @@ int	pars_find_quotes(char **line, char c, int i, int delete_escape)
 				if (delete_escape == 0)
 					i++;
 				else
-				{
 					if ((*line)[i + 1] == '\\' || (*line)[i + 1] == '\"' || (*line)[i + 1] == '$')
 						pars_shift_line(line, i);
 					else
 						i++;
-				}
 			}
 		}
-		else if (c == '\"' && delete_escape == 1 && (*line)[i] == '$')// && i++)
+		else if (c == '\"' && delete_escape == 1 && (*line)[i] == '$')
 		{
 			*line = str_free(line, pars_get_env_var(line, i, i));
 		}
@@ -110,7 +113,7 @@ t_com	*pars_command(char *line, int start, int end)
 	if (!com)
 		errorfunction();
 	com->type = 0;
-	com->pipsem = '\0';
+	ft_bzero(&com->pipsem, 37);
 	com->line = ft_substr(line, start, 1 + end - start);
 	if (!com->line)
 		errorfunction();
@@ -127,66 +130,110 @@ int	pars_check_escape(char *input, int i)
 	return (i);
 }
 
+int	isprevnotempty(char *str, int begin, int last)
+{
+	while (begin < last && str[begin] != '\0')
+	{
+		if (str[begin] != ' ')
+			return (1);
+		begin++;
+	}
+	return (0);
+}
+
+int	pars_check_prev_com(t_all *all)
+{
+	t_list	*begin;
+	t_com	*com;
+	int		i;
+
+	begin = 0;
+	i = -1;
+	if (all->lst)
+	{
+		begin = all->lst;
+		while (all->lst->next)
+			all->lst = all->lst->next;
+		com = all->lst->content;
+		i = com->place;
+	}
+	while (++i < all->par.i)
+		if (all->input[i] != ' ')
+			return (0);
+	if (begin)
+		all->lst = begin;
+	all->par.i = -1;
+	pars_free(all);
+	return (1);
+}
+
+void	pars_check_command(t_all *all, t_com *com)
+{
+	if (pars_check_prev_com(all))
+		return ;
+	com = pars_command(all->input, all->par.st, all->par.i - 1);
+	ft_lstadd_back(&all->lst, ft_lstnew(com));
+	com->pipsem = all->input[all->par.i];
+	com->place = all->par.i;
+	all->par.i++;
+	all->par.st = all->par.i;
+	if (all->input[all->par.i - 1] == '|' && !isnotempty(&all->input[all->par.i]))
+	{
+		all->par.i = -1;
+		pars_free(all);
+		return ;	
+	}
+}
+
+
+
 int	pars_split_commands(t_all *all)
 {
-	int		i;
-	int		st;
 	char	*c;
-	// char	cc;
 	t_com	*com;
-	t_list	*lst;
 
-	i = 0;
-	st = 0;
 	c = 0;
-	lst = 0;
-	while (all->input[i] != '\0')
+	while (all->input[all->par.i] != '\0')
 	{
-		c = ft_strchr("\"'\\;|&#", all->input[i]);
+		c = ft_strchr("\"'\\;|&#", all->input[all->par.i]);
 		if (c)
 		{
 			// cc = *c;
 			if (*c == '\"' || *c == '\'')
-				i = pars_find_quotes(&all->input, *c, i, 0);
+				all->par.i = pars_find_quotes(&all->input, *c, all->par.i, 0);
 			else if (*c == ';' || *c == '|')
-			{
-				com = pars_command(all->input, st, i - 1);
-				ft_lstadd_back(&lst, ft_lstnew(com));
-				com->pipsem = *c;
-				i++;
-				st = i;
-			}
+				pars_check_command(all, com);
 			else if (*c == '\\')
-				i = pars_check_escape(all->input, i);
+				all->par.i = pars_check_escape(all->input, all->par.i);
 			else if (*c == '#')
 			{
-				if (all->input[i - 1] == ' ')
+				if (all->input[all->par.i - 1] == ' ')
 				{
-					com = pars_command(all->input, st, i - 1);
-					ft_lstadd_back(&lst, ft_lstnew(com));
+					com = pars_command(all->input, all->par.st, all->par.i - 1);
+					ft_lstadd_back(&all->lst, ft_lstnew(com));
 					break ;
 				}
 				else
-					i++;
+					all->par.i++;
 			}
 			else if (*c == '&')
-				i++;
+				all->par.i++;
 		}
 		else
-			i++;
-		if (i == -1)
+			all->par.i++;
+		if (all->par.i == -1)
 		{
 			write(1, "Syntax error!\n", 14);
 			break ;
 		}
-		if (all->input[i] == '\0')
+		if (all->input[all->par.i] == '\0')
 		{
-			com = pars_command(all->input, st, i - 1);
-			ft_lstadd_back(&lst, ft_lstnew(com));
+			com = pars_command(all->input, all->par.st, all->par.i - 1);
+			ft_lstadd_back(&all->lst, ft_lstnew(com));
 		}
 	}
-	all->lst = lst;
-	return (i);
+	// all->lst = lst;
+	return (all->par.i);
 }
 
 void	pars_get_command(t_all *all)
@@ -286,7 +333,7 @@ char	*pars_line_to_args(t_com *com, char **line, int *i)
 	// if (new != *line)
 	// 	// free(*line);
 	// free(new); /* WHY NOT FREED? */
-	new = ft_strndup(&(*line)[s], *i);
+	new = ft_strndup(&(*line)[s], *i - s);
 	// free(*line);
 	// *line += i;
 	return (new);

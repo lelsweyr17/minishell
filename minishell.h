@@ -28,6 +28,8 @@ typedef struct		s_com
 	int				type;
 	int				n;
 	char			pipsem;
+	int				place;
+	int				pipamount;
 	char			*line;
 	char			**args;
 	t_list			*re;
@@ -36,6 +38,7 @@ typedef struct		s_com
 typedef struct		s_par
 {
 	int				i;
+	int				st;
 	int				sem;
 }					t_par;
 
@@ -57,5 +60,6 @@ void				pars_split_args(t_all *all);
 char				*str_free(char **line, char *tmp);
 int					pars_shift_line(char **line, int i);
 int					isnotempty(char *str);
+void				pars_free(t_all *all);
 
 #endif

@@ -22,6 +22,8 @@ void		parser(t_all *all) //, char **line)
 	// i = 0;
 	if (all->input[0] == '#')
 		return ;
+	ft_bzero(&all->par, 12);
+	all->lst = 0;
 	pars_split_commands(all);
 	pars_split_args(all);
 	pars_get_command(all);
@@ -39,6 +41,28 @@ void		parser(t_all *all) //, char **line)
 	// return ;
 }
 
+void	pars_free(t_all *all)
+{
+	t_com	*com;
+	t_list	*tmp;
+
+	while (all->lst != 0)// && *all.input != '\n')
+	{
+		com = all->lst->content;
+		// ft_putendl_fd(com->line, 1);
+		if (com->line)
+			free(com->line);
+		int m = -1;
+		while (com->args && com->args[++m] != '\0')
+			free(com->args[m]);
+		free(com->args);
+		free(com);
+		tmp = all->lst;
+		all->lst = all->lst->next;
+		free(tmp);
+	}
+}
+
 int			main(int argc, char *argv[], char *envp[])
 {
 	t_all	all;
@@ -47,7 +71,6 @@ int			main(int argc, char *argv[], char *envp[])
 	char	*bf;
 	struct termios term;
 	t_com	*com;
-	t_list	*tmp;
 	t_dlist	*hist;
 	// t_dlist *empty;
 	int		len;
@@ -79,6 +102,7 @@ int			main(int argc, char *argv[], char *envp[])
 	ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 	while (ft_strcmp(buf, "\4"))
 	{
+		len = 0;
 		if (isnotempty(hist->content))
 			ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 		while (hist->next)
@@ -124,7 +148,7 @@ int			main(int argc, char *argv[], char *envp[])
 				// tputs(restore_cursor, 1, ft_iputchar);
 				// tputs(tigetstr("ed"), 1, ft_iputchar);
 			}
-			else if (!strcmp(buf, "\177") && len > 0) // && res > 0) // "\177" BACKSPACE
+			else if (!strcmp(buf, "\177") && len > 0 && res > 0) // "\177" BACKSPACE
 			{
 				tputs(cursor_left, 1, ft_iputchar);
 				tputs(tigetstr("ed"), 1, ft_iputchar);
@@ -184,34 +208,14 @@ int			main(int argc, char *argv[], char *envp[])
 		// all.input= "\\'";
 		// all.input= "\\'\\"; // TODO
 		// all.input = "echo $USER+$PWD";
-		// all.input = "echo $y";
+		// all.input = "echo $q";
+		// all.input = "echo 11 22 33";
+		// all.input = "echo 1 ; echo 2";
 		buf[0] = '\n';
 		if (all.input[0] != '\0' && !ft_strcmp(buf, "\n") && *all.input != '\n')
 			parser(&all);
 		// exit (0);
-		while (all.lst != 0)// && *all.input != '\n')
-		{
-			com = all.lst->content;
-			// ft_putendl_fd(com->line, 1);
-			if (com->line)
-				free(com->line);
-			int m = -1;
-			while (com->args[++m] != '\0')
-			{
-				// write(1, com->args[m], ft_strlen(com->args[m]));
-				// write(1, "__2\n", 4);
-				free(com->args[m]);
-				// write(1, com->args[m], ft_strlen(com->args[m]));
-				// write(1, "__3\n", 4);
-				// write(1, com->args[m], ft_strlen(com->args[m]));
-				// write(1, "__4\n", 4);
-			}
-			free(com->args);
-			free(com);
-			tmp = all.lst;
-			all.lst = all.lst->next;
-			free(tmp);
-		}
+		pars_free(&all);
 	}
 	write(1, "\n", 1);
 	return (0);
