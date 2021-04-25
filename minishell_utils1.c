@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-int	isnotempty(char *str, int hash)
+int	isempty(char *str, int hash)
 {
 	int	i;
 
@@ -8,12 +8,25 @@ int	isnotempty(char *str, int hash)
 	while (str[i] != '\0')
 	{
 		if (hash == 1 && ((str[i] == ' ' && str[i + 1] == '#') || str[0] == '#'))
-			return (0);
-		if (str[i] != ' ')
 			return (1);
+		if (str[i] != ' ')
+			return (0);
 		i++;
 	}
-	return (0);
+	return (1);
+}
+
+int	isprevempty(char *str, int begin, int last)
+{
+	while (begin < last--)
+	{
+		if (str[last] == '<' || str[last] == '>')
+			return (1);
+		if (str[last] != ' ')
+			return (0);
+		// last--;
+	}
+	return (1);
 }
 
 char	*str_free(char **line, char *tmp)

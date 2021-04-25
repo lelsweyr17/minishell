@@ -55,11 +55,25 @@ void				pars_shift_array(char **args, int a);
 int					pars_shift_line(char **line, int n);
 char				*strtrim_free(char *str);
 int					pars_split_commands(t_all *all);
-void				pars_get_command(t_all *all);
-void				pars_split_args(t_all *all);
 char				*str_free(char **line, char *tmp);
 int					pars_shift_line(char **line, int i);
-int					isnotempty(char *str, int hash);
+/* minishell_utils1.c */
+int					isprevempty(char *str, int begin, int last);
+int					isempty(char *str, int hash);
 void				pars_free(t_all *all);
+/* minishell_parser2.c */
+void				pars_get_args(t_all *all);
+void				pars_split_args(t_com *com);
+char				*pars_get_next_arg(t_com *com, char **line, int *i, int s);
+int					pars_get_com(t_com *com);
+void				pars_cmp_com(t_com *com, char **commands);
+/* minishell_parser3.c */
+void				pars_echo_del_n_str(t_com *com);
+void				pars_echo_n(t_com *com);
+int					pars_get_env_value(char **line, char **env, int n, int i);
+int					pars_dollar(char **line, int i, int n);
+int					pars_find_quotes(char **line, char c, int i, int delescape);
+
+int					pars_check_redirects(t_all *all, char **line, char c, int i);
 
 #endif

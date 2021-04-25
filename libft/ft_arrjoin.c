@@ -17,7 +17,7 @@ char	**ft_arrjoin(char **s1, char **s2)
 	char	**res;
 	size_t	l1;
 	size_t	l2;
-	int		i;
+	size_t	i;
 
 	i = -1;
 	if (!s1 || !s2)

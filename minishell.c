@@ -2,13 +2,13 @@
 
 void		parser(t_all *all)
 {
-	if (!isnotempty(all->input, 1))
+	if (isempty(all->input, 1))
 		return ;
 	ft_bzero(&all->par, 12);
 	all->lst = 0;
 	pars_split_commands(all);
-	pars_split_args(all);
-	pars_get_command(all);
+	pars_get_args(all);
+	
 }
 
 int			main(int argc, char *argv[], char *envp[])
@@ -16,9 +16,9 @@ int			main(int argc, char *argv[], char *envp[])
 	t_all	all;
 	int		res;
 	char	buf[1000];
-	char	*bf;
+	// char	*bf;
 	struct termios term;
-	t_com	*com;
+	// t_com	*com;
 	t_dlist	*hist;
 	// t_dlist *empty;
 	int		len;
@@ -51,7 +51,7 @@ int			main(int argc, char *argv[], char *envp[])
 	while (ft_strcmp(buf, "\4"))
 	{
 		len = 0;
-		if (isnotempty(hist->content, 0))
+		if (!isempty(hist->content, 0))
 			ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 		while (hist->next)
 			hist = hist->next;
@@ -61,7 +61,7 @@ int			main(int argc, char *argv[], char *envp[])
 		do
 		{
 			// if (!ft_strchr(buf, '\n'))
-            	ft_memset(buf, 0, res);
+				ft_memset(buf, 0, res);
 			// bf = buf;
 			res = read(0, buf, 100);
 			// buf[res] = '\0';
@@ -131,12 +131,15 @@ int			main(int argc, char *argv[], char *envp[])
 			}
 		} while (ft_strcmp(buf, "\n") && ft_strcmp(buf, "\4"));
 		all.input = (char *)hist->content;
-		if (!isnotempty(hist->content, 0))
+		if (isempty(hist->content, 0))
 		{
 			write(1, "EMPTY\n", 6);
 			// ft_memset(all.input, 0, len);
 			ft_memset(hist->content, 0, len);
 		}
+		write(1, "VHOD:_", 6);
+		write(1, all.input, ft_strlen(all.input));
+		write(1, "_\n", 2);
 		// all.input[len] = '\0';
 		// term.c_lflag |= (ICANON);
 		// term.c_lflag |= (ECHO);
@@ -159,6 +162,7 @@ int			main(int argc, char *argv[], char *envp[])
 		// all.input = "echo $q";
 		// all.input = "echo 11 22 33";
 		// all.input = "echo 1 ; echo 2";
+		// all.input = "1>>2";
 		buf[0] = '\n';
 		if (all.input[0] != '\0' && !ft_strcmp(buf, "\n") && *all.input != '\n')
 			parser(&all);
