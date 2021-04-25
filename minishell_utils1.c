@@ -18,13 +18,12 @@ int	isempty(char *str, int hash)
 
 int	isprevempty(char *str, int begin, int last)
 {
-	while (begin < last--)
+	while (begin < --last)
 	{
 		if (str[last] == '<' || str[last] == '>')
-			return (1);
+			return (2);
 		if (str[last] != ' ')
 			return (0);
-		// last--;
 	}
 	return (1);
 }

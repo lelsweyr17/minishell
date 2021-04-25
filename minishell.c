@@ -1,10 +1,22 @@
 #include "minishell.h"
 
+char    **arrdup(char **envp)
+{
+    int     i;
+    char    **env;
+    i = -1;
+    env = (char **)ft_calloc(array_size(envp) + 1, sizeof(char *));
+    while (envp[++i])
+        env[i] = ft_strdup(envp[i]);
+    env[i] = NULL;
+    return (env);
+}
+
 void		parser(t_all *all)
 {
 	if (isempty(all->input, 1))
 		return ;
-	ft_bzero(&all->par, 12);
+	ft_bzero(&all->par, sizeof(all->par));
 	all->lst = 0;
 	pars_split_commands(all);
 	pars_get_args(all);
@@ -29,7 +41,7 @@ int			main(int argc, char *argv[], char *envp[])
 	// empty = ft_dlstnew(empty);
 	len = 0;
 	hist = 0;
-	all.env = envp;
+	all.env = arrdup(envp);
 	if (!argc || !argv)
 		exit(0);
     tcgetattr(0, &term);
@@ -137,9 +149,9 @@ int			main(int argc, char *argv[], char *envp[])
 			// ft_memset(all.input, 0, len);
 			ft_memset(hist->content, 0, len);
 		}
-		write(1, "VHOD:_", 6);
-		write(1, all.input, ft_strlen(all.input));
-		write(1, "_\n", 2);
+// 		write(1, "VHOD:_", 6);
+// 		write(1, all.input, ft_strlen(all.input));
+// 		write(1, "_\n", 2);
 		// all.input[len] = '\0';
 		// term.c_lflag |= (ICANON);
 		// term.c_lflag |= (ECHO);
@@ -162,7 +174,10 @@ int			main(int argc, char *argv[], char *envp[])
 		// all.input = "echo $q";
 		// all.input = "echo 11 22 33";
 		// all.input = "echo 1 ; echo 2";
-		// all.input = "1>>2";
+		// all.input = "echo>2";
+		// all.input = "echo $USER ;";
+		// all.input = "as ;  ;";
+		// all.input = "a > 1 b > 2 c";
 		buf[0] = '\n';
 		if (all.input[0] != '\0' && !ft_strcmp(buf, "\n") && *all.input != '\n')
 			parser(&all);

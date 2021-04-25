@@ -29,9 +29,9 @@ typedef struct		s_com
 	int				n;
 	char			pipsem;
 	int				place;
-	int				pipamount;
 	char			*line;
 	char			**args;
+	int				pipamount;
 	t_list			*re;
 }					t_com;
 
