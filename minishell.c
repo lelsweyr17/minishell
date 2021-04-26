@@ -1,15 +1,16 @@
 #include "minishell.h"
 
-char    **arrdup(char **envp)
+char	**arrdup(char **envp)
 {
-    int     i;
-    char    **env;
-    i = -1;
-    env = (char **)ft_calloc(array_size(envp) + 1, sizeof(char *));
-    while (envp[++i])
-        env[i] = ft_strdup(envp[i]);
-    env[i] = NULL;
-    return (env);
+	int		i;
+	char	**env;
+
+	i = -1;
+	env = (char **)ft_calloc(array_size(envp) + 1, sizeof(char *));
+	while (envp[++i])
+		env[i] = ft_strdup(envp[i]);
+	env[i] = NULL;
+	return (env);
 }
 
 void		parser(t_all *all)
@@ -30,11 +31,15 @@ int			main(int argc, char *argv[], char *envp[])
 	char	buf[1000];
 	// char	*bf;
 	struct termios term;
+	// t_com	*com;
 	t_dlist	*hist;
+	// t_dlist *empty;
 	int		len;
 	char	*copy;
 
 	all.lst = 0;
+	// empty = 0;
+	// empty = ft_dlstnew(empty);
 	len = 0;
 	hist = 0;
 	all.env = arrdup(envp);

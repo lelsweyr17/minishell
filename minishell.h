@@ -76,4 +76,6 @@ int					pars_find_quotes(char **line, char c, int i, int delescape);
 
 int					pars_check_redirects(t_all *all, char **line, char c, int i);
 
+int					array_size(char **ar);
+
 #endif

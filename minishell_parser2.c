@@ -50,6 +50,7 @@ void	pars_redirects(t_com *com, char *line, int *i)
 		re->type++;
 	if (line[*i] == line[*i + 1] && *i++)
 		re->type += 2;
+	*i += 1;
 	while (line[*i] == ' ')
 		*i += 1;
 }
