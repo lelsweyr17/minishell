@@ -48,11 +48,11 @@ void	pars_redirects(t_com *com, char *line, int *i)
 	re->type = 1;
 	if (line[*i] == '<')
 		re->type++;
-	if (line[*i] == line[*i + 1] && *i++)
+	if (line[*i] == line[*i + 1] && (*i)++)
 		re->type += 2;
-	*i += 1;
+	(*i)++;
 	while (line[*i] == ' ')
-		*i += 1;
+		(*i)++;
 }
 
 void	pars_line(char **line, int *i)
@@ -86,7 +86,8 @@ char	*pars_get_next_arg(t_com *com, char **line, int *i, int s)
 		while ((*line)[*i] != '\0' && (*line)[*i] != ' ')
 			pars_line(line, i);
 		re->fn = ft_strndup(&(*line)[s], *i - s);
-		write(1, re->fn, ft_strlen(re->fn));
+		// write(1, re->fn, ft_strlen(re->fn));
+		// write(1, "\n", 1);
 	}
 	return (new);
 }

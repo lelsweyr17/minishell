@@ -178,7 +178,7 @@ int			main(int argc, char *argv[], char *envp[])
 		// all.input = "echo>2";
 		// all.input = "echo $USER ;";
 		// all.input = "as ;  ;";
-		// all.input = "a > 1 b > 2 c";
+		// all.input = "a >> 1 b > 2 c";
 		// all.input = "1;2;3;4;5;6";
 		buf[0] = '\n';
 		if (all.input[0] != '\0' && !ft_strcmp(buf, "\n") && *all.input != '\n')
