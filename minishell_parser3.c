@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void	pars_echo_del_n_str(t_com *com)
+void	pars_echo_n(t_com *com)
 {
 	int		a;
 	int		i;
@@ -26,7 +26,7 @@ void	pars_echo_del_n_str(t_com *com)
 	}
 }
 
-void	pars_echo_n(t_com *com)
+void	pars_echo(t_com *com)
 {
 	char	*space;
 	char	**args;
@@ -35,7 +35,7 @@ void	pars_echo_n(t_com *com)
 	m = 1;
 	args = com->args;
 	space = ft_strdup(" ");
-	pars_echo_del_n_str(com);
+	pars_echo_n(com);
 	while (args[m + 1])
 	{
 		args[1] = str_free(&args[1], ft_strjoin(args[1], space));

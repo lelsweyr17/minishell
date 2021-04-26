@@ -28,7 +28,7 @@ t_dlist	*ft_dlstnew(void *content)
 void	ft_dlstadd_back(t_dlist **dlst, t_dlist *new)
 {
 	t_dlist	*dlist;
-	t_dlist *dprev;
+	t_dlist	*dprev;
 
 	if (dlst && !*dlst)
 	{
@@ -40,26 +40,6 @@ void	ft_dlstadd_back(t_dlist **dlst, t_dlist *new)
 		dlist = *dlst;
 		while (dlist->next)
 			dlist = dlist->next;
-		dlist->next = new;
-		dprev = dlist;
-		dlist = dlist->next;
-		dlist->prev = dprev;
-	}
-}
-
-void	ft_dlstadd_next(t_dlist **dlst, t_dlist *new)
-{
-	t_dlist	*dlist;
-	t_dlist *dprev;
-
-	if (dlst && !*dlst)
-	{
-		*dlst = new;
-		return ;
-	}
-	if (dlst && *dlst)
-	{
-		dlist = *dlst;
 		dlist->next = new;
 		dprev = dlist;
 		dlist = dlist->next;
@@ -79,6 +59,7 @@ void	ft_dlstadd_front(t_dlist **dlst, t_dlist *new)
 	*dlst = new;
 }
 
+/* NEXT FUNCTIONS DOES NOT WORK PROPERLY */
 int	ft_dlstsize(t_dlist *dlst)
 {
 	int	len;
@@ -92,4 +73,24 @@ int	ft_dlstsize(t_dlist *dlst)
 		len++;
 	}
 	return (len);
+}
+
+void	ft_dlstadd_next(t_dlist **dlst, t_dlist *new)
+{
+	t_dlist	*dlist;
+	t_dlist	*dprev;
+
+	if (dlst && !*dlst)
+	{
+		*dlst = new;
+		return ;
+	}
+	if (dlst && *dlst)
+	{
+		dlist = *dlst;
+		dlist->next = new;
+		dprev = dlist;
+		dlist = dlist->next;
+		dlist->prev = dprev;
+	}
 }

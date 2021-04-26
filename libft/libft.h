@@ -43,7 +43,8 @@ typedef struct s_list
 
 typedef struct s_dlist
 {
-	void			*content;
+	char			*content;
+	char			*dup;
 	struct s_dlist	*next;
 	struct s_dlist	*prev;
 }					t_dlist;

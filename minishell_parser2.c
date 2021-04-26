@@ -118,7 +118,7 @@ void	pars_split_args(t_com *com)
 			pars_get_com(com);
 	}
 	if (com->type == 1)
-		pars_echo_n(com);
+		pars_echo(com);
 }
 
 /* PRINTF int m */

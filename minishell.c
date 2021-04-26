@@ -24,6 +24,21 @@ void		parser(t_all *all)
 	
 }
 
+void	hist_prep(t_dlist *hist, char *tmp, char *input)
+{
+	if (hist->next)
+	{
+		if (tmp)
+			free(tmp);
+		hist->content = ft_strdup(hist->dup);
+	}
+	while (hist->next)
+		hist = hist->next;
+	hist->dup = ft_strdup(input);
+	free(input);
+	hist->content = ft_strdup(hist->dup);
+}
+
 int			main(int argc, char *argv[], char *envp[])
 {
 	t_all	all;
@@ -35,7 +50,7 @@ int			main(int argc, char *argv[], char *envp[])
 	t_dlist	*hist;
 	// t_dlist *empty;
 	int		len;
-	char	*copy;
+	char	*tmp;
 
 	all.lst = 0;
 	// empty = 0;
@@ -59,12 +74,11 @@ int			main(int argc, char *argv[], char *envp[])
 	// char *ss = key_right;
 	// char *ss = tgetstr("kr", 0);
 	// hist = ft_dlstnew(all.input);
-	copy = 0;
 	ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 	while (ft_strcmp(buf, "\4"))
 	{
 		len = 0;
-		if (!isempty(hist->content, 0))
+		if (!isempty(hist->content, 0))// && hst == 0)
 			ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 		while (hist->next)
 			hist = hist->next;
@@ -82,20 +96,27 @@ int			main(int argc, char *argv[], char *envp[])
 			// if (*bf == '\n')
 			// 	*bf = '\0';
 			// res = get_next_line(0, &buf);
-			if (!ft_strcmp(buf, "\e[A") && hist->prev)// && hist->prev) // "\e[A"
+			if (!ft_strcmp(buf, "\e[A"))// && hist->prev) // "\e[A"
 			{
-				tputs(restore_cursor, 1, ft_iputchar);
-				tputs(tigetstr("ed"), 1, ft_iputchar);
-//				if (hist->prev)
+				if (hist->prev)
+				{
+					tputs(restore_cursor, 1, ft_iputchar);
+					tputs(tigetstr("ed"), 1, ft_iputchar);
 					hist = hist->prev; // UP
-				write(1, hist->content, ft_strlen(hist->content));
+					write(1, hist->content, ft_strlen(hist->content));
+				}
+				ft_bzero(buf, res + 1);
 			}
-			else if (!ft_strcmp(buf, "\e[B") && hist->next) // "\e[B"
+			else if (!ft_strcmp(buf, "\e[B")) // "\e[B"
 			{
-				tputs(restore_cursor, 1, ft_iputchar);
-				tputs(tigetstr("ed"), 1, ft_iputchar);
-				hist = hist->next; // DOWN
-				write(1, hist->content, ft_strlen(hist->content));
+				if (hist->next)
+				{
+					tputs(restore_cursor, 1, ft_iputchar);
+					tputs(tigetstr("ed"), 1, ft_iputchar);
+					hist = hist->next; // DOWN
+					write(1, hist->content, ft_strlen(hist->content));
+				}
+				ft_bzero(buf, res + 1);
 			}
 			else if (!ft_strcmp(buf, "\e[C"))
 			{
@@ -113,7 +134,7 @@ int			main(int argc, char *argv[], char *envp[])
 			{
 				tputs(cursor_left, 1, ft_iputchar);
 				tputs(tigetstr("ed"), 1, ft_iputchar);
-				((char *)hist->content)[--len] = '\0';
+				(hist->content)[--len] = '\0';
 			}
 			else if (!ft_strcmp(buf, "\3"))
 			{
@@ -126,24 +147,26 @@ int			main(int argc, char *argv[], char *envp[])
 			}
 			else if (ft_strcmp(buf, "\4") && strcmp(buf, "\177"))
 			{
-			    write(1, buf, res);
-				if (!hist->next && !copy)
-				{
-					copy = ft_strdup(hist->content);
-				}
-				// all.input = str_free(&all.input, ft_strjoin(all.input, buf));
-				hist->content = str_free((char **)&hist->content, ft_strjoin(hist->content, buf));
-				len = ft_strlen(hist->content);
-				if (!ft_strcmp(buf, "\n"))
-					((char *)hist->content)[len - 1] = '\0';
+				write(1, buf, res);
+				hist->content = str_free(&hist->content, ft_strjoin(hist->content, buf));
+				if (hist->next == 0)
+					tmp = hist->content;
 			}
+			len = ft_strlen(hist->content);
+			if (!ft_strcmp(buf, "\n"))
+				(hist->content)[len - 1] = '\0';
 			if (!ft_strcmp(buf, "\4"))
 			{
 				write(1, "exit", 4);
 				exit (0);
 			}
 		} while (ft_strcmp(buf, "\n") && ft_strcmp(buf, "\4"));
-		all.input = (char *)hist->content;
+		write(1, "TEMP: ", 6);
+		write(1, tmp, ft_strlen(tmp));
+		ft_putnbr_fd(len, 1);
+		write(1, "\n", 1);
+		all.input = ft_strdup(hist->content); /* is there ft_strdup() need? */
+		free(hist->content);
 		if (isempty(hist->content, 0))
 		{
 			write(1, "EMPTY\n", 6);
@@ -180,9 +203,10 @@ int			main(int argc, char *argv[], char *envp[])
 		// all.input = "as ;  ;";
 		// all.input = "a >> 1 b > 2 c";
 		// all.input = "1;2;3;4;5;6";
-		buf[0] = '\n';
-		if (all.input[0] != '\0' && !ft_strcmp(buf, "\n") && *all.input != '\n')
+		// buf[0] = '\n';
+		if (all.input[0] != '\0' && *all.input != '\n')// && !ft_strcmp(buf, "\n"))
 			parser(&all);
+		hist_prep(hist, tmp, all.input);
 		pars_free(&all);
 		// exit (0);
 	}

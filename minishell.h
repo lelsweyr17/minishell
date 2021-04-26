@@ -68,8 +68,8 @@ char				*pars_get_next_arg(t_com *com, char **line, int *i, int s);
 int					pars_get_com(t_com *com);
 void				pars_cmp_com(t_com *com, char **commands);
 /* minishell_parser3.c */
-void				pars_echo_del_n_str(t_com *com);
 void				pars_echo_n(t_com *com);
+void				pars_echo(t_com *com);
 int					pars_get_env_value(char **line, char **env, int n, int i);
 int					pars_dollar(char **line, int i, int n);
 int					pars_find_quotes(char **line, char c, int i, int delescape);
