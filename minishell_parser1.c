@@ -39,6 +39,7 @@ int	pars_check_prev_com(t_all *all)
 			all->lst = all->lst->next;
 		com = all->lst->content;
 		i = com->place;
+		all->lst = begin;
 	}
 	if (!isprevempty(all->input, i, all->par.i))
 		return (0);
