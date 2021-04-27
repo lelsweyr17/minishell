@@ -161,10 +161,10 @@ int			main(int argc, char *argv[], char *envp[])
 				exit (0);
 			}
 		} while (ft_strcmp(buf, "\n") && ft_strcmp(buf, "\4"));
-		write(1, "TEMP: ", 6);
-		write(1, tmp, ft_strlen(tmp));
-		ft_putnbr_fd(len, 1);
-		write(1, "\n", 1);
+		// write(1, "TEMP: ", 6);
+		// write(1, tmp, ft_strlen(tmp));
+		// ft_putnbr_fd(len, 1);
+		// write(1, "\n", 1);
 		all.input = ft_strdup(hist->content); /* is there ft_strdup() need? */
 		free(hist->content);
 		if (isempty(hist->content, 0))

@@ -62,6 +62,7 @@ int	pars_dollar(char **line, int i, int n)
 {
 	char	*env;
 	char	*new;
+	int		len;
 
 	if (ft_isdigit((*line)[i++ + 1]))
 	{
@@ -77,9 +78,26 @@ int	pars_dollar(char **line, int i, int n)
 	new = ft_strndup(&((*line)[n]), i - n);
 	if (!new)
 		return (0);
+	write(1, new, ft_strlen(new));
 	env = getenv(new);
+	if (!env)
+	{
+		write(1, "len: ", 5);
+		ft_putnbr(len = ft_strlen(new) + 1);
+		write(1, "\n", 1);
+		n--;
+		while (len--)
+		{
+			pars_shift_line(line, n);
+		}
+		// if (n == 0)
+		// 	n--;
+	}
+	else
+		pars_get_env_value(line, &env, n, i);
+	write(1, "ext\n", 4);
+	ft_putnbr(n);
 	free(new);
-	pars_get_env_value(line, &env, n, i);
 	return (n);
 }
 

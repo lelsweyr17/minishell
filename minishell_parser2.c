@@ -12,11 +12,11 @@ void	pars_cmp_com(t_com *com, char **commands)
 		str[i] = ft_tolower(com->args[0][i]);
 	str[i] = '\0';
 	n = -1;
-	while (n < 6 && com->type == 0)
-		if (ft_strncmp(str, commands[++n], i) == 0)
+	while (++n < 7 && com->type == 0)
+		if (ft_strncmp(str, commands[n], ft_strlen(commands[n])) == 0)
 			com->type = 1 << n;
 	if (com->type == 0)
-		com->type = 1 << ++n;
+		com->type = 1 << n;
 	printf("getcom\t_%s_\t_%d_\t_%c_%d\n", com->line, com->type, com->pipsem, i);
 }
 
@@ -35,26 +35,6 @@ int	pars_get_com(t_com *com)
 	return (com->type);
 }
 
-void	pars_redirects(t_com *com, char *line, int *i)
-{
-	t_re	*re;
-
-	re = ft_calloc(1, sizeof(t_re));
-	if (!re)
-		com->type = -1; /* SOME KIND OF STUPIDITY */
-	ft_lstadd_back(&com->re, ft_lstnew(re));
-	if (!com->re)
-		com->type = -1; /* SOME KIND OF STUPIDITY */
-	re->type = 1;
-	if (line[*i] == '<')
-		re->type++;
-	if (line[*i] == line[*i + 1] && (*i)++)
-		re->type += 2;
-	(*i)++;
-	while (line[*i] == ' ')
-		(*i)++;
-}
-
 void	pars_line(char **line, int *i)
 {
 	if ((*line)[*i] == '\\')
@@ -69,26 +49,51 @@ void	pars_line(char **line, int *i)
 		*i += 1;
 }
 
+void	pars_redirects_type(t_re *re, char *line, int *i)
+{
+	re->type = 1;
+	if (line[*i] == '<')
+		re->type++;
+	if (line[*i] == line[*i + 1] && (*i)++)
+		re->type += 2;
+	(*i)++;
+	while (line[*i] == ' ')
+		(*i)++;
+}
+
+void	pars_redirects(t_com *com, char **line, int *i)
+{
+	t_re	*re;
+	t_list	*begin;
+	int		s;
+
+	re = ft_calloc(1, sizeof(t_re));
+	if (!re)
+		com->type = -1; /* SOME KIND OF STUPIDITY */
+	ft_lstadd_back(&com->re, ft_lstnew(re));
+	if (!com->re)
+		com->type = -1; /* SOME KIND OF STUPIDITY */
+	pars_redirects_type(re, *line, i);
+	begin = com->re;
+	while (com->re->next)
+		com->re = com->re->next;
+	s = *i;
+	re = com->re->content;
+	while ((*line)[*i] != '\0' && (*line)[*i] != ' ')
+		pars_line(line, i);
+	re->fn = ft_strndup(&(*line)[s], *i - s);
+	com->re = begin;
+}
+
 char	*pars_get_next_arg(t_com *com, char **line, int *i, int s)
 {
 	char	*new;
-	t_re	*re;
 
 	while ((*line)[*i] != '\0' && (*line)[*i] != ' ' && (*line)[*i] != '<' && (*line)[*i] != '>')
 		pars_line(line, i);
 	new = ft_strndup(&(*line)[s], *i - s);
 	if (*new == '\0' && ft_strchr("<>", (*line)[*i]))
-	{
-		// free(new);
-		pars_redirects(com, *line, i);
-		s = *i;
-		re = com->re->content;
-		while ((*line)[*i] != '\0' && (*line)[*i] != ' ')
-			pars_line(line, i);
-		re->fn = ft_strndup(&(*line)[s], *i - s);
-		// write(1, re->fn, ft_strlen(re->fn));
-		// write(1, "\n", 1);
-	}
+		pars_redirects(com, line, i);
 	return (new);
 }
 
@@ -119,6 +124,20 @@ void	pars_split_args(t_com *com)
 	}
 	if (com->type == 1)
 		pars_echo(com);
+	// t_re	*re;
+	// t_list	*begin;
+	// begin = com->re;
+	// while (com->re)
+	// {
+	// 	re = com->re->content;
+	// 	write(1, "REDIR: ", 7);
+	// 	ft_putnbr(re->type);
+	// 	write(1, "\n", 1);
+	// 	write(1, re->fn, ft_strlen(re->fn));
+	// 	write(1, "\n", 1);
+	// 	com->re = com->re->next;
+	// }
+	// com->re = begin;
 }
 
 /* PRINTF int m */
