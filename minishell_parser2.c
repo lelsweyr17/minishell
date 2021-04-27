@@ -89,11 +89,13 @@ char	*pars_get_next_arg(t_com *com, char **line, int *i, int s)
 {
 	char	*new;
 
+	new = 0;
 	while ((*line)[*i] != '\0' && (*line)[*i] != ' ' && (*line)[*i] != '<' && (*line)[*i] != '>')
 		pars_line(line, i);
-	new = ft_strndup(&(*line)[s], *i - s);
-	if (*new == '\0' && ft_strchr("<>", (*line)[*i]))
+	if (ft_strchr("<>", (*line)[*i]))
 		pars_redirects(com, line, i);
+	else
+		new = ft_strndup(&(*line)[s], *i - s);
 	return (new);
 }
 
@@ -111,14 +113,14 @@ void	pars_split_args(t_com *com)
 		while (com->line[i] == ' ')
 			i++;
 		new = pars_get_next_arg(com, &com->line, &i, i);
-		tmp = (char **)ft_calloc(2, sizeof(char *));
-		*tmp = new;
-		if (*new != '\0')
+		if (new)// != '\0')
 		{
+			tmp = (char **)ft_calloc(2, sizeof(char *));
+			*tmp = new;
 			com->args = ft_arrjoin(com->args, tmp);
 			free(tmp2);
+			free(tmp);
 		}
-		free(tmp);
 		if (com->type == 0)
 			pars_get_com(com);
 	}
