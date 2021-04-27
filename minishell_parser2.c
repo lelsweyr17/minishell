@@ -1,54 +1,5 @@
 #include "minishell.h"
 
-/* PRINTF */
-void	pars_cmp_com(t_com *com, char **commands)
-{
-	int		i;
-	int		n;
-	char	str[10];
-
-	i = -1;
-	while (com->args[0][++i] != '\0' && i < 9)
-		str[i] = ft_tolower(com->args[0][i]);
-	str[i] = '\0';
-	n = -1;
-	while (++n < 7 && com->type == 0)
-		if (ft_strncmp(str, commands[n], ft_strlen(commands[n])) == 0)
-			com->type = 1 << n;
-	if (com->type == 0)
-		com->type = 1 << n;
-	printf("getcom\t_%s_\t_%d_\t_%c_%d\n", com->line, com->type, com->pipsem, i);
-}
-
-int	pars_get_com(t_com *com)
-{
-	char	*commands[7];
-
-	commands[0] = "echo";
-	commands[1] = "cd";
-	commands[2] = "pwd";
-	commands[3] = "export";
-	commands[4] = "unset";
-	commands[5] = "env";
-	commands[6] = "exit";
-	pars_cmp_com(com, commands);
-	return (com->type);
-}
-
-void	pars_line(char **line, int *i)
-{
-	if ((*line)[*i] == '\\')
-		*i += pars_shift_line(line, *i);
-	else if ((*line)[*i] == '\"')
-		*i = pars_find_quotes(line, '\"', *i, 1);
-	else if ((*line)[*i] == '\'')
-		*i = pars_find_quotes(line, '\'', *i, 1);
-	else if ((*line)[*i] == '$')
-		*i = pars_dollar(line, *i, *i);
-	else
-		*i += 1;
-}
-
 void	pars_redirects_type(t_re *re, char *line, int *i)
 {
 	re->type = 1;
@@ -90,7 +41,8 @@ char	*pars_get_next_arg(t_com *com, char **line, int *i, int s)
 	char	*new;
 
 	new = 0;
-	while ((*line)[*i] != '\0' && (*line)[*i] != ' ' && (*line)[*i] != '<' && (*line)[*i] != '>')
+	while ((*line)[*i] != '\0' && (*line)[*i] != ' ' && (*line)[*i]
+		!= '<' && (*line)[*i] != '>')
 		pars_line(line, i);
 	if (ft_strchr("<>", (*line)[*i]))
 		pars_redirects(com, line, i);
@@ -113,7 +65,7 @@ void	pars_split_args(t_com *com)
 		while (com->line[i] == ' ')
 			i++;
 		new = pars_get_next_arg(com, &com->line, &i, i);
-		if (new)// != '\0')
+		if (new)
 		{
 			tmp = (char **)ft_calloc(2, sizeof(char *));
 			*tmp = new;
@@ -126,20 +78,6 @@ void	pars_split_args(t_com *com)
 	}
 	if (com->type == 1)
 		pars_echo(com);
-	// t_re	*re;
-	// t_list	*begin;
-	// begin = com->re;
-	// while (com->re)
-	// {
-	// 	re = com->re->content;
-	// 	write(1, "REDIR: ", 7);
-	// 	ft_putnbr(re->type);
-	// 	write(1, "\n", 1);
-	// 	write(1, re->fn, ft_strlen(re->fn));
-	// 	write(1, "\n", 1);
-	// 	com->re = com->re->next;
-	// }
-	// com->re = begin;
 }
 
 /* PRINTF int m */

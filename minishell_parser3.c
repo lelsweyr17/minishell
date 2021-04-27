@@ -1,49 +1,5 @@
 #include "minishell.h"
 
-void	pars_echo_n(t_com *com)
-{
-	int		a;
-	int		i;
-	char	**args;
-
-	a = 1;
-	com->n = 0;
-	args = com->args;
-	while (args[a] && args[a][0] == '-' && args[a][1] == 'n')
-	{
-		i = 1;
-		while (args[a][i] == 'n')
-			i++;
-		if (args[a][i] == '\0' || args[a][i] == ' ')
-		{
-			com->n = 1;
-			pars_shift_array(args, a);
-			continue ;
-		}
-		else
-			return ;
-		a++;
-	}
-}
-
-void	pars_echo(t_com *com)
-{
-	char	*space;
-	char	**args;
-	int		m;
-
-	m = 1;
-	args = com->args;
-	space = ft_strdup(" ");
-	pars_echo_n(com);
-	while (args[m + 1])
-	{
-		args[1] = str_free(&args[1], ft_strjoin(args[1], space));
-		args[1] = str_free(&args[1], ft_strjoin(args[1], args[m++ + 1]));
-	}
-	free(space);
-}
-
 int	pars_get_env_value(char **line, char **env, int n, int i)
 {
 	char	*end;
