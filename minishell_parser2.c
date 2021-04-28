@@ -94,9 +94,9 @@ void	pars_get_args(t_all *all)
 		line = com->line;
 		com->args = (char **)ft_calloc(1, sizeof(char *));
 		pars_split_args(com);
-		int	m = -1;
-		while (com->args[++m])
-			printf("args %d\t_%s_\n", m, com->args[m]);
+		// int	m = -1;
+		// while (com->args[++m])
+		// 	printf("args %d\t_%s_\n", m, com->args[m]);
 		all->lst = all->lst->next;
 	}
 	all->lst = begin;

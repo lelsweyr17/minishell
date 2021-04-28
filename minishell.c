@@ -48,15 +48,10 @@ int			main(int argc, char *argv[], char *envp[])
 	char	buf[20];
 	// char	*bf;
 	struct termios term;
-	// t_com	*com;
 	t_dlist	*hist;
-	// t_dlist *empty;
 	int		len;
-	// char	*tmp;
 
 	all.lst = 0;
-	// empty = 0;
-	// empty = ft_dlstnew(empty);
 	len = 0;
 	hist = 0;
 	res = 0;
@@ -76,16 +71,14 @@ int			main(int argc, char *argv[], char *envp[])
 	// write(1, "sh: ", 4);
 	// char *ss = key_right;
 	// char *ss = tgetstr("kr", 0);
-	// hist = ft_dlstnew(all.input);
 	ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 	while (ft_strcmp(buf, "\4"))
 	{
 		len = 0;
-		if (!isempty(hist->content, 0))// && hst == 0)
+		if (!isempty(hist->content, 0))
 			ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 		while (hist->next)
 			hist = hist->next;
-		// all.input = ft_strdup("");
 		write(1, "::: ", 4);
 		tputs(save_cursor, 1, ft_iputchar);
 		do
@@ -154,35 +147,19 @@ int			main(int argc, char *argv[], char *envp[])
 			{
 				write(1, buf, res);
 				hist->content = str_free(&hist->content, ft_strjoin(hist->content, buf));
-//				if (hist->next == 0)
-//					tmp = hist->content;
 			}
 			len = ft_strlen(hist->content);
 			if (!ft_strcmp(buf, "\n"))
 				(hist->content)[len - 1] = '\0';
 			if (!ft_strcmp(buf, "\4") && len == 0)
 			{
-				// ft_putnbr(len);
 				write(1, "exit", 4);
 				exit (0);
 			}
-		} while (ft_strcmp(buf, "\n"));// && ft_strcmp(buf, "\4"));
-		// write(1, "TEMP: ", 6);
-		// write(1, tmp, ft_strlen(tmp));
-		// ft_putnbr_fd(len, 1);
-		// write(1, "\n", 1);
-		all.input = hist->content; /* is there ft_strdup() need? */
-		// free(hist->content);
-		// hist->content = 0;
+		} while (ft_strcmp(buf, "\n"));
+		all.input = hist->content;
 		if (isempty(hist->content, 0))
-		{
-			// write(1, "EMPTY\n", 6);
-			// ft_memset(all.input, 0, len);
 			ft_memset(hist->content, 0, len);
-		}
-// 		write(1, "VHOD:_", 6);
-// 		write(1, all.input, ft_strlen(all.input));
-// 		write(1, "_\n", 2);
 		// all.input[len] = '\0';
 		// term.c_lflag |= (ICANON);
 		// term.c_lflag |= (ECHO);
@@ -212,9 +189,9 @@ int			main(int argc, char *argv[], char *envp[])
 		// all.input = "1;2;3;4;5;6";
 		// all.input = "echo $R";
 		// buf[0] = '\n';
-		if (all.input[0] != '\0' && *all.input != '\n')// && !ft_strcmp(buf, "\n"))
+		if (all.input[0] != '\0' && *all.input != '\n')
 			parser(&all);
-		hist_prep(hist);//, all.input);
+		hist_prep(hist);
 		pars_free(&all);
 		// exit (0);
 	}
