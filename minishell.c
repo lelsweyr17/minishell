@@ -58,10 +58,6 @@ void	main_cycle(t_all *all)
 			// if (*bf == '\n')
 			// 	*bf = '\0';
 			// res = get_next_line(0, &buf);
-			if (!ft_strcmp(buf, "\n"))
-			{
-				break ;
-			}
 			if (!ft_strcmp(buf, "\e[A"))// && hist->prev) // "\e[A"
 			{
 				if (hist->prev)
@@ -129,6 +125,10 @@ void	main_cycle(t_all *all)
 			{
 				write(1, buf, res);
 				hist->content = str_free(&hist->content, ft_strjoin(hist->content, buf));
+			}
+			if (!ft_strcmp(buf, "\n"))
+			{
+				break ;
 			}
 			len = ft_strlen(hist->content);
 			if (!ft_strcmp(buf, "\n"))
