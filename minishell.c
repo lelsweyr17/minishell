@@ -24,39 +24,42 @@ void		parser(t_all *all)
 	
 }
 
-void	hist_prep(t_dlist *hist, char *tmp, char *input)
+void	hist_prep(t_dlist *hist)
 {
+	char	*changedhist;
+
 	if (hist->next)
 	{
-		if (tmp)
-			free(tmp);
+		changedhist = hist->content;
 		hist->content = ft_strdup(hist->dup);
+		while (hist->next)
+			hist = hist->next;
+		if (hist->content)
+			free(hist->content);
+		hist->content = changedhist;
 	}
-	while (hist->next)
-		hist = hist->next;
-	hist->dup = ft_strdup(input);
-	free(input);
-	hist->content = ft_strdup(hist->dup);
+	hist->dup = ft_strdup(hist->content);
 }
 
 int			main(int argc, char *argv[], char *envp[])
 {
 	t_all	all;
 	int		res;
-	char	buf[1000];
+	char	buf[20];
 	// char	*bf;
 	struct termios term;
 	// t_com	*com;
 	t_dlist	*hist;
 	// t_dlist *empty;
 	int		len;
-	char	*tmp;
+	// char	*tmp;
 
 	all.lst = 0;
 	// empty = 0;
 	// empty = ft_dlstnew(empty);
 	len = 0;
 	hist = 0;
+	res = 0;
 	all.env = arrdup(envp);
 	if (!argc || !argv)
 		exit(0);
@@ -90,8 +93,8 @@ int			main(int argc, char *argv[], char *envp[])
 			// if (!ft_strchr(buf, '\n'))
 				ft_memset(buf, 0, res);
 			// bf = buf;
-			res = read(0, buf, 100);
-			// buf[res] = '\0';
+			res = read(0, buf, 10);
+			buf[res] = '\0';
 			// bf = ft_strchr(buf, '\n')
 			// if (*bf == '\n')
 			// 	*bf = '\0';
@@ -120,12 +123,14 @@ int			main(int argc, char *argv[], char *envp[])
 			}
 			else if (!ft_strcmp(buf, "\e[C"))
 			{
+				ft_bzero(buf, res + 1);
 				continue ;
 				// tputs(restore_cursor, 1, ft_iputchar);
 				// tputs(tigetstr("ed"), 1, ft_iputchar);
 			}
 			else if (!ft_strcmp(buf, "\e[D"))
 			{
+				ft_bzero(buf, res + 1);
 				continue ;
 				// tputs(restore_cursor, 1, ft_iputchar);
 				// tputs(tigetstr("ed"), 1, ft_iputchar);
@@ -138,7 +143,7 @@ int			main(int argc, char *argv[], char *envp[])
 			}
 			else if (!ft_strcmp(buf, "\3"))
 			{
-				write(1, "^C\n", 4);
+				write(1, "\n", 1);
 				break ;
 			}
 			else if (!ft_strcmp(buf, "\34"))
@@ -149,27 +154,29 @@ int			main(int argc, char *argv[], char *envp[])
 			{
 				write(1, buf, res);
 				hist->content = str_free(&hist->content, ft_strjoin(hist->content, buf));
-				if (hist->next == 0)
-					tmp = hist->content;
+//				if (hist->next == 0)
+//					tmp = hist->content;
 			}
 			len = ft_strlen(hist->content);
 			if (!ft_strcmp(buf, "\n"))
 				(hist->content)[len - 1] = '\0';
-			if (!ft_strcmp(buf, "\4"))
+			if (!ft_strcmp(buf, "\4") && len == 0)
 			{
+				// ft_putnbr(len);
 				write(1, "exit", 4);
 				exit (0);
 			}
-		} while (ft_strcmp(buf, "\n") && ft_strcmp(buf, "\4"));
+		} while (ft_strcmp(buf, "\n"));// && ft_strcmp(buf, "\4"));
 		// write(1, "TEMP: ", 6);
 		// write(1, tmp, ft_strlen(tmp));
 		// ft_putnbr_fd(len, 1);
 		// write(1, "\n", 1);
-		all.input = ft_strdup(hist->content); /* is there ft_strdup() need? */
-		free(hist->content);
+		all.input = hist->content; /* is there ft_strdup() need? */
+		// free(hist->content);
+		// hist->content = 0;
 		if (isempty(hist->content, 0))
 		{
-			write(1, "EMPTY\n", 6);
+			// write(1, "EMPTY\n", 6);
 			// ft_memset(all.input, 0, len);
 			ft_memset(hist->content, 0, len);
 		}
@@ -207,7 +214,7 @@ int			main(int argc, char *argv[], char *envp[])
 		// buf[0] = '\n';
 		if (all.input[0] != '\0' && *all.input != '\n')// && !ft_strcmp(buf, "\n"))
 			parser(&all);
-		hist_prep(hist, tmp, all.input);
+		hist_prep(hist);//, all.input);
 		pars_free(&all);
 		// exit (0);
 	}
