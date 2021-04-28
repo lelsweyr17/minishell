@@ -39,6 +39,7 @@ void	pars_free(t_all *all)
 {
 	t_com	*com;
 	t_list	*tmp;
+	t_re 	*re;
 
 	while (all->lst != 0)
 	{
@@ -51,7 +52,6 @@ void	pars_free(t_all *all)
 			free(com->args[m]);
 		while (com->re != 0)
 		{
-			t_re *re;
 			re = com->re->content;
 			free(re->fn);
 			tmp = com->re;

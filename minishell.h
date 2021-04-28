@@ -45,9 +45,12 @@ typedef struct		s_par
 typedef struct		s_all
 {
 	t_list			*lst;
+	t_dlist			*hist;
 	t_par			par;
 	char			*input;
 	char			**env;
+	char			*fn;
+	struct termios	term;
 }					t_all;
 
 void				parser(t_all *all); //, char **line);
@@ -79,5 +82,14 @@ int					pars_check_redirects(t_all *all, char **line, char c, int i);
 int					array_size(char **ar);
 /* minishell_parser4.c */
 void				pars_line(char **line, int *i);
+/* minishell_history.c */
+void				hist_filling_in(t_dlist **hist, char *buf, int res, int beg);
+int					hist_read_file(t_dlist **hist, char *fn);
+void				hist_prep(t_dlist *hist, char *fn);
+void				hist_file(t_all *all);
+/* minishell_termcap.c */
+void				termcap_off(t_all *all);
+void				termcap_on(t_all *all);
+void				termcap(t_all *all);
 
 #endif
