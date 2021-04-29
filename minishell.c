@@ -99,6 +99,10 @@ void	main_cycle(t_all *all)
 				ft_bzero(buf, res + 1);
 				continue ;
 			}
+			// else if (!ft_strcmp(buf, "\e[H"))
+			// {
+
+			// }
 			else if (!strcmp(buf, "\177") && len > 0 && res > 0) // "\177" BACKSPACE
 			{
 				tputs(cursor_left, 1, ft_iputchar);
@@ -126,19 +130,16 @@ void	main_cycle(t_all *all)
 				write(1, buf, res);
 				hist->content = str_free(&hist->content, ft_strjoin(hist->content, buf));
 			}
+			len = ft_strlen(hist->content);
+			if (!ft_strcmp(buf, "\n"))
+				(hist->content)[len - 1] = '\0';
 			if (!ft_strcmp(buf, "\n"))
 			{
 				break ;
 			}
-			len = ft_strlen(hist->content);
-			if (!ft_strcmp(buf, "\n"))
-				(hist->content)[len - 1] = '\0';
 		}
-		// termcap_on(all);
-		// all->input[len] = '\0';
-		// term.c_lflag |= (ICANON);
-		// term.c_lflag |= (ECHO);
-        // all->input = "\"e\" \"c\\\"\"h\\\"o\\' '1\\'\n";
+		termcap_on(all);
+		// all->input = "\"e\" \"c\\\"\"h\\\"o\\' '1\\'\n";
 		// all->input = "ec\"\"H'O' \\' 5 \"#f\\\" ; | \\\\\" ' \\f\\' ; env";
 		// all->input = "\"E\"c'h'O \' '\\dfa\"\'\"\\\"df\" | env";
 		// all->input = "\n";
@@ -163,11 +164,9 @@ void	main_cycle(t_all *all)
 		// all->input = "a >> 1 b > 2 c";
 		// all->input = "1;2;3;4;5;6";
 		// all->input = "echo $R";
-		// buf[0] = '\n';
 		all->input = hist->content;
 		if (isempty(hist->content, 0))
 			ft_bzero(hist->content, len);
-			// ft_memset(hist->content, 0, len);
 		else
 			hist_prep(hist, all->fn);
 		if (all->input[0] != '\0' && *all->input != '\n')
