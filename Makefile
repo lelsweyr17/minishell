@@ -3,25 +3,58 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: cmarsha <marvin@42.fr>                     +#+  +:+       +#+         #
+#    By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/28 13:42:48 by cmarsha           #+#    #+#              #
-#    Updated: 2020/12/26 22:20:52 by cmarsha          ###   ########.fr        #
+#    Updated: 2021/04/29 14:41:49 by lelsweyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME = mmm
+NAME = minishell
 LIBFT = libft/libft.a
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -g
 TFLAGS = -ltermcap
-HEADERF = minishell.h parser.h
-CFILES = minishell.c minishell_parser.c minishell_utils.c
+HEADERF = minishell.h processor.h structs.h
+CFILES = parcer/minishell.c \
+	parcer/minishell_history.c \
+	parcer/minishell_termcap.c \
+	parcer/minishell_parser1.c \
+	parcer/minishell_parcer2.c \
+	parcer/minishell_parcer3.c \
+	parcer/minishell_parcer4.c \
+	parcer/minishell_utils.c \
+	parcer/minishell_parcer_utils.c \
+	processor/start/processor1.c \
+	processor/start/processor2.c \
+	processor/export/export1.c \
+	processor/export/export2.c \
+	processor/export/export3.c \
+	processor/unset/unset1.c \
+	processor/unset/unset2.c \
+	processor/env/env.c \
+	processor/cd/cd1.c \
+	processor/cd/cd2.c \
+	processor/pwd/pwd.c \
+	processor/echo/echo.c \
+	processor/exit/exit.c \
+	processor/prepare/pre_processor.c \
+	processor/bin/bin_command1.c \
+	processor/bin/bin_command2.c \
+	processor/bin/bin_command3.c \
+	processor/bin/bin_command4.c \
+	processor/bin/bin_command5.c \
+	processor/error/errors.c \
+	processor/pipe/pipe1.c \
+	processor/pipe/pipe2.c \
+	processor/redirect/redirect1.c \
+	processor/redirect/redirect2.c
+
 BFILES = bonus_minishell.c
 OBJ := $(CFILES:.c=.o)
 BOBJ := $(BFILES:.c=.o)
 
-.PHONY: all clean fclean re run deb debb s
+.PHONY: all clean fclean re run deb debb lin w s
 
 all: $(NAME)
 
@@ -39,7 +72,7 @@ bonus: $(LIBFT) $(BOBJ)
 
 clean:
 	/bin/rm -f $(OBJ) $(BOBJ)
-	$(MAKE) clean -C libft
+	$(MAKE) fclean -C libft
 
 fclean: clean
 	/bin/rm -f $(NAME)
@@ -50,6 +83,9 @@ re: fclean all
 run:
 	$(CC) $(CFLAGS) -o mmr *.c $(TFLAGS)
 	./mmr
+
+arina: $(LIBFT) $(OBJ)
+	$(CC) $(OBJ) $(CFLAGS) $(LIBFT) $(TFLAGS) -o $(NAME)
 
 deb:
 	$(CC) -g -o deb *.c libft/*.c $(TFLAGS)
@@ -63,5 +99,9 @@ debb:
 	./debb
 
 s:
-	cp Makefile minishell* .gitignore l/
-	cp libft/* l/libft/
+	cp Makefile .gitignore l/
+	cp -r libft l/
+	cp -r parcer l/
+	cp -r processor l/
+	cp -r headers l/
+	

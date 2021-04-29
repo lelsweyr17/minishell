@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: cmarsha <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -22,7 +22,8 @@ static	char	*cashcheck(char *cash, char **line)
 	*line = ft_strdup("");
 	if (cash)
 	{
-		if ((np = ft_strchr(cash, '\n')))
+		np = ft_strchr(cash, '\n');
+		if (np)
 		{
 			*np = '\0';
 			free(*line);
@@ -50,25 +51,30 @@ static	char	*ft_freetmp(char **line, char *ln)
 	return (*line);
 }
 
-int				get_next_line(int fd, char **line)
+int	get_next_line(int fd, char **line)
 {
 	int					ret;
 	char				ln[BUFFER_SIZE + 1];
 	char				*np;
-	static	char		cash[1024][BUFFER_SIZE + 1];
+	static char			cash[1024][BUFFER_SIZE + 1];
 
 	if (!line || fd < 0 || read(fd, ln, 0) < 0 || BUFFER_SIZE < 1)
 		return (-1);
 	np = cashcheck(cash[fd], line);
-	while ((!np) && (ret = read(fd, ln, BUFFER_SIZE)) > 0)
+	ret = 1;
+	while (!np && ret > 0)
 	{
+		ret = read(fd, ln, BUFFER_SIZE);
 		ln[ret] = '\0';
-		if ((np = ft_strchr(ln, '\n')))
+		np = ft_strchr(ln, '\n');
+		if (np)
 		{
 			*np = '\0';
 			ft_strcpy(cash[fd], ++np);
 		}
 		*line = ft_freetmp(line, ln);
 	}
-	return (ret || np ? 1 : 0);
+	if (ret || np)
+		return (1);
+	return (0);
 }
