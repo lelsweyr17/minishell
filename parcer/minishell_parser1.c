@@ -112,7 +112,7 @@ int	pars_split_commands(t_all *all)
 		if (c)
 		{
 			if (*c == '\"' || *c == '\'')
-				all->par.i = pars_find_quotes(&all->input, *c, all->par.i, 0);
+				all->par.i = pars_find_quotes(all, &all->input, *c, all->par.i, 0);
 			else if (*c == ';' || *c == '|')
 				pars_check_command(all);
 			else if (*c == '\\')

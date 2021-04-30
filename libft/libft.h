@@ -113,5 +113,6 @@ void				ft_lstiter(t_list *lst, void (*f)(void *));
 int					ft_lstsize(t_list *lst);
 /* OTHER */
 int					get_next_line(int fd, char **line);
+char				*ft_getenv(char **envp, char *key);
 
 #endif

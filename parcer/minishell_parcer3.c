@@ -21,7 +21,7 @@ int	pars_get_env_value(char **line, char **env, int n, int i)
 
 // }
 
-int	pars_dollar(char **line, int i, int n)
+int	pars_dollar(t_all *all, char **line, int i, int n)
 {
 	char	*env;
 	char	*new;
@@ -43,7 +43,7 @@ int	pars_dollar(char **line, int i, int n)
 	new = ft_strndup(&((*line)[n]), i - n);
 	if (!new)
 		return (0);
-	env = getenv(new);
+	env = ft_getenv(all->env, new);
 	if (!env)
 	{
 		len = ft_strlen(new) + 1;
@@ -57,7 +57,7 @@ int	pars_dollar(char **line, int i, int n)
 	return (n);
 }
 
-int	pars_find_pair_quote(char **line, char c, int i, int delescape)
+int	pars_find_pair_quote(t_all *all, char **line, char c, int i, int delescape)
 {
 	while ((*line)[i] != '\0' && (*line)[i] != c)
 	{
@@ -74,7 +74,7 @@ int	pars_find_pair_quote(char **line, char c, int i, int delescape)
 		}
 		else if (c == '\"' && delescape == 1 && (*line)[i] == '$')
 		{
-			i = pars_dollar(line, i, i);
+			i = pars_dollar(all, line, i, i);
 			if (((*line)[i] == '\"' || (*line)[i] == '$') && delescape == 1)
 				continue ;
 		}
@@ -83,12 +83,12 @@ int	pars_find_pair_quote(char **line, char c, int i, int delescape)
 	return (i);
 }
 
-int	pars_find_quotes(char **line, char c, int i, int delescape)
+int	pars_find_quotes(t_all *all, char **line, char c, int i, int delescape)
 {
 	if (delescape == 1 && (*line)[i] == c)
 		i -= pars_shift_line(line, i);
 	i++;
-	i = pars_find_pair_quote(line, c, i, delescape);
+	i = pars_find_pair_quote(all, line, c, i, delescape);
 	if (delescape == 0 && (*line)[i] == c)
 		return (++i);
 	else if ((*line)[i] == '\0')

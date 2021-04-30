@@ -169,7 +169,7 @@ void	main_cycle(t_all *all)
 		// all->input = "echo $R";
 		// all->input = "echo $USER ; ls";
 		// all->input = "echo asdf ; ls | cat -e ;echo $HOME";
-
+		// all->input = "echo \"\\\\$HOME \\\\\\$HOME \\\\\\\\$HOME $HOME $HOME $HOME\"";
 		all->input = hist->content; // do not forget to uncomment!
 		if (isempty(hist->content, 0))
 			ft_bzero(hist->content, len);
@@ -190,6 +190,7 @@ int	main(int argc, char *argv[], char *envp[])
 	t_all	all;
 
 	all.env = arrdup(envp);
+	envp = all.env;
 	if (!argc || !argv)
 		exit(0);
 	termcap(&all);

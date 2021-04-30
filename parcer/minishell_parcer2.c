@@ -12,7 +12,7 @@ void	pars_redirects_type(t_re *re, char *line, int *i)
 		(*i)++;
 }
 
-void	pars_redirects(t_com *com, char **line, int *i)
+void	pars_redirects(t_all *all, t_com *com, char **line, int *i)
 {
 	t_re	*re;
 	t_list	*begin;
@@ -31,27 +31,27 @@ void	pars_redirects(t_com *com, char **line, int *i)
 	s = *i;
 	re = com->re->content;
 	while ((*line)[*i] != '\0' && (*line)[*i] != ' ')
-		pars_line(line, i);
+		pars_line(all, line, i);
 	re->fn = ft_strndup(&(*line)[s], *i - s);
 	com->re = begin;
 }
 
-char	*pars_get_next_arg(t_com *com, char **line, int *i, int s)
+char	*pars_get_next_arg(t_all *all, t_com *com, char **line, int *i, int s)
 {
 	char	*new;
 
 	new = 0;
 	while ((*line)[*i] != '\0' && (*line)[*i] != ' ' && (*line)[*i]
 		!= '<' && (*line)[*i] != '>')
-		pars_line(line, i);
+		pars_line(all, line, i);
 	if (ft_strchr("<>", (*line)[*i]))
-		pars_redirects(com, line, i);
+		pars_redirects(all, com, line, i);
 	else
 		new = ft_strndup(&(*line)[s], *i - s);
 	return (new);
 }
 
-void	pars_split_args(t_com *com)
+void	pars_split_args(t_all *all, t_com *com)
 {
 	int		i;
 	char	*new;
@@ -64,7 +64,7 @@ void	pars_split_args(t_com *com)
 		tmp2 = com->args;
 		while (com->line[i] == ' ')
 			i++;
-		new = pars_get_next_arg(com, &com->line, &i, i);
+		new = pars_get_next_arg(all, com, &com->line, &i, i);
 		if (new)
 		{
 			tmp = (char **)ft_calloc(2, sizeof(char *));
@@ -93,10 +93,10 @@ void	pars_get_args(t_all *all, t_proc *proc)
 	{
 		com = all->lst->content;
 		com->args = (char **)ft_calloc(1, sizeof(char *));
-		pars_split_args(com);
-		int	m = -1;
-		while (com->args[++m])
-			printf("args %d\t_%s_\n", m, com->args[m]);
+		pars_split_args(all, com);
+		// int	m = -1;
+		// while (com->args[++m])
+		// 	printf("args %d\t_%s_\n", m, com->args[m]);
 		if (com->pipsem == ';' || com->pipsem == 0)
 		{
 			all->env = processor(all->env, send, proc);

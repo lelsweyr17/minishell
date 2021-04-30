@@ -26,7 +26,7 @@ CFILES = ft_putchar.c ft_putnbr.c ft_putstr.c ft_strcmp.c ft_atoi.c ft_swap.c \
 		 get_next_line.c ft_strcpy.c ft_lstnew.c ft_lstadd_front.c \
 		 ft_lstsize.c ft_lstlast.c ft_lstadd_back.c ft_lstdelone.c \
 		 ft_lstclear.c ft_lstiter.c ft_lstmap.c ft_iputchar.c ft_arrjoin.c \
-		 ft_arrlen.c ft_dlst.c ft_strndup.c
+		 ft_arrlen.c ft_dlst.c ft_strndup.c ft_getenv.c
 
 OBJ = $(CFILES:.c=.o)
 
