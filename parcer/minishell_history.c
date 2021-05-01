@@ -10,10 +10,15 @@ int	hist_read_file(t_dlist **hist, char *fn)
 		return (0);
 	while (get_next_line(fd, &line) > 0)
 		ft_dlstadd_back(hist, ft_dlstnew(line));
+	if (line)
+		free(line);
 	if (!hist)
 		return (0);
-	if ((*hist)->next)
+	while ((*hist)->next)
+	{
+		(*hist)->dup = ft_strdup((*hist)->content);
 		*hist = (*hist)->next;
+	}
 	(*hist)->dup = ft_strdup((*hist)->content);
 	return (1);
 }

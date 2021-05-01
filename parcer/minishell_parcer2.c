@@ -36,10 +36,12 @@ void	pars_redirects(t_all *all, t_com *com, char **line, int *i)
 	com->re = begin;
 }
 
-char	*pars_get_next_arg(t_all *all, t_com *com, char **line, int *i, int s)
+char	*pars_get_next_arg(t_all *all, t_com *com, char **line, int *i)
 {
+	int		s;
 	char	*new;
 
+	s = *i;
 	new = 0;
 	while ((*line)[*i] != '\0' && (*line)[*i] != ' ' && (*line)[*i]
 		!= '<' && (*line)[*i] != '>')
@@ -64,7 +66,7 @@ void	pars_split_args(t_all *all, t_com *com)
 		tmp2 = com->args;
 		while (com->line[i] == ' ')
 			i++;
-		new = pars_get_next_arg(all, com, &com->line, &i, i);
+		new = pars_get_next_arg(all, com, &com->line, &i);
 		if (new)
 		{
 			tmp = (char **)ft_calloc(2, sizeof(char *));
@@ -94,18 +96,17 @@ void	pars_get_args(t_all *all, t_proc *proc)
 		com = all->lst->content;
 		com->args = (char **)ft_calloc(1, sizeof(char *));
 		pars_split_args(all, com);
-		// int	m = -1;
-		// while (com->args[++m])
-		// 	printf("args %d\t_%s_\n", m, com->args[m]);
+		int	m = -1;
+		while (com->args[++m])
+			printf("args %d\t_%s_\n", m, com->args[m]);
 		if (com->pipsem == ';' || com->pipsem == 0)
 		{
-			all->env = processor(all->env, send, proc);
-			// send = all->lst;
+			all->env = processor(all->env, send, all->proc);
+			send = all->lst;
 			while (send != all->lst)
 				send = send->next;
 			send = send->next;
 		}
-		// else if (com->pipsem == '|')
 		all->lst = all->lst->next;
 	}
 	all->lst = begin;
