@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pipe2.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/02 17:39:39 by lelsweyr          #+#    #+#             */
+/*   Updated: 2021/05/02 17:39:45 by lelsweyr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../headers/processor.h"
 
 void	waitpid_operator(t_pipe *pip, t_proc *com)
@@ -55,9 +67,6 @@ void	fd_pid_pipe_full(t_pipe *pip)
 
 void	pipe_command(char **env, char **arg, t_proc *com, t_com *list)
 {
-	// int i = -1;
-	// while (arg[++i])
-	// 	printf("%s\n", arg[i]);
 	if (!(ft_strncmp(arg[0], ".", 2)))
 	{
 		write_error(arg[0], NULL, "filename argument required");
