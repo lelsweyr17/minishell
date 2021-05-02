@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   export2.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/02 17:39:26 by lelsweyr          #+#    #+#             */
+/*   Updated: 2021/05/02 17:39:27 by lelsweyr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../headers/processor.h"
 
 int	ft_is_str(char *str)
@@ -65,7 +77,7 @@ char	**exp_command(t_proc *com, char **envp, char **args)
 {
 	int	i;
 
-	if (com->arg)
+	if (args[0])
 	{
 		i = -1;
 		while (args[++i])

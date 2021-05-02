@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   pre_processor.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/02 17:39:50 by lelsweyr          #+#    #+#             */
+/*   Updated: 2021/05/02 17:39:51 by lelsweyr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../headers/processor.h"
 
 void	null_flags(t_proc *com)
@@ -66,5 +78,4 @@ void	prepare_function(t_proc *com, char **envp, char **res)
 {
 	null_flags(com);
 	com_export(com, envp);
-	com->arg = res[1];
 }

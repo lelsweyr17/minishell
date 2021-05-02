@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   unset1.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/02 17:40:24 by lelsweyr          #+#    #+#             */
+/*   Updated: 2021/05/02 17:40:25 by lelsweyr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../headers/processor.h"
 
 int	search_key(char **envp, char *arg)
@@ -51,6 +63,7 @@ char	**unset_command(t_proc *com, char **envp, char **args)
 	i = 0;
 	num_str = 0;
 	len = array_size(envp);
+	com->arg = args[0];
 	if (!com->arg)
 		return (envp);
 	while (com->arg && com->arg[i] && com->arg[i] != '=')

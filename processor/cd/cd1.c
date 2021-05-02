@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd1.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/02 17:38:45 by lelsweyr          #+#    #+#             */
+/*   Updated: 2021/05/02 17:38:46 by lelsweyr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../../headers/processor.h"
 
 void	cd_minus(t_proc *com, char **envp)
@@ -57,7 +69,7 @@ int	change_dir(t_proc *com, char **envp)
 	return (flag);
 }
 
-char	**cd_command(t_proc *com, char **envp)
+char	**cd_command(t_proc *com, char **envp, char *arg)
 {
 	int		flag;
 	char	*oldpwd;
@@ -65,6 +77,7 @@ char	**cd_command(t_proc *com, char **envp)
 
 	oldpwd = getcwd(NULL, 0);
 	errno = 0;
+	com->arg = arg;
 	flag = change_dir(com, envp);
 	if (errno != 0 && com->arg)
 		cd_errno(com);

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   processor.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/05/02 17:37:56 by lelsweyr          #+#    #+#             */
+/*   Updated: 2021/05/02 17:37:57 by lelsweyr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef PROCESSOR_H
 # define PROCESSOR_H
 
@@ -21,8 +33,8 @@ char		**add_oldpwd(char **envp);
 char		**processor(char **envp, t_list *list, t_proc *com);
 int			ft_is_str(char *str);
 void		pwd_command(void);
-char		**cd_command(t_proc *com, char **envp);
-void		echo_command(t_proc *com, char **envp, t_com *list);
+char		**cd_command(t_proc *com, char **envp, char *arg);
+void		echo_command(t_proc *com, char **envp, t_com *list, char *arg);
 char		*ft_getenv(char **envp, char *key);
 char		**exp_command(t_proc *com, char **envp, char **arg);
 int			array_size(char **ar);
