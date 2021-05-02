@@ -35,8 +35,7 @@ void				pars_free(t_all *all);
 /* minishell_parser2.c */
 void				pars_get_args(t_all *all, t_proc *proc);
 void				pars_split_args(t_all *all, t_com *com);
-char				*pars_get_next_arg(t_all *all, t_com *com, char **line, int *i, \
-					int s);
+char				*pars_get_next_arg(t_all *all, t_com *com, char **line, int *i);
 int					pars_get_com(t_com *com);
 void				pars_cmp_com(t_com *com, char **commands);
 /* minishell_parser3.c */
@@ -44,7 +43,7 @@ void				pars_echo_n(t_com *com);
 void				pars_echo(t_com *com);
 int					pars_get_env_value(char **line, char **env, int n, int i);
 int					pars_dollar(t_all *all, char **line, int i, int n);
-int					pars_find_quotes(t_all *all, char **line, char c, int i, int delescape);
+int					pars_find_quotes(t_all *all, char **line, char c, int i);
 
 int					pars_check_redirects(t_all *all, char **line, char c, \
 					int i);

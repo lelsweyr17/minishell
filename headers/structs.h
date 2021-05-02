@@ -76,12 +76,16 @@ typedef struct s_par
 
 typedef struct s_all
 {
-	t_list			*lst;
 	t_dlist			*hist;
+	t_list			*lst;
 	t_par			par;
-	char			*input;
+	t_proc			*proc;
 	char			**env;
 	char			*fn;
+	char			*input;
+	// int				ctrld;
+	int				delescape;
+	int				pid;
 	struct termios	term;
 }	t_all;
 

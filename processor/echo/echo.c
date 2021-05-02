@@ -17,17 +17,17 @@ void	echo_command(t_proc *com, char **envp, t_com *list)
 	i = 0;
 	while (com->arg && com->arg[i])
 	{
-		if (!ft_strncmp(com->arg, "$?", 2))
-		{
-			if (com->error >= 256)
-				com->error /= 256;
-			ft_putnbr_fd(com->error, 1);
-			init_error(0, &com->error);
-			i += 2;
-		}
-		else if (com->arg[i] == '$')
-			i++;
-		while (com->arg[i] && (com->arg[i] != '$' && com->arg[i + 1] != '?'))
+		// if (!ft_strncmp(com->arg, "$?", 2))
+		// {
+		// 	if (com->error >= 256)
+		// 		com->error /= 256;
+		// 	ft_putnbr_fd(com->error, 1);
+		// 	init_error(0, &com->error);
+		// 	i += 2;
+		// }
+		// else if (com->arg[i] == '$')
+		// 	i++;
+		while (com->arg[i])// && (com->arg[i] != '$' && com->arg[i + 1] != '?'))
 			write(1, &com->arg[i++], 1);
 	}
 	if (!list->n)
