@@ -55,6 +55,9 @@ void	fd_pid_pipe_full(t_pipe *pip)
 
 void	pipe_command(char **env, char **arg, t_proc *com, t_com *list)
 {
+	// int i = -1;
+	// while (arg[++i])
+	// 	printf("%s\n", arg[i]);
 	if (!(ft_strncmp(arg[0], ".", 2)))
 	{
 		write_error(arg[0], NULL, "filename argument required");

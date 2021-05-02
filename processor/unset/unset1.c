@@ -51,6 +51,7 @@ char	**unset_command(t_proc *com, char **envp, char **args)
 	i = 0;
 	num_str = 0;
 	len = array_size(envp);
+	com->arg = args[0];
 	if (!com->arg)
 		return (envp);
 	while (com->arg && com->arg[i] && com->arg[i] != '=')

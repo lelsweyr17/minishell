@@ -66,5 +66,4 @@ void	prepare_function(t_proc *com, char **envp, char **res)
 {
 	null_flags(com);
 	com_export(com, envp);
-	com->arg = res[1];
 }

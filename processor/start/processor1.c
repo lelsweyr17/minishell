@@ -3,9 +3,9 @@
 char	**build_in_commands(t_proc *com, char **envp, char **arg, t_com *list)
 {
 	if (list->type == 1)
-		echo_command(com, envp, list);
+		echo_command(com, envp, list, arg[1]);
 	else if (list->type == 2)
-		envp = cd_command(com, envp);
+		envp = cd_command(com, envp, arg[1]);
 	else if (list->type == 4)
 		pwd_command();
 	else if (list->type == 8)
@@ -69,23 +69,18 @@ char	**processor(char **env, t_list *lst, t_proc *com)
 	int			pipe_num;
 	t_com		*list;
 
-	while (lst)
+	list = lst->content;
+	prepare_function(com, env, list->args);
+	if (list->pipsem == '|')
 	{
-		list = lst->content;
-		prepare_function(com, env, list->args);
-		if (list->pipsem == '|')
-		{
-			pipe_num = pipe_number(lst);
-			pipe_operator(pipe_num, env, lst, com);
-			i = -1;
-			while (++i < pipe_num && list->pipsem == '|')
-				lst = lst->next;
-		}
-		else
-			env = redirect_condition(env, com, list);
-		// free(com->ex_port);
-		// lst = lst->next;
-		break ;
+		pipe_num = pipe_number(lst);
+		pipe_operator(pipe_num, env, lst, com);
+		i = -1;
+		while (++i < pipe_num)
+			lst = lst->next;
 	}
+	else
+		env = redirect_condition(env, com, list);
+	free(com->ex_port);
 	return (env);
 }

@@ -160,7 +160,7 @@ void	d_cycle(t_all *all)
 		while (hist->next)
 			hist = hist->next;
 		all->hist = hist;
-		write(1, "::: ", 4);
+		write(1, "ʕ•ᴥ•ʔ -> ", 18);
 		tputs(save_cursor, 1, ft_iputchar);
 		n_cycle(all, &ctrld);
 

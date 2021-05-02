@@ -57,7 +57,7 @@ int	change_dir(t_proc *com, char **envp)
 	return (flag);
 }
 
-char	**cd_command(t_proc *com, char **envp)
+char	**cd_command(t_proc *com, char **envp, char *arg)
 {
 	int		flag;
 	char	*oldpwd;
@@ -65,6 +65,7 @@ char	**cd_command(t_proc *com, char **envp)
 
 	oldpwd = getcwd(NULL, 0);
 	errno = 0;
+	com->arg = arg;
 	flag = change_dir(com, envp);
 	if (errno != 0 && com->arg)
 		cd_errno(com);

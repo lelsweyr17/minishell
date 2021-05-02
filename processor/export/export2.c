@@ -65,7 +65,7 @@ char	**exp_command(t_proc *com, char **envp, char **args)
 {
 	int	i;
 
-	if (com->arg)
+	if (args[0])
 	{
 		i = -1;
 		while (args[++i])
