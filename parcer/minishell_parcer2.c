@@ -83,7 +83,7 @@ void	pars_split_args(t_all *all, t_com *com)
 }
 
 /* PRINTF int m */
-void	pars_get_args(t_all *all, t_proc *proc)
+void	pars_get_args(t_all *all)
 {
 	t_com	*com;
 	t_list	*begin;

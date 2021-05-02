@@ -84,9 +84,9 @@ void	pars_line(t_all *all, char **line, int *i)
 	if ((*line)[*i] == '\\')
 		*i += pars_shift_line(line, *i);
 	else if ((*line)[*i] == '\"')
-		*i = pars_find_quotes(all, line, '\"', *i, 1);
+		*i = pars_find_quotes(all, line, '\"', *i);
 	else if ((*line)[*i] == '\'')
-		*i = pars_find_quotes(all, line, '\'', *i, 1);
+		*i = pars_find_quotes(all, line, '\'', *i);
 	else if ((*line)[*i] == '$')
 		*i = pars_dollar(all, line, *i, *i);
 	else

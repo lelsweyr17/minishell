@@ -16,10 +16,10 @@ int	hist_read_file(t_dlist **hist, char *fn)
 		return (0);
 	while ((*hist)->next)
 	{
-		(*hist)->dup = ft_strdup((*hist)->content);
+		(*hist)->dup = ft_strdup((*hist)->cont);
 		*hist = (*hist)->next;
 	}
-	(*hist)->dup = ft_strdup((*hist)->content);
+	(*hist)->dup = ft_strdup((*hist)->cont);
 	return (1);
 }
 
@@ -30,19 +30,19 @@ void	hist_prep(t_dlist *hist, char *fn)
 
 	if (hist->next)
 	{
-		changedhist = hist->content;
-		hist->content = ft_strdup(hist->dup);
+		changedhist = hist->cont;
+		hist->cont = ft_strdup(hist->dup);
 		while (hist->next)
 			hist = hist->next;
-		if (hist->content)
-			free(hist->content);
-		hist->content = changedhist;
+		if (hist->cont)
+			free(hist->cont);
+		hist->cont = changedhist;
 	}
-	hist->dup = ft_strdup(hist->content);
+	hist->dup = ft_strdup(hist->cont);
 	fd = open(fn, O_RDWR | O_CREAT | O_APPEND, 0644);
 	if (fd)
 	{
-		write(fd, hist->content, ft_strlen(hist->content));
+		write(fd, hist->cont, ft_strlen(hist->cont));
 		write(fd, "\n", 1);
 	}
 	close(fd);

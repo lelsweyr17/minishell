@@ -33,7 +33,7 @@ int					isprevempty(char *str, int begin, int last);
 int					isempty(char *str, int hash);
 void				pars_free(t_all *all);
 /* minishell_parser2.c */
-void				pars_get_args(t_all *all, t_proc *proc);
+void				pars_get_args(t_all *all);
 void				pars_split_args(t_all *all, t_com *com);
 char				*pars_get_next_arg(t_all *all, t_com *com, char **line, int *i);
 int					pars_get_com(t_com *com);

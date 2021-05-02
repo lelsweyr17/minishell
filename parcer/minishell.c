@@ -22,92 +22,106 @@ void		executor(t_all *all)
 	all->delescape = 0;
 	pars_split_commands(all);
 	all->delescape = 1;
-	pars_get_args(all, all->proc);
-	// free(all->proc);
+	pars_get_args(all);
+	pars_free(all);
 }
 
-void	n_cycle(t_all *all, int *ctrld)
+int	get_read(t_all *all, char *buf, int res)
+{
+	int	nl;
+
+	nl = 0;
+	ft_memset(buf, 0, res);
+	res = read(0, buf, 999);
+	buf[res] = '\0';
+	// while (nl <= 999 && buf[nl] != '\0')
+	// {
+	// 	if (buf[nl] == '\n')
+	// 	{
+	// 		buf[nl] = '\0';
+	// 	}
+	// }
+	return (res);
+}
+
+void	hist_moving(t_all *all, char buf[1000], t_dlist **hist)
+{
+	if (!ft_strcmp(buf, "\e[A") && all->hist->prev)
+	{
+		tputs(restore_cursor, 1, ft_iputchar);
+		tputs(tigetstr("ed"), 1, ft_iputchar);
+		all->hist = all->hist->prev;
+		write(1, all->hist->cont, ft_strlen(all->hist->cont));
+	}
+	else if (!ft_strcmp(buf, "\e[B") && all->hist->next)
+	{
+		tputs(restore_cursor, 1, ft_iputchar);
+		tputs(tigetstr("ed"), 1, ft_iputchar);
+		all->hist = all->hist->next;
+		write(1, all->hist->cont, ft_strlen(all->hist->cont));
+	}
+	*hist = all->hist;
+	buf[0] = '\0';
+}
+
+void	move_righ_left(t_all *all, char buf[1000], int res)
+{
+	// char	*end;
+
+	if (!ft_strcmp(buf, "\e[C")) // RIGHT 
+	{
+		buf[0] = '\0';
+		// ft_bzero(buf, res + 1);
+		return ;
+		// tputs(restore_cursor, 1, ft_iputchar);
+		// tputs(tigetstr("ed"), 1, ft_iputchar);
+	}
+	else if (!ft_strcmp(buf, "\e[D")) // LEFT
+	{
+		buf[0] = '\0';
+		// ft_bzero(buf, res + 1);
+		return ;
+		// tputs(restore_cursor, 1, ft_iputchar);
+		// tputs(tigetstr("ed"), 1, ft_iputchar);
+	}
+	else if (!ft_strncmp(buf, "\5", 1)) // \1 HOME \5 END
+	{
+		ft_bzero(buf, res + 1);
+		return ;
+	}
+}
+
+void	n_cycle(t_all *all, int *ctrld, t_dlist *hist)
 {
 	int		res;
 	int		len;
 	char	buf[1000];
-	// char	*bf;
-	t_dlist	*hist;
 
-	hist = all->hist;
 	res = 0;
 	len = 0;
 	while (1)
 	{
-		// if (!ft_strchr(buf, '\n'))
-			ft_memset(buf, 0, res);
-		// bf = buf;
-		res = read(0, buf, 999);
-		buf[res] = '\0';
-		// write(1, buf, res); /* UNCOMMENT TO SEE SIGNALS */
-		// bf = ft_strchr(buf, '\n')
-		// if (*bf == '\n')
-		// 	*bf = '\0';
-		// res = get_next_line(0, &buf);
-		if (!ft_strcmp(buf, "\e[A"))// && hist->prev) // "\e[A"
+		res = get_read(all, buf, res);
+		if (!ft_strcmp(buf, "\e[A") || !ft_strcmp(buf, "\e[B"))
+			hist_moving(all, buf, &hist);
+		else if (!ft_strcmp(buf, "\e[C") || !ft_strcmp(buf, "\e[D"))
+			move_righ_left(all, buf, res);
+		else if (!ft_strcmp(buf, "\n"))
 		{
-			if (hist->prev)
-			{
-				tputs(restore_cursor, 1, ft_iputchar);
-				tputs(tigetstr("ed"), 1, ft_iputchar);
-				hist = hist->prev; // UP
-				write(1, hist->content, ft_strlen(hist->content));
-			}
-			// ft_bzero(buf, res + 1);
+			*buf = '\0';
+			write(1, "\n", 1);
+			break ;
 		}
-		else if (!ft_strcmp(buf, "\t"))
-		{
-			ft_bzero(buf, res + 1);
-			continue ;
-		}
-		else if (!ft_strcmp(buf, "\e[B")) // "\e[B"
-		{
-			if (hist->next)
-			{
-				tputs(restore_cursor, 1, ft_iputchar);
-				tputs(tigetstr("ed"), 1, ft_iputchar);
-				hist = hist->next; // DOWN
-				write(1, hist->content, ft_strlen(hist->content));
-			}
-			// ft_bzero(buf, res + 1);
-		}
-		else if (!ft_strcmp(buf, "\e[C"))
-		{
-			ft_bzero(buf, res + 1);
-			continue ;
-			// tputs(restore_cursor, 1, ft_iputchar);
-			// tputs(tigetstr("ed"), 1, ft_iputchar);
-		}
-		else if (!ft_strcmp(buf, "\e[D"))
-		{
-			ft_bzero(buf, res + 1);
-			continue ;
-			// tputs(restore_cursor, 1, ft_iputchar);
-			// tputs(tigetstr("ed"), 1, ft_iputchar);
-		}
-		else if (!ft_strcmp(buf, "\033"))
-		{
-			ft_bzero(buf, res + 1);
-			continue ;
-		}
-		// else if (!ft_strcmp(buf, "\e[H"))
+		// else if (!ft_strcmp(buf, "\033")) // ESC
 		// {
-
+		// 	write(1, "HOHO\n", 5);
+		// 	ft_bzero(buf, res + 1);
+		// 	continue ;
 		// }
-		else if (!strcmp(buf, "\177") && len > 0 && res > 0) // "\177" BACKSPACE
-		{
-			tputs(cursor_left, 1, ft_iputchar);
-			tputs(tigetstr("ed"), 1, ft_iputchar);
-			(hist->content)[--len] = '\0';
-		}
 		else if (!ft_strcmp(buf, "\3"))
 		{
-			ft_bzero(hist->content, len);
+			ft_bzero(hist->cont, len);
+			init_error(1, &all->proc->error);
 			write(1, "\n", 1);
 			break ;
 		}
@@ -121,27 +135,32 @@ void	n_cycle(t_all *all, int *ctrld)
 			write(1, "exit", 4);
 			break ;
 		}
-		else if (ft_strcmp(buf, "\4") && strcmp(buf, "\177"))
+		else if (*buf < 32 || *buf > 126)
+		{
+			ft_bzero(buf, res + 1);
+			continue ;
+		}
+		else if (!strcmp(buf, "\177") && len > 0 && res > 0)
+		{
+			tputs(cursor_left, 1, ft_iputchar);
+			tputs(tigetstr("ed"), 1, ft_iputchar);
+			(hist->cont)[--len] = '\0';
+		}
+		else// if (ft_strcmp(buf, "\4") && strcmp(buf, "\177"))
 		{
 			write(1, buf, res);
-			hist->content = str_free(&hist->content, ft_strjoin(hist->content, buf));
+			hist->cont = str_free(&hist->cont, ft_strjoin(hist->cont, buf));
 		}
-		len = ft_strlen(hist->content);
-		if (!ft_strcmp(buf, "\n"))
-		{
-			(hist->content)[len - 1] = '\0';
-			break ;
-		}
+		len = ft_strlen(hist->cont);
 	}
-	all->input = hist->content; // do not forget to uncomment!
+	all->input = hist->cont;
 	termcap_on(all);
-	if (isempty(hist->content, 0))
-		ft_bzero(hist->content, len);
+	if (isempty(hist->cont, 0))
+		ft_bzero(hist->cont, len);
 	else
 	{
 		hist_prep(hist, all->fn);
 		executor(all);
-		pars_free(all);
 	}
 }
 
@@ -155,14 +174,14 @@ void	d_cycle(t_all *all)
 	while (!ctrld)
 	{
 		termcap_off(all);
-		if (!hist->content || !isempty(hist->content, 0))
+		if (!hist->cont || !isempty(hist->cont, 0))
 			ft_dlstadd_back(&hist, ft_dlstnew(ft_strdup("")));
 		while (hist->next)
 			hist = hist->next;
 		all->hist = hist;
 		write(1, "::: ", 4);
 		tputs(save_cursor, 1, ft_iputchar);
-		n_cycle(all, &ctrld);
+		n_cycle(all, &ctrld, all->hist);
 
 		// all->input = "\"e\" \"c\\\"\"h\\\"o\\' '1\\'\n";
 		// all->input = "ec\"\"H'O' \\' 5 \"#f\\\" ; | \\\\\" ' \\f\\' ; env";

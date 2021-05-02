@@ -83,7 +83,7 @@ char	**processor(char **env, t_list *lst, t_proc *com)
 		}
 		else
 			env = redirect_condition(env, com, list);
-		// free(com->ex_port);
+		free(com->ex_port);
 		// lst = lst->next;
 		break ;
 	}
