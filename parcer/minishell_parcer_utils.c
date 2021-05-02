@@ -54,12 +54,3 @@ void	pars_delete_last_spaces(char **line)
 	while ((*line)[len] == ' ' && len > 0)
 		(*line)[len--] = '\0';
 }
-
-int	pars_check_slash(char *line, int i)
-{
-	/* // if (i == 0) **
-	** 	errorfunc(line[i]); // если спецсимвол первый, вызывать ошибку syntax error... */
-	if (line[i - 1] == '\\')
-		return (1);
-	return (0);
-}

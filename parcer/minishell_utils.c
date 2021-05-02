@@ -7,7 +7,8 @@ int	isempty(char *str, int hash)
 	i = 0;
 	while (str[i] != '\0')
 	{
-		if (hash == 1 && ((str[i] == ' ' && str[i + 1] == '#') || str[0] == '#'))
+		if (hash == 1 && ((str[i] == ' ' && str[i + 1] == '#')
+				|| str[0] == '#'))
 			return (1);
 		if (str[i] != ' ')
 			return (0);
@@ -35,30 +36,39 @@ char	*str_free(char **line, char *tmp)
 	return (tmp);
 }
 
+void	pars_free_re(t_list *lst)
+{
+	t_re	*re;
+	t_list	*tmp;
+
+	while (lst != 0)
+	{
+		re = lst->content;
+		free(re->fn);
+		free(re);
+		tmp = lst;
+		lst = lst->next;
+		free(tmp);
+	}
+}
+
 void	pars_free(t_all *all)
 {
+	int		i;
 	t_com	*com;
 	t_list	*tmp;
 
 	while (all->lst != 0)
 	{
 		com = all->lst->content;
-		// ft_putendl_fd(com->line, 1);
 		if (com->line)
 			free(com->line);
-		int m = -1;
-		while (com->args && com->args[++m] != '\0')
-			free(com->args[m]);
-		while (com->re != 0)
-		{
-			t_re *re;
-			re = com->re->content;
-			free(re->fn);
-			tmp = com->re;
-			com->re = com->re->next;
-			free(tmp);
-		}
+		i = -1;
+		while (com->args && com->args[++i] != '\0')
+			free(com->args[i]);
 		free(com->args);
+		if (com->re != 0)
+			pars_free_re(com->re);
 		free(com);
 		tmp = all->lst;
 		all->lst = all->lst->next;

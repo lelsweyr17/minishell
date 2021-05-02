@@ -75,7 +75,7 @@ int	pars_dollar(t_all *all, char **line, int i, int n)
 		n = pars_dollar_spec(all, line, n);
 	else if (!ft_isalnum((*line)[n]))
 		return (n);
-	else  // if (ft_isalnum((*line)[i]) || (*line)[i] == '_')
+	else if (ft_isalnum((*line)[i]) || (*line)[i] == '_')
 		n = pars_dollar_get_var(all, line, i, n);
 	return (n);
 }
