@@ -19,4 +19,5 @@ void	echo_command(t_proc *com, char **envp, t_com *list, char *arg)
 		write(1, &arg[i++], 1);
 	if (!list->n)
 		write(1, "\n", 1);
+	init_error(0, &com->error);
 }

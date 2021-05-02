@@ -92,7 +92,7 @@ int	bin_command(t_proc *com, char **envp)
 void	execve_command(t_proc *com, char **arg, char **envp)
 {
 	pid_t	pid;
-
+	
 	pid = fork();
 	if (pid == 0)
 	{
