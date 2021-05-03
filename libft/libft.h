@@ -49,6 +49,8 @@ typedef struct s_dlist
 	struct s_dlist	*prev;
 }					t_dlist;
 
+char				**arrdup(char **envp);
+int					array_size(char **ar);
 char				**ft_arrjoin(char **s1, char **s2);
 size_t				ft_arrlen(char **s);
 int					ft_atoi(const char *str);

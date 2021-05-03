@@ -101,7 +101,7 @@ void	pars_get_args(t_all *all)
 		// 	printf("args %d\t_%s_\n", m, com->args[m]);
 		if (com->pipsem == ';' || com->pipsem == 0)
 		{
-			// all->env = processor(all->env, send, all->proc);
+			all->env = processor(all->env, send, all->proc);
 			send = all->lst;
 			while (send != all->lst)
 				send = send->next;

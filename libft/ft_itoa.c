@@ -27,7 +27,7 @@ static	int	n_len(int n)
 	return (nb);
 }
 
-char		*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	char	*dest;
 	int		nb;

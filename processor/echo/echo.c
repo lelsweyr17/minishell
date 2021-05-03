@@ -12,16 +12,6 @@
 
 #include "../../headers/processor.h"
 
-int	array_size(char **ar)
-{
-	int	i;
-
-	i = 0;
-	while (ar[i])
-		i++;
-	return (i);
-}
-
 void	echo_command(t_proc *com, char **envp, t_com *list, char *arg)
 {
 	int		i;

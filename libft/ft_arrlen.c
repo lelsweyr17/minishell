@@ -23,4 +23,3 @@ size_t	ft_arrlen(char **s)
 		n++;
 	return (n);
 }
-

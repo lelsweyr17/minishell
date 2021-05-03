@@ -71,14 +71,17 @@ typedef struct s_p
 {
 	int				i;
 	int				st;
-	// int				sem;
+	int				nl;
+	int				len;
+	int				res;
+	int				ctrld;
 }	t_p;
 
 typedef struct s_all
 {
 	t_dlist			*hist;
 	t_list			*lst;
-	t_p				p;
+	t_p				*p;
 	t_proc			*proc;
 	char			**env;
 	char			*fn;

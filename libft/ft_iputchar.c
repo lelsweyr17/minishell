@@ -12,7 +12,7 @@
 
 #include "libft.h"
 
-int		ft_iputchar(int c)
+int	ft_iputchar(int c)
 {
-	return(write(1, &c, 1));
+	return (write(1, &c, 1));
 }

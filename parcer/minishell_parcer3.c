@@ -24,7 +24,7 @@ int	pars_dollar_spec(t_all *all, char **line, int n)
 
 	i = n;
 	if ((*line)[n] == '$')
-		env = ft_itoa(all->pid);
+		env = ft_strdup("The cake is a lie!");
 	else
 	{
 		if (all->proc->error > 255)

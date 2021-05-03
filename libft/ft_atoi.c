@@ -12,7 +12,7 @@
 
 static	int	count(const char *str, int i)
 {
-	int n;
+	int	n;
 
 	n = 0;
 	while (str[i] >= '0' && str[i] <= '9')
@@ -25,7 +25,7 @@ static	int	count(const char *str, int i)
 	return (1);
 }
 
-int			ft_atoi(const char *str)
+int	ft_atoi(const char *str)
 {
 	int				i;
 	int				n;

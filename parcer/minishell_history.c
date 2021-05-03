@@ -53,7 +53,7 @@ void	hist_file(t_all *all)
 	all->hist = 0;
 	all->fn = getenv("HOME");
 	if (all->fn)
-		all->fn = ft_strjoin(all->fn, "/.SSSshelkers_hist");
+		all->fn = ft_strjoin(all->fn, "/.shelkers");
 	if (!all->fn || !hist_read_file(&all->hist, all->fn))
 		ft_dlstadd_back(&all->hist, ft_dlstnew(ft_strdup("")));
 }

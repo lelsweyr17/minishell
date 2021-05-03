@@ -1,99 +1,6 @@
 #include "../headers/minishell.h"
 
-char	**arrdup(char **envp)
-{
-	int		i;
-	char	**env;
-
-	i = -1;
-	env = (char **)ft_calloc(array_size(envp) + 1, sizeof(char *));
-	while (envp[++i])
-		env[i] = ft_strdup(envp[i]);
-	env[i] = NULL;
-	return (env);
-}
-
-void		executor(t_all *all)
-{
-	if (isempty(all->input, 1))
-		return ;
-	ft_bzero(&all->p, sizeof(all->p));
-	all->lst = 0;
-	all->delescape = 0;
-	pars_split_commands(all);
-	all->delescape = 1;
-	pars_get_args(all);
-	pars_free(all);
-}
-
-int	get_read(t_all *all, char *buf, int res)
-{
-	int	nl;
-
-	nl = 0;
-	ft_memset(buf, 0, res);
-	res = read(0, buf, 999);
-	if (res < 0)
-		exit (0);
-	buf[res] = '\0';
-	// while (nl <= 999 && buf[nl] != '\0')
-	// {
-	// 	if (buf[nl] == '\n')
-	// 	{
-	// 		buf[nl] = '\0';
-	// 	}
-	// }
-	return (res);
-}
-
-void	hist_moving(t_all *all, char buf[1000], t_dlist **hist)
-{
-	if (!ft_strcmp(buf, "\e[A") && all->hist->prev)
-	{
-		tputs(restore_cursor, 1, ft_iputchar);
-		tputs(tigetstr("ed"), 1, ft_iputchar);
-		all->hist = all->hist->prev;
-		write(1, all->hist->cont, ft_strlen(all->hist->cont));
-	}
-	else if (!ft_strcmp(buf, "\e[B") && all->hist->next)
-	{
-		tputs(restore_cursor, 1, ft_iputchar);
-		tputs(tigetstr("ed"), 1, ft_iputchar);
-		all->hist = all->hist->next;
-		write(1, all->hist->cont, ft_strlen(all->hist->cont));
-	}
-	*hist = all->hist;
-	buf[0] = '\0';
-}
-
-void	move_righ_left(t_all *all, char buf[1000], int res)
-{
-	// char	*end;
-
-	if (!ft_strcmp(buf, "\e[C")) // RIGHT 
-	{
-		buf[0] = '\0';
-		// ft_bzero(buf, res + 1);
-		return ;
-		// tputs(restore_cursor, 1, ft_iputchar);
-		// tputs(tigetstr("ed"), 1, ft_iputchar);
-	}
-	else if (!ft_strcmp(buf, "\e[D")) // LEFT
-	{
-		buf[0] = '\0';
-		// ft_bzero(buf, res + 1);
-		return ;
-		// tputs(restore_cursor, 1, ft_iputchar);
-		// tputs(tigetstr("ed"), 1, ft_iputchar);
-	}
-	else if (!ft_strncmp(buf, "\5", 1)) // \1 HOME \5 END
-	{
-		ft_bzero(buf, res + 1);
-		return ;
-	}
-}
-
-int	break_n_cycle(t_all *all, char buf[1000], int len, int *ctrld)
+int	break_n_cycle(t_all *all, char buf[1000], int len)
 {
 	if (!ft_strcmp(buf, "\n"))
 		*buf = '\0';
@@ -104,7 +11,7 @@ int	break_n_cycle(t_all *all, char buf[1000], int len, int *ctrld)
 	}
 	else if (!ft_strcmp(buf, "\4") && len == 0)
 	{
-		*ctrld = 1;
+		all->p->ctrld = 1;
 		write(1, "exit", 4);
 	}
 	else
@@ -113,47 +20,49 @@ int	break_n_cycle(t_all *all, char buf[1000], int len, int *ctrld)
 	return (1);
 }
 
-void	n_cycle(t_all *all, int *ctrld, t_dlist *hist)
+void	n_cycle(t_all *all, char buf[1000], t_p *p, t_dlist *hist)
 {
-	int		res;
-	int		len;
-	char	buf[1000];
-
-	res = 0;
-	len = 0;
-	while (1)
+	if (!ft_strcmp(buf, "\e[A") || !ft_strcmp(buf, "\e[B"))
+		hist_moving(all, buf, &hist);
+	else if (!ft_strcmp(buf, "\e[C") || !ft_strcmp(buf, "\e[D"))
+		move_righ_left(all, buf, p->res);
+	else if (break_n_cycle(all, buf, p->len))
+		p->nl = 1;
+	else if (!ft_strcmp(buf, "\34"))
+		write(1, "^\\Quit: 3\n", 10);
+	else if (!strcmp(buf, "\177") && p->len > 0 && p->res > 0)
 	{
-		res = get_read(all, buf, res);
-		if (!ft_strcmp(buf, "\e[A") || !ft_strcmp(buf, "\e[B"))
-			hist_moving(all, buf, &hist);
-		else if (!ft_strcmp(buf, "\e[C") || !ft_strcmp(buf, "\e[D"))
-			move_righ_left(all, buf, res);
-		else if (break_n_cycle(all, buf, len, ctrld))
-			break ;
-		else if (!ft_strcmp(buf, "\34"))
-			write(1, "^\\Quit: 3\n", 10);
-		else if (!strcmp(buf, "\177") && len > 0 && res > 0)
-		{
-			tputs(cursor_left, 1, ft_iputchar);
-			tputs(tigetstr("ed"), 1, ft_iputchar);
-			(hist->cont)[--len] = '\0';
-		}
-		else if (*buf < 32 || *buf > 126)
-			continue ;
-		else
-		{
-			write(1, buf, res);
-			hist->cont = str_free(&hist->cont, ft_strjoin(hist->cont, buf));
-		}
-		len = ft_strlen(hist->cont);
+		tputs(cursor_left, 1, ft_iputchar);
+		tputs(tigetstr("ed"), 1, ft_iputchar);
+		(hist->cont)[--p->len] = '\0';
 	}
-	all->input = hist->cont;
-	termcap_on(all);
-	if (isempty(hist->cont, 0))
-		ft_bzero(hist->cont, len);
+	else if (*buf < 32 || *buf > 126)
+		return ;
 	else
 	{
-		hist_prep(hist, all->fn);
+		write(1, buf, p->res);
+		hist->cont = str_free(&hist->cont, ft_strjoin(hist->cont, buf));
+	}
+}
+
+void	n_cycle_begin(t_all *all)
+{
+	char	buf[1000];
+
+	ft_memset(all->p, 0, sizeof(*all->p));
+	while (!all->p->nl)
+	{
+		all->p->res = get_read(all, buf, all->p->res);
+		n_cycle(all, buf, all->p, all->hist);
+		all->p->len = ft_strlen(all->hist->cont);
+	}
+	all->input = all->hist->cont;
+	termcap_on(all);
+	if (isempty(all->hist->cont, 0))
+		ft_bzero(all->hist->cont, all->p->len);
+	else
+	{
+		hist_prep(all->hist, all->fn);
 		executor(all);
 		// exit (666);
 	}
@@ -161,12 +70,11 @@ void	n_cycle(t_all *all, int *ctrld, t_dlist *hist)
 
 void	d_cycle(t_all *all)
 {
-	int		ctrld;
 	t_dlist	*hist;
 
-	ctrld = 0;
 	hist = all->hist;
-	while (!ctrld)
+	all->p->ctrld = 0;
+	while (!all->p->ctrld)
 	{
 		termcap_off(all);
 		if (!hist->cont || !isempty(hist->cont, 0))
@@ -176,7 +84,7 @@ void	d_cycle(t_all *all)
 		all->hist = hist;
 		write(1, "::: ", 4);
 		tputs(save_cursor, 1, ft_iputchar);
-		n_cycle(all, &ctrld, all->hist);
+		n_cycle_begin(all);
 	}
 }
 
