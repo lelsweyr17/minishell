@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:38:22 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/02 17:38:23 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/03 20:54:21 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,11 +23,15 @@ char	*path_with_bin(char *path, char *com)
 	j = 0;
 	len = ft_strlen(path) + ft_strlen(com) + 2;
 	res = (char *)ft_calloc(len, sizeof(char));
-	res[ft_strlen(path)] = '/';
 	while (++i < (int)ft_strlen(path))
 		res[i] = path[i];
-	while (i++ < len)
-		res[i] = com[j++];
+	if (path[ft_strlen(path) - 1] != '/')
+	{
+		res[ft_strlen(path)] = '/';
+		i++;
+	}
+	while (i < len)
+		res[i++] = com[j++];
 	res[i] = 0;
 	return (res);
 }

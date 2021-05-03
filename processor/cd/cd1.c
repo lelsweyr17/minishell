@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:38:45 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/03 20:04:43 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/03 20:51:39 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,8 @@ void	cd_minus(t_proc *com, char **envp)
 	if (i != -1 && envp[i][6] == '=')
 	{
 		chdir(envp[i] + 7);
+		ft_putstr_fd(envp[i] + 7, 1);
+		write(1, "\n", 1);
 		init_error(0, &com->error);
 	}
 	else
@@ -88,20 +90,23 @@ char	**cd_command(t_proc *com, char **envp, char *arg)
 	char	*pwd;
 
 	oldpwd = ft_strdup(com->pwd);
-	errno = 0;
 	com->arg = arg;
+	errno = 0;
 	flag = change_dir(com, envp);
 	if (errno != 0 && com->arg)
 		cd_errno(com);
-	pwd = getcwd(NULL, 0);
-	if (!pwd && ft_strlen(com->arg) <= 4)
-		pwd = pwd_not_found(com);
-	else if (!pwd)
-		pwd = ft_strdup(com->pwd);
-	if (ft_strncmp(oldpwd, pwd, ft_strlen(pwd)) || \
-		ft_strncmp(oldpwd, pwd, ft_strlen(oldpwd)) || flag)
-		envp = change_pwd(envp, pwd, oldpwd);
+	else
+	{
+		pwd = getcwd(NULL, 0);
+		if (!pwd)
+			pwd = pwd_not_found(com);
+		else if (!pwd)
+			pwd = ft_strdup(com->pwd);
+		if (ft_strncmp(oldpwd, pwd, ft_strlen(pwd)) || \
+			ft_strncmp(oldpwd, pwd, ft_strlen(oldpwd)) || flag)
+			envp = change_pwd(envp, pwd, oldpwd);
+		free(pwd);
+	}
 	free(oldpwd);
-	free(pwd);
 	return (envp);
 }
