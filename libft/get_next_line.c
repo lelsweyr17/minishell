@@ -74,7 +74,5 @@ int	get_next_line(int fd, char **line)
 		}
 		*line = ft_freetmp(line, ln);
 	}
-	if (ret || np)
-		return (1);
-	return (0);
+	return (ret || np);
 }

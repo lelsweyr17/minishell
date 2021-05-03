@@ -43,12 +43,14 @@ typedef struct s_list
 
 typedef struct s_dlist
 {
-	char			*content;
+	char			*cont;
 	char			*dup;
 	struct s_dlist	*next;
 	struct s_dlist	*prev;
 }					t_dlist;
 
+char				**arrdup(char **envp);
+int					array_size(char **ar);
 char				**ft_arrjoin(char **s1, char **s2);
 size_t				ft_arrlen(char **s);
 int					ft_atoi(const char *str);

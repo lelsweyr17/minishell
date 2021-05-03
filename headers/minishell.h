@@ -21,7 +21,18 @@
 # include <math.h>
 # include "structs.h"
 
-void				executor(t_all *all); //, char **line);
+/* minishell.c */
+void				d_cycle(t_all *all);
+void				n_cycle_begin(t_all *all);
+void				n_cycle(t_all *all, char buf[1000], t_p *p, t_dlist *hist);
+int					break_n_cycle(t_all *all, char buf[1000], int len);
+/* minishell_executor.c */
+void				executor(t_all *all);
+int					get_read(t_all *all, char *buf, int res);
+void				hist_moving(t_all *all, char buf[1000], t_dlist **hist);
+void				move_righ_left(t_all *all, char buf[1000], int res);
+
+
 void				pars_shift_array(char **args, int a);
 int					pars_shift_line(char **line, int n);
 char				*strtrim_free(char *str);
@@ -33,7 +44,7 @@ int					isprevempty(char *str, int begin, int last);
 int					isempty(char *str, int hash);
 void				pars_free(t_all *all);
 /* minishell_parser2.c */
-void				pars_get_args(t_all *all, t_proc *proc);
+void				pars_get_args(t_all *all);
 void				pars_split_args(t_all *all, t_com *com);
 char				*pars_get_next_arg(t_all *all, t_com *com, char **line, int *i);
 int					pars_get_com(t_com *com);

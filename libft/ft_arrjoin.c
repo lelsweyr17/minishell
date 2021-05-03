@@ -27,11 +27,11 @@ char	**ft_arrjoin(char **s1, char **s2)
 	res = malloc(sizeof(char **) * (l1 + l2 + 1));
 	if (!res)
 		return (0);
-	while(++i < l1)
+	while (++i < l1)
 		res[i] = s1[i];
 	res += l1;
 	i = -1;
-	while(++i < l2)
+	while (++i < l2)
 		res[i] = s2[i];
 	res -= l1;
 	res[l1 + l2] = 0;

@@ -24,9 +24,13 @@ int	pars_dollar_spec(t_all *all, char **line, int n)
 
 	i = n;
 	if ((*line)[n] == '$')
-		env = ft_itoa(all->pid);
+		env = ft_strdup("The cake is a lie!");
 	else
+	{
+		if (all->proc->error > 255)
+			all->proc->error /= 256;
 		env = ft_itoa(all->proc->error);
+	}
 	tmp = env;
 	n = pars_get_env_value(line, &env, n, ++i);
 	free(tmp);
@@ -71,7 +75,7 @@ int	pars_dollar(t_all *all, char **line, int i, int n)
 		n = pars_dollar_spec(all, line, n);
 	else if (!ft_isalnum((*line)[n]))
 		return (n);
-	else  // if (ft_isalnum((*line)[i]) || (*line)[i] == '_')
+	else if (ft_isalnum((*line)[i]) || (*line)[i] == '_')
 		n = pars_dollar_get_var(all, line, i, n);
 	return (n);
 }

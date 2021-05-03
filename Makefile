@@ -17,6 +17,7 @@ CFLAGS = -g
 TFLAGS = -ltermcap
 HEADERF = minishell.h processor.h structs.h
 CFILES = parcer/minishell.c \
+	parcer/minishell_executor.c \
 	parcer/minishell_history.c \
 	parcer/minishell_termcap.c \
 	parcer/minishell_parser1.c \
