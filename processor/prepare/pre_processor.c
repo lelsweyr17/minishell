@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:39:50 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/03 17:27:21 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/02 17:39:51 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,26 +74,8 @@ void	com_export(t_proc *com, char **envp)
 		com->ex_port[i] = envp[i];
 }
 
-void	save_pwd(t_proc *com)
-{
-	char *tmp;
-	char *tmp2;
-	
-	tmp = getcwd(NULL, 0);
-	if (tmp)
-	{
-		// if (!com->pwd)
-		// 	com->pwd = ft_strdup("");
-		// tmp2 = com->pwd;
-		com->pwd = ft_strdup(tmp);
-		// free(tmp2);
-	}
-	free(tmp);
-}
-
 void	prepare_function(t_proc *com, char **envp, char **res)
 {
 	null_flags(com);
 	com_export(com, envp);
-	save_pwd(com);
 }

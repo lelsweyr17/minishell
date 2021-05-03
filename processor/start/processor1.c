@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:40:14 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/03 18:18:43 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/02 17:40:15 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	**build_in_commands(t_proc *com, char **envp, char **arg, t_com *list)
 	else if (list->type == 2)
 		envp = cd_command(com, envp, arg[1]);
 	else if (list->type == 4)
-		pwd_command(com);
+		pwd_command();
 	else if (list->type == 8)
 		envp = exp_command(com, envp, arg + 1);
 	else if (list->type == 16)
@@ -80,12 +80,9 @@ char	**processor(char **env, t_list *lst, t_proc *com)
 	int			i;
 	int			pipe_num;
 	t_com		*list;
-	char		*tmp;
 
 	list = lst->content;
-	// printf("1: %s\n", com->pwd);
 	prepare_function(com, env, list->args);
-	// printf("2: %s\n", com->pwd);
 	if (list->pipsem == '|')
 	{
 		pipe_num = pipe_number(lst);
@@ -96,7 +93,6 @@ char	**processor(char **env, t_list *lst, t_proc *com)
 	}
 	else
 		env = redirect_condition(env, com, list);
-	// printf("3: %s\n", com->pwd);
 	free(com->ex_port);
 	return (env);
 }

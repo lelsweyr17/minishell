@@ -49,7 +49,7 @@ void	n_cycle_begin(t_all *all)
 {
 	char	buf[1000];
 
-	ft_memset(all->p, 0, sizeof(*all->p));
+	ft_bzero(all->p, sizeof(t_p));
 	while (!all->p->nl)
 	{
 		all->p->res = get_read(all, buf, all->p->res);

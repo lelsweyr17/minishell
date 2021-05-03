@@ -4,6 +4,7 @@ void	executor(t_all *all)
 {
 	if (isempty(all->input, 1))
 		return ;
+	ft_bzero(all->p, sizeof(t_p));
 	all->lst = 0;
 	all->delescape = 0;
 	pars_split_commands(all);

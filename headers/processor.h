@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:37:56 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/03 15:46:55 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/02 17:37:57 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 char		**add_oldpwd(char **envp);
 char		**processor(char **envp, t_list *list, t_proc *com);
 int			ft_is_str(char *str);
-void		pwd_command(t_proc *com);
+void		pwd_command(void);
 char		**cd_command(t_proc *com, char **envp, char *arg);
 void		echo_command(t_proc *com, char **envp, t_com *list, char *arg);
 char		*ft_getenv(char **envp, char *key);
