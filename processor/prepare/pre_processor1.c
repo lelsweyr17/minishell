@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pre_processor.c                                    :+:      :+:    :+:   */
+/*   pre_processor1.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:39:50 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/03 20:36:47 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/03 21:00:11 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,16 +72,6 @@ void	com_export(t_proc *com, char **envp)
 	com->ex_port[len] = NULL;
 	while (++i < len)
 		com->ex_port[i] = envp[i];
-}
-
-void	save_pwd(t_proc *com)
-{
-	char	*tmp;
-
-	tmp = getcwd(NULL, 0);
-	if (tmp)
-		com->pwd = ft_strdup(tmp);
-	free(tmp);
 }
 
 void	prepare_function(t_proc *com, char **envp, char **res)

@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 20:50:33 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/04/29 20:30:40 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/03 21:00:45 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ void				pars_free(t_all *all);
 /* minishell_parser2.c */
 void				pars_get_args(t_all *all, t_proc *proc);
 void				pars_split_args(t_all *all, t_com *com);
-char				*pars_get_next_arg(t_all *all, t_com *com, char **line, int *i);
+char				*pars_get_next_arg(t_all *all, t_com *com, char **line, \
+					int *i);
 int					pars_get_com(t_com *com);
 void				pars_cmp_com(t_com *com, char **commands);
 /* minishell_parser3.c */

@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:38:45 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/03 20:51:39 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/03 20:58:16 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ char	*pwd_not_found(t_proc *com)
 {
 	char	*pwd;
 	char	*tmp;
-	
+
 	write(1, "cd: error retrieving current directory: getcwd: cannot ", 56);
 	write(1, "access parent directories: No such file or directory\n", 54);
 	pwd = path_with_bin(com->pwd, com->arg);
