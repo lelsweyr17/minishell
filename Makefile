@@ -16,16 +16,16 @@ CC = gcc
 CFLAGS = -g
 TFLAGS = -ltermcap
 HEADERF = minishell.h processor.h structs.h
-CFILES = parcer/minishell.c \
-	parcer/minishell_executor.c \
-	parcer/minishell_history.c \
-	parcer/minishell_termcap.c \
-	parcer/minishell_parser1.c \
-	parcer/minishell_parcer2.c \
-	parcer/minishell_parcer3.c \
-	parcer/minishell_parcer4.c \
-	parcer/minishell_utils.c \
-	parcer/minishell_parcer_utils.c \
+CFILES = parser/minishell.c \
+	parser/minishell_executor.c \
+	parser/minishell_history.c \
+	parser/minishell_termcap.c \
+	parser/minishell_parser1.c \
+	parser/minishell_parser2.c \
+	parser/minishell_parser3.c \
+	parser/minishell_parser4.c \
+	parser/minishell_parser_utils.c \
+	parser/minishell_utils.c \
 	processor/start/processor1.c \
 	processor/start/processor2.c \
 	processor/export/export1.c \
@@ -103,7 +103,7 @@ debb:
 s:
 	cp Makefile .gitignore l/
 	cp -r libft l/
-	cp -r parcer l/
+	cp -r parser l/
 	cp -r processor l/
 	cp -r headers l/
 	
