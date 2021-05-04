@@ -93,6 +93,7 @@ int	main(int argc, char *argv[], char *envp[])
 	t_all	all;
 
 	all.env = arrdup(envp);
+	all.p = (t_p *)ft_calloc(1, sizeof(t_p));
 	all.proc = (t_proc *)ft_calloc(1, sizeof(t_proc));
 	envp = all.env;
 	if (!argc || !argv)

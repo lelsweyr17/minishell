@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:40:14 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/02 17:40:15 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/03 18:54:14 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char	**build_in_commands(t_proc *com, char **envp, char **arg, t_com *list)
 	else if (list->type == 2)
 		envp = cd_command(com, envp, arg[1]);
 	else if (list->type == 4)
-		pwd_command();
+		pwd_command(com);
 	else if (list->type == 8)
 		envp = exp_command(com, envp, arg + 1);
 	else if (list->type == 16)
