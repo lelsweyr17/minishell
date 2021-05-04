@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 20:50:40 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/04 15:28:32 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/04 16:08:45 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ typedef struct s_proc
 	int				build_in;
 	char			*arg;
 	int				error;
-	int				slesh;
 	char			*pwd;
+	int				slesh;
 	char			**ex_port;
 	char			**bin;
 	char			*com;
@@ -75,6 +75,7 @@ typedef struct s_p
 	int				nl;
 	int				len;
 	int				res;
+	int				pos;
 	int				ctrld;
 }	t_p;
 
@@ -87,11 +88,11 @@ typedef struct s_all
 	char			**env;
 	char			*fn;
 	char			*input;
-	// int				ctrld;
+	char			*end;
 	int				delescape;
 	int				pid;
 	int				nl;
 	struct termios	term;
 }	t_all;
 
-#endif 
+#endif

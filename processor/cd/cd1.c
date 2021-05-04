@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:38:45 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/04 15:26:42 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/04 16:18:10 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,23 +71,44 @@ int	change_dir(t_proc *com, char **envp)
 	return (flag);
 }
 
+char	*pwd_not_found(t_proc *com)
+{
+	char	*pwd;
+	char	*tmp;
+
+	write(1, "cd: error retrieving current directory: getcwd: cannot ", 56);
+	write(1, "access parent directories: No such file or directory\n", 54);
+	pwd = path_with_bin(com->pwd, com->arg);
+	if (com->pwd)
+		free(com->pwd);
+	com->pwd = ft_strdup(pwd);
+	return (pwd);
+}
+
 char	**cd_command(t_proc *com, char **envp, char *arg)
 {
 	int		flag;
 	char	*oldpwd;
 	char	*pwd;
 
-	oldpwd = getcwd(NULL, 0);
-	errno = 0;
+	oldpwd = ft_strdup(com->pwd);
 	com->arg = arg;
 	errno = 0;
 	flag = change_dir(com, envp);
 	if (errno != 0 && com->arg)
 		cd_errno(com);
-	pwd = getcwd(NULL, 0);
-	if (ft_strncmp(oldpwd, pwd, ft_strlen(pwd)) || \
-		ft_strncmp(oldpwd, pwd, ft_strlen(oldpwd)) || flag)
-		envp = change_pwd(envp, pwd, oldpwd);
+	else
+	{
+		pwd = getcwd(NULL, 0);
+		if (!pwd)
+			pwd = pwd_not_found(com);
+		else if (!pwd)
+			pwd = ft_strdup(com->pwd);
+		if (ft_strncmp(oldpwd, pwd, ft_strlen(pwd)) || \
+			ft_strncmp(oldpwd, pwd, ft_strlen(oldpwd)) || flag)
+			envp = change_pwd(envp, pwd, oldpwd);
+		free(pwd);
+	}
 	free(oldpwd);
 	return (envp);
 }

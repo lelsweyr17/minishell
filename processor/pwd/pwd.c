@@ -6,17 +6,19 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:39:55 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/04 15:26:53 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/04 16:08:23 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/processor.h"
 
-void	pwd_command(void)
+void	pwd_command(t_proc *com)
 {
 	char	*a;
 
 	a = getcwd(NULL, 0);
+	if (!a)
+		a = ft_strdup(com->pwd);
 	write(1, a, ft_strlen(a));
 	write(1, "\n", 1);
 	free(a);
