@@ -90,10 +90,35 @@ void	move_righ_left(t_all *all, char buf[1000], int res)
 		all->p->pos = 0;
 		all->end = str_free(&all->end, ft_strdup(all->hist->cont));
 	}
-	else if (!ft_strncmp(buf, "\5", 1) || !ft_strcmp(buf, "\e[F"))
+	else if ((!ft_strncmp(buf, "\5", 1) || !ft_strcmp(buf, "\e[F")) && all->p->pos < all->p->len)
 	{
-		while (all->p->pos++ != all->p->len)
+		while (all->p->pos != all->p->len)
+		{
+			all->p->pos++;
 			tputs(cursor_right, 1, ft_iputchar);
+		}
 		all->end[0] = '\0';
+	}
+	else if (!ft_strcmp(buf, "\ef") && all->p->pos < all->p->len)
+	{
+		while (all->p->pos != all->p->len)
+		{
+			all->p->pos++;
+			tputs(cursor_right, 1, ft_iputchar);
+			if (ft_isalnum(all->hist->cont[all->p->pos - 1]) && !ft_isalnum(all->hist->cont[all->p->pos]))
+				break ;
+		}
+		all->end = str_free(&all->end, ft_strdup(&all->hist->cont[all->p->pos]));
+	}
+	else if (!ft_strcmp(buf, "\eb") && all->p->pos > 0)
+	{
+		while (all->p->pos != 0)
+		{
+			all->p->pos--;
+			tputs(cursor_left, 1, ft_iputchar);
+			if (!ft_isalnum(all->hist->cont[all->p->pos - 1]) && ft_isalnum(all->hist->cont[all->p->pos]))
+				break ;
+		}
+		all->end = str_free(&all->end, ft_strdup(&all->hist->cont[all->p->pos]));
 	}
 }

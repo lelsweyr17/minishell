@@ -25,7 +25,8 @@ CFILES = parser/minishell.c \
 	parser/minishell_parser3.c \
 	parser/minishell_parser4.c \
 	parser/minishell_parser_utils.c \
-	parser/minishell_utils.c \
+	parser/minishell_utils1.c \
+	parser/minishell_utils2.c \
 	processor/start/processor1.c \
 	processor/start/processor2.c \
 	processor/export/export1.c \

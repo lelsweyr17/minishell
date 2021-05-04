@@ -33,23 +33,26 @@ void	pars_redirects(t_all *all, t_com *com, char **line, int *i)
 	while ((*line)[*i] != '\0' && (*line)[*i] != ' ')
 		pars_line(all, line, i);
 	re->fn = ft_strndup(&(*line)[s], *i - s);
+	write(1, re->fn, ft_strlen(re->fn));
 	com->re = begin;
 }
 
 char	*pars_get_next_arg(t_all *all, t_com *com, char **line, int *i)
 {
 	int		s;
+	int		parsed;
 	char	*new;
 
 	s = *i;
 	new = 0;
+	parsed = 0;
 	while ((*line)[*i] != '\0' && (*line)[*i] != ' ' && (*line)[*i]
 		!= '<' && (*line)[*i] != '>')
-		pars_line(all, line, i);
+		parsed = pars_line(all, line, i);
+	if (parsed)
+		new = ft_strndup(&(*line)[s], *i - s);
 	if (ft_strchr("<>", (*line)[*i]))
 		pars_redirects(all, com, line, i);
-	else
-		new = ft_strndup(&(*line)[s], *i - s);
 	return (new);
 }
 

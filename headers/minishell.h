@@ -62,7 +62,7 @@ int					pars_check_redirects(t_all *all, char **line, char c, \
 
 int					array_size(char **ar);
 /* minishell_parser4.c */
-void				pars_line(t_all *all, char **line, int *i);
+int					pars_line(t_all *all, char **line, int *i);
 /* minishell_history.c */
 void				hist_filling_in(t_dlist **hist, char *buf, int res, \
 					int beg);
@@ -73,5 +73,8 @@ void				hist_file(t_all *all);
 void				termcap_off(t_all *all);
 void				termcap_on(t_all *all);
 void				termcap(t_all *all);
+/* minishell_utils2.c */
+void				sig_int(int i);
+void				sig_quit(int i);
 
 #endif

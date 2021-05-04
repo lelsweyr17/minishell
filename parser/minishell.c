@@ -24,12 +24,10 @@ void	n_cycle(t_all *all, char buf[1000], t_p *p, t_dlist *hist)
 {
 	if (!ft_strcmp(buf, "\e[A") || !ft_strcmp(buf, "\e[B"))
 		hist_moving(all, buf, &hist);
-	else if (!ft_strcmp(buf, "\e[C") || !ft_strcmp(buf, "\e[D") || !ft_strncmp(buf, "\1", 1) || !ft_strcmp(buf, "\e[H") || !ft_strncmp(buf, "\5", 1) || !ft_strcmp(buf, "\e[F"))
+	else if (!ft_strcmp(buf, "\e[C") || !ft_strcmp(buf, "\e[D") || !ft_strncmp(buf, "\1", 1) || !ft_strcmp(buf, "\e[H") || !ft_strncmp(buf, "\5", 1) || !ft_strcmp(buf, "\e[F") || !ft_strcmp(buf, "\eb") || !ft_strcmp(buf, "\ef"))
 		move_righ_left(all, buf, p->res);
 	else if (break_n_cycle(all, buf, p->len))
 		p->nl = 1;
-	else if (!ft_strcmp(buf, "\34"))
-		write(1, "^\\Quit: 3\n", 10);
 	else if (!strcmp(buf, "\177") && p->len > 0 && p->pos > 0)
 	{
 		tputs(cursor_left, 1, ft_iputchar);
@@ -100,7 +98,6 @@ void	n_cycle_begin(t_all *all)
 	{
 		hist_prep(all->hist, all->fn);
 		executor(all);
-		// exit (666);
 	}
 }
 
@@ -133,7 +130,8 @@ int	main(int argc, char *argv[], char *envp[])
 	all.p = (t_p *)ft_calloc(1, sizeof(t_p));
 	all.proc = (t_proc *)ft_calloc(1, sizeof(t_proc));
 	all.end = ft_strdup("");
-	// envp = all.env;
+	signal(SIGINT, &sig_int);
+	signal(SIGQUIT, &sig_quit);
 	if (!argc || !argv)
 		exit(0);
 	termcap(&all);
