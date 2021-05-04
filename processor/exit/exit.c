@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:39:15 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/02 17:39:16 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/04 16:44:30 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,13 @@ void	exit_if_arg_is_number(t_proc *com, long long res)
 		init_error(res % 256, &com->error);
 		exit(com->error);
 	}
+	else
+	{
+		write(2, "exit\n", 5);
+		write_error("exit", com->arg, "numeric argument required");
+		init_error(255, &com->error);
+		exit(com->error);
+	}
 }
 
 void	exit_with_arg(t_proc *com, t_com *list, long long res)
@@ -75,7 +82,8 @@ void	exit_with_arg(t_proc *com, t_com *list, long long res)
 		exit_with_many_args(com, list->args[1]);
 	else
 	{
-		if (ft_is_number(com->arg) != -1)
+		res = ft_is_number(com->arg);
+		if (res != -1)
 			exit_if_arg_is_number(com, res);
 		else
 		{
