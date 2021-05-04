@@ -96,9 +96,9 @@ void	pars_get_args(t_all *all)
 		com = all->lst->content;
 		com->args = (char **)ft_calloc(1, sizeof(char *));
 		pars_split_args(all, com);
-		// int	m = -1;
-		// while (com->args[++m])
-		// 	printf("args %d\t_%s_\n", m, com->args[m]);
+		int	m = -1;
+		while (com->args[++m])
+			printf("args %d\t_%s_\n", m, com->args[m]);
 		if (com->pipsem == ';' || com->pipsem == 0)
 		{
 			all->env = processor(all->env, send, all->proc);
