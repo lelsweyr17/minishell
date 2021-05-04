@@ -26,7 +26,11 @@ int	pars_dollar_spec(t_all *all, char **line, int n)
 	if ((*line)[n] == '$')
 		env = ft_itoa(all->pid);
 	else
+	{
+		if (all->proc->error > 255)
+			all->proc->error /= 256;
 		env = ft_itoa(all->proc->error);
+	}
 	tmp = env;
 	n = pars_get_env_value(line, &env, n, ++i);
 	free(tmp);
