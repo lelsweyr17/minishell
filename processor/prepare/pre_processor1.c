@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:39:50 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/04 15:15:06 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/04 15:26:30 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,5 +78,4 @@ void	prepare_function(t_proc *com, char **envp, char **res)
 {
 	null_flags(com);
 	com_export(com, envp);
-	save_pwd(com);
 }
