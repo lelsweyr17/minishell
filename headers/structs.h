@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 20:50:40 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/02 20:03:20 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/04/29 20:29:52 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ typedef struct s_proc
 	int				build_in;
 	char			*arg;
 	int				error;
-	char			*pwd;
 	int				slesh;
 	char			**ex_port;
 	char			**bin;
