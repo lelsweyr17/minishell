@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:39:55 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/03 17:35:07 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/04 15:15:12 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ void	pwd_command(t_proc *com)
 
 	a = getcwd(NULL, 0);
 	if (!a)
-		a = com->pwd;
+		a = ft_strdup(com->pwd);
 	write(1, a, ft_strlen(a));
 	write(1, "\n", 1);
 	free(a);

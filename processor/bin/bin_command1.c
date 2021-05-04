@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:38:13 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/02 17:38:14 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/03 20:58:06 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	bin_command(t_proc *com, char **envp)
 void	execve_command(t_proc *com, char **arg, char **envp)
 {
 	pid_t	pid;
-	
+
 	pid = fork();
 	if (pid == 0)
 	{

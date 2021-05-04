@@ -6,7 +6,7 @@
 #    By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/28 13:42:48 by cmarsha           #+#    #+#              #
-#    Updated: 2021/04/29 14:41:49 by lelsweyr         ###   ########.fr        #
+#    Updated: 2021/05/04 14:56:34 by lelsweyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -39,7 +39,8 @@ CFILES = parcer/minishell.c \
 	processor/pwd/pwd.c \
 	processor/echo/echo.c \
 	processor/exit/exit.c \
-	processor/prepare/pre_processor.c \
+	processor/prepare/pre_processor1.c \
+	processor/prepare/pre_processor2.c \
 	processor/bin/bin_command1.c \
 	processor/bin/bin_command2.c \
 	processor/bin/bin_command3.c \
