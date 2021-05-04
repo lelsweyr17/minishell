@@ -72,18 +72,21 @@ typedef struct s_com
 	t_list			*re;
 }	t_com;
 
-typedef struct s_par
+typedef struct s_p
 {
 	int				i;
 	int				st;
-	int				sem;
-}	t_par;
+	int				nl;
+	int				len;
+	int				res;
+	int				ctrld;
+}	t_p;
 
 typedef struct s_all
 {
 	t_dlist			*hist;
 	t_list			*lst;
-	t_par			par;
+	t_p				*p;
 	t_proc			*proc;
 	char			**env;
 	char			*fn;
@@ -91,6 +94,7 @@ typedef struct s_all
 	// int				ctrld;
 	int				delescape;
 	int				pid;
+	int				nl;
 	struct termios	term;
 }	t_all;
 
