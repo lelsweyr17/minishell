@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:40:02 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/02 17:40:03 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/05 14:56:53 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,6 +61,9 @@ int	redirect_iterator(t_proc *com, char **env, t_com *list)
 			redirect_output(com, env, list, re);
 		else if (re->type == 3)
 			double_redirect_output(com, env, list, re);
+		free(re->fn);
+		free(re);
+		free(list->re);
 		list->re = list->re->next;
 	}
 	dup2(com->bin_exec.fd[0], 0);
