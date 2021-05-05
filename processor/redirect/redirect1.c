@@ -46,7 +46,9 @@ void	double_redirect_output(t_proc *com, char **env, \
 int	redirect_iterator(t_proc *com, char **env, t_com *list)
 {
 	t_re		*re;
+	t_list		*begin;
 
+	begin = list->re;
 	com->bin_exec.fd[0] = -1;
 	com->bin_exec.fd[1] = -1;
 	while (list->re)
@@ -65,6 +67,7 @@ int	redirect_iterator(t_proc *com, char **env, t_com *list)
 	}
 	dup2(com->bin_exec.fd[0], 0);
 	dup2(com->bin_exec.fd[1], 1);
+	list->re = begin;
 	return (1);
 }
 
