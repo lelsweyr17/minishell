@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:38:45 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/03 20:58:16 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/05 21:35:54 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ void	cd_minus(t_proc *com, char **envp)
 	}
 }
 
-void	cd_home(t_proc *com)
+void	cd_home(char **env, t_proc *com)
 {
 	char	*tmp;
 
-	tmp = getenv("HOME");
+	tmp = ft_getenv(env, "HOME");
 	if (tmp)
 	{
 		chdir(tmp);
@@ -59,11 +59,11 @@ int	change_dir(t_proc *com, char **envp)
 		cd_in_current_dir(com, &flag);
 	else if (com->arg && com->arg[0] == '-' && com->arg[1] == '-' \
 		&& com->arg[2] == 0)
-		cd_home(com);
+		cd_home(envp, com);
 	else if (com->arg && com->arg[0] == '~' && com->arg[1] == 0)
-		cd_home(com);
+		cd_home(envp, com);
 	else if (!com->arg)
-		cd_home(com);
+		cd_home(envp, com);
 	else if (com->arg && com->arg[0] != '-' && com->arg[1] == 0)
 		cd_with_arg(com);
 	else
@@ -78,7 +78,10 @@ char	*pwd_not_found(t_proc *com)
 
 	write(1, "cd: error retrieving current directory: getcwd: cannot ", 56);
 	write(1, "access parent directories: No such file or directory\n", 54);
+	init_error(1, &com->error);
 	pwd = path_with_bin(com->pwd, com->arg);
+	if (com->pwd)
+		free(com->pwd);
 	com->pwd = ft_strdup(pwd);
 	return (pwd);
 }

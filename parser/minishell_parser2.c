@@ -33,7 +33,7 @@ void	pars_redirects(t_all *all, t_com *com, char **line, int *i)
 	while ((*line)[*i] != '\0' && (*line)[*i] != ' ')
 		pars_line(all, line, i);
 	re->fn = ft_strndup(&(*line)[s], *i - s);
-	write(1, re->fn, ft_strlen(re->fn));
+	// write(1, re->fn, ft_strlen(re->fn));
 	com->re = begin;
 }
 
