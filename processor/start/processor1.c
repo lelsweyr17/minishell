@@ -30,7 +30,7 @@ char	**build_in_commands(t_proc *com, char **envp, char **arg, t_com *list)
 		exit_command(com, list);
 	else
 	{
-		if (!check_build_in_with_slesh(arg[0], com, list))
+		if (list->type && !check_build_in_with_slesh(arg[0], com, list))
 			com->com = arg[0];
 	}
 	return (envp);
@@ -51,7 +51,7 @@ void	free_array(void **array)
 
 char	**function(char **env, t_proc *com, t_com *list)
 {
-	if (!(ft_strncmp(list->args[0], ".", 2)))
+	if (list->args[0] && !(ft_strncmp(list->args[0], ".", 2)))
 	{
 		write_error(list->args[0], NULL, "filename argument required");
 		write(2, ".: usage: . filename [arguments]\n", 34);

@@ -92,6 +92,8 @@ typedef struct s_all
 	int				delescape;
 	int				pid;
 	int				nl;
+	int				el;
+	int				res;
 	struct termios	term;
 }	t_all;
 
