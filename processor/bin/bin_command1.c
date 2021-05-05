@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:38:13 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/03 20:58:06 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/05 20:58:59 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ char	*tmp_command(char *command, t_proc *com)
 	char	*command_tmp;
 	int		i;
 
-	command_tmp = command;
+	command_tmp = ft_strdup(command);
 	i = ft_strlen(command_tmp) - 1;
 	if (command_tmp[i] == '/')
 	{
@@ -87,10 +87,12 @@ int	bin_command(t_proc *com, char **envp)
 			if (check_file_before_exec(com, command_tmp))
 			{
 				free(com->bin_exec.path);
+				free(command_tmp);
 				return (1);
 			}
 			else
 				init_error(0, &com->error);
+			free(command_tmp);
 		}
 	}
 	else

@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:37:56 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/04 16:44:42 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/05 22:00:05 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char		**change_pwd(char **envp, char *pwd, char *oldpwd);
 int			absolute_or_relative_path(char *line, t_proc *com);
 char		*path_with_bin(char *path, char *com);
 char		*change_arg_for_unset(char *arg);
-char		*get_dollar_arg(char *arg, int *start, int flag);
+char		*get_dollar_arg(char *arg, int *start, int flag, char **env);
 int			check_file_in_dir(char *path, char *command, t_proc *com);
 int			find_bin_command(char **array, char *command, t_proc *com);
 char		*from_up_to_low(char *arg);
@@ -73,12 +73,12 @@ int			write_no_such_file_or_dir(t_proc *com, char *command);
 char		**export_add_new_object(char **envp, char *str);
 char		**export_dollar(char *arg, t_proc *com, char **envp, int flag);
 char		**build_in_commands(t_proc *com, char **envp, char **arg, \
-	t_com *list);
+			t_com *list);
 int			pipe_number(t_list *lst);
 void		pipe_operator(int pipe_num, char **env, t_list *lst, t_proc *com);
 void		fd_pid_pipe_full(t_pipe *pip);
 void		pid_child_command(t_pipe *pip, char **env, t_com *list, \
-	t_proc *com);
+			t_proc *com);
 void		pipe_command(char **env, char **arg, t_proc *com, t_com *list);
 void		close_dup_middle_command(int i, t_pipe *pip, t_proc *com);
 void		close_dup_first_command(int i, t_pipe *pip, t_proc *com);
@@ -96,6 +96,6 @@ char		**unset_delete_condition(char **envp, char *str, t_proc *com);
 char		**redirect_operator(t_proc *com, char **env, t_com *list);
 char		**function(char **env, t_proc *com, t_com *list);
 void		redirect_pipe_condition(char **env, char **arg, t_proc *com, \
-	t_com *list);
+			t_com *list);
 
 #endif

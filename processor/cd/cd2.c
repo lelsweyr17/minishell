@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:38:49 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/03 20:49:09 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/05 21:15:47 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	cd_errno(t_proc *com)
 {
-	write_error("cd", com->pwd, strerror(errno));
+	write_error("cd", com->arg, strerror(errno));
 	init_error(1, &com->error);
 }
 

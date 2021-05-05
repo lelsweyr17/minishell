@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:39:29 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/02 17:39:30 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/05 21:37:46 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*new_arg_for_export(char *str, char *arg, int *start)
 	return (new);
 }
 
-char	*get_dollar_arg(char *arg, int *start, int flag)
+char	*get_dollar_arg(char *arg, int *start, int flag, char **env)
 {
 	int		i;
 	char	*new;
@@ -41,7 +41,7 @@ char	*get_dollar_arg(char *arg, int *start, int flag)
 	if (!flag)
 		*start = i;
 	tmp[i] = 0;
-	str_env = getenv(tmp);
+	str_env = ft_getenv(env, tmp);
 	if (str_env)
 		str = ft_strdup(str_env);
 	new = new_arg_for_export(str, arg, start);
@@ -57,7 +57,7 @@ char	**export_dollar(char *arg, t_proc *com, char **envp, int flag)
 	int		start;
 
 	str = NULL;
-	str = get_dollar_arg(arg, &start, flag);
+	str = get_dollar_arg(arg, &start, flag, envp);
 	if (str && ft_strlen(str))
 	{
 		if (!ft_is_str(str))

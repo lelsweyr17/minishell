@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:40:14 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/04 16:15:03 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/05 20:56:19 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,8 @@ char	**processor(char **env, t_list *lst, t_proc *com)
 
 	list = lst->content;
 	prepare_function(com, env, list->args);
+	// printf("%s\n", list->args[0]);
+	// printf("%s\n", com->com);
 	if (list->pipsem == '|')
 	{
 		pipe_num = pipe_number(lst);

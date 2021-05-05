@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:40:24 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/02 17:40:25 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/05 22:03:48 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,15 @@ char	**unset_dollar(char *arg, t_proc *com, char **envp, int flag)
 	i = 0;
 	num_str = 0;
 	str = NULL;
-	str = get_dollar_arg(arg, &start, flag);
+	str = get_dollar_arg(arg, &start, flag, envp);
 	if (str && ft_strchr(str, '='))
 		write_invalid_parameter_name(com);
 	else if (str && ft_strlen(str))
+	{
 		envp = unset_delete_condition(envp, str, com);
-	if (str)
+		free(str);
+	}
+	else
 		free(str);
 	return (envp);
 }
@@ -57,26 +60,27 @@ char	**unset_dollar(char *arg, t_proc *com, char **envp, int flag)
 char	**unset_command(t_proc *com, char **envp, char **args)
 {
 	int	i;
+	int j;
 	int	len;
 	int	num_str;
 
 	i = 0;
+	j = -1;
 	num_str = 0;
 	len = array_size(envp);
-	com->arg = args[0];
-	if (!com->arg)
+	if (!args[0])
 		return (envp);
-	while (com->arg && com->arg[i] && com->arg[i] != '=')
-		i++;
-	if (com->arg[0] == '$' && com->arg[1])
-		envp = arg_dollar_conditions(envp, com);
-	else if (com->arg && ft_strchr(com->arg, '='))
-		write_invalid_parameter_name(com);
-	else if (com->arg)
+	while (args[++j])
 	{
-		i = -1;
-		while (args[++i])
-			envp = unset_delete_condition(envp, args[i], com);
+		com->arg = args[j];
+		while (com->arg && com->arg[i] && com->arg[i] != '=')
+			i++;
+		if (com->arg[0] == '$' && com->arg[1])
+			envp = arg_dollar_conditions(envp, com);
+		else if (com->arg && ft_strchr(com->arg, '='))
+			write_invalid_parameter_name(com);
+		else
+			envp = unset_delete_condition(envp, com->arg, com);
 	}
 	return (envp);
 }
