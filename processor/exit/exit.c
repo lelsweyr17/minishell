@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:39:15 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/04 16:48:44 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/05 22:09:52 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,11 @@ int	ft_is_number(char *a)
 	res = 0;
 	count = 1;
 	if (a[0] == '-' || a[0] == '+')
+	{
+		if (a[1] == 0)
+			return (-1);
 		i++;
+	}
 	while (a[++i])
 	{
 		if (ft_isdigit(a[i]))
