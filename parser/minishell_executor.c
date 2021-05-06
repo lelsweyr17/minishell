@@ -1,51 +1,5 @@
 #include "../headers/minishell.h"
 
-void	executor(t_all *all)
-{
-	if (isempty(all->input, 1))
-		return ;
-	ft_bzero(all->p, sizeof(t_p));
-	all->lst = 0;
-	all->delescape = 0;
-	pars_split_commands(all);
-	all->delescape = 1;
-	pars_get_args(all);
-	pars_free(all);
-}
-
-int	get_read(t_all *all, char *buf, int res)
-{
-	ft_memset(buf, 0, res);
-	if (all->nl == 0)
-	{
-		all->res = read(0, buf, 999);
-		if (all->res < 0)
-			exit (0);
-		buf[all->res] = '\0';
-		// all->el = all->res;
-	}
-	// all->nl = 0;
-	// if (all->res > 1)
-	// {
-	// 	while (!all->nl && buf[all->el] != '\0')// && buf[all->el] != '\n') //all->el < 999 && 
-	// 	{
-	// 		if (buf[all->el] == '\n')
-	// 		{
-	// 			buf[all->el] = '\0';
-	// 			all->p->nl = 1;
-	// 			all->nl = &buf[all->el + 1];
-	// 			// break ;
-	// 		}
-	// 		all->el++;
-	// 	}
-	// 	// if (all->nl)
-	// 	// {
-
-	// 	// }
-	// }
-	return (all->res);
-}
-
 void	hist_moving(t_all *all, char buf[1000], t_dlist **hist)
 {
 	if (!ft_strcmp(buf, "\e[A") && all->hist->prev)
@@ -121,4 +75,17 @@ void	move_righ_left(t_all *all, char buf[1000], int res)
 		}
 		all->end = str_free(&all->end, ft_strdup(&all->hist->cont[all->p->pos]));
 	}
+}
+
+void	executor(t_all *all)
+{
+	if (isempty(all->input, 1))
+		return ;
+	ft_bzero(all->p, sizeof(t_p));
+	all->lst = 0;
+	all->delescape = 0;
+	pars_split_commands(all);
+	all->delescape = 1;
+	pars_get_args(all);
+	pars_free(all);
 }

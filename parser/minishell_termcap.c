@@ -21,7 +21,6 @@ void	termcap(t_all *all)
 	char			*termname;
 
 	tcgetattr(0, &all->term);
-	tcsetattr(0, TCSANOW, &all->term);
 	termname = getenv("TERM");
 	if (!termname)
 		termname = "xterm-256color";

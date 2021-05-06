@@ -97,4 +97,6 @@ typedef struct s_all
 	struct termios	term;
 }	t_all;
 
+int					g_err;
+
 #endif
