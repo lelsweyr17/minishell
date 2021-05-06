@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:40:02 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/06 22:11:11 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/06 23:48:24 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,9 @@ int	redirect_iterator(t_proc *com, t_com *list)
 		else if (re->type == 1)
 			redirect_output(com, re);
 		else if (re->type == 3)
-<<<<<<< HEAD
-			double_redirect_output(com, env, list, re);
+			double_redirect_output(com, re);
 		if (!check_errno())
 			return (0);
-=======
-			double_redirect_output(com, re);
->>>>>>> cmarsha
 		list->re = list->re->next;
 	}
 	return_input_output(com);
