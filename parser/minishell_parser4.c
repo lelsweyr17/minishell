@@ -61,7 +61,6 @@ void	pars_cmp_com(t_com *com, char **commands)
 			com->type = 1 << n;
 	if (com->type == 0)
 		com->type = 1 << n;
-	// printf("\ngetcom\t_%s_\t_%d_\t_%c_%d\n", com->line, com->type, com->pipsem, i);
 }
 
 int	pars_get_com(t_com *com)

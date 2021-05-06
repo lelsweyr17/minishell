@@ -27,7 +27,7 @@ int	pars_dollar_spec(t_all *all, char **line, int n)
 		env = ft_strdup("The cake is a lie!");
 	else
 	{
-		if (all->proc->error > 255)
+		if (g_err != 258 && all->proc->error > 255)
 			all->proc->error /= 256;
 		env = ft_itoa(all->proc->error);
 	}

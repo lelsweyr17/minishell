@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/21 20:50:33 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/06 19:12:30 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/06 20:42:33 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,20 @@
 # include "structs.h"
 
 /* minishell.c */
-int		zreak_n_cycle(t_all *all, char buf[1000], int len);
-void	z_cycle(t_all *all, char buf[1000], t_p *p, t_dlist *hist);
-void	z_cycle_begin(t_all *all);
-void	z_cycle(t_all *all);
+void	executor(t_all *all);
+int		break_n_cycle(t_all *all, char buf[1000], int len);
+void	n_cycle(t_all *all);
+void	d_cycle(t_all *all);
+/* minishell_input_edit.c */
+void	backspase(t_all *all, t_p *p);
+void	deletebutton(t_all *all, t_p *p);
+char	*lineinput(t_all *all, char buf[1000], t_p *p, char *cont);
 /* minishell_executor.c */
 void	hist_moving(t_all *all, char buf[1000], t_dlist **hist);
-void	move_righ_left(t_all *all, char buf[1000], int res);
-void	executor(t_all *all);
+char	*linemovingright(t_all *all, char buf[1000], int res);
+char	*linemovingleft(t_all *all, char buf[1000], int res);
+char	*linemovebywords(t_all *all, char buf[1000], int res);
+void	lineedit(t_all *all, char buf[1000], t_p *p, t_dlist *hist);
 /* minishell_parser1.c */
 t_com	*pars_get_command(t_all *all, int start, int end);
 void	pars_hash(t_all *all);
