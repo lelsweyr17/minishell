@@ -18,7 +18,6 @@
 # include <term.h>
 # include <termios.h>
 # include <termcap.h>
-# include <math.h>
 # include "structs.h"
 
 /* minishell.c */
@@ -32,24 +31,22 @@ void	deletebutton(t_all *all, t_p *p);
 char	*lineinput(t_all *all, char buf[1000], t_p *p, char *cont);
 /* minishell_executor.c */
 void	hist_moving(t_all *all, char buf[1000], t_dlist **hist);
-char	*linemovingright(t_all *all, char buf[1000], int res);
-char	*linemovingleft(t_all *all, char buf[1000], int res);
-char	*linemovebywords(t_all *all, char buf[1000], int res);
+char	*linemovingright(t_all *all, char buf[1000]);
+char	*linemovingleft(t_all *all, char buf[1000]);
+char	*linemovebywords(t_all *all, char buf[1000]);
 void	lineedit(t_all *all, char buf[1000], t_p *p, t_dlist *hist);
 /* minishell_parser1.c */
 t_com	*pars_get_command(t_all *all, int start, int end);
 void	pars_hash(t_all *all);
 void	pars_spec_sym(t_all *all, char *c);
 int		pars_split_commands(t_all *all);
-char	*str_free(char **line, char *tmp);
 int		pars_shift_line(char **line, int i);
 /* minishell_parser2.c */
 void	pars_redirects_type(t_re *re, char *line, int *i);
 void	pars_redirects(t_all *all, t_com *com, char **line, int *i);
-char	*pars_get_next_arg(t_all *all, t_com *com, char **line, \
-		int *i);
+char	*pars_get_next_arg(t_all *all, t_com *com, char **line, int *i);
 void	pars_split_args(t_all *all, t_com *com);
-void	pars_get_args(t_all *all);
+void	pars_argsnproc(t_all *all);
 /* minishell_parser3.c */
 int		pars_find_pair_quote(t_all *all, char **line, char c, int i);
 int		pars_find_quotes(t_all *all, char **line, char c, int i);
@@ -68,8 +65,7 @@ int		pars_dollar(t_all *all, char **line, int i, int n);
 int		pars_check_escape(char *input, int i);
 int		pars_check_prev_com(t_all *all);
 void	pars_check_command(t_all *all);
-int		pars_check_redirects(t_all *all, char **line, char c, \
-		int i);
+int		pars_check_redirects(char **line, char c, int i);
 void	pars_syntax_error(t_all *all);
 /* minishell_history.c */
 int		hist_read_file(t_dlist **hist, char *fn);
@@ -82,6 +78,7 @@ void	termcap(t_all *all);
 /* minishell_utils1.c */
 int		isempty(char *str, int hash);
 int		isprevempty(char *str, int begin, int last);
+char	*str_free(char **line, char *tmp);
 char	*str_free(char **line, char *tmp);
 void	pars_free_re(t_list *lst);
 void	pars_free(t_all *all);

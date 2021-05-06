@@ -40,7 +40,7 @@ void	pars_spec_sym(t_all *all, char *c)
 	else if (*c == '\\')
 		all->p->i = pars_check_escape(all->input, all->p->i);
 	else if (*c == '<' || *c == '>')
-		all->p->i = pars_check_redirects(all, &all->input, *c, all->p->i);
+		all->p->i = pars_check_redirects(&all->input, *c, all->p->i);
 	else if (*c == '#')
 		pars_hash(all);
 	else if (*c == '(')

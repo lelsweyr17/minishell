@@ -101,9 +101,9 @@ void	exit_with_arg(t_proc *com, t_com *list, long long res)
 
 void	exit_command(t_proc *com, t_com *list)
 {
-	int			i;
 	long long	res;
 
+	res = 0;
 	com->arg = list->args[1];
 	if (!com->arg)
 	{

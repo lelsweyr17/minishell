@@ -9,7 +9,7 @@ void	executor(t_all *all)
 	all->delescape = 0;
 	pars_split_commands(all);
 	all->delescape = 1;
-	pars_get_args(all);
+	pars_argsnproc(all);
 	pars_free(all);
 }
 
@@ -25,6 +25,7 @@ int	break_n_cycle(t_all *all, char buf[1000], int len)
 	else if (!ft_strcmp(buf, "\4") && len == 0)
 	{
 		all->p->ctrld = 1;
+		termcap_on(all);
 		write(1, "exit\n", 5);
 		exit (all->proc->error);
 	}

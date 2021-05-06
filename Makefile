@@ -13,7 +13,7 @@
 NAME = minishell
 LIBFT = libft/libft.a
 CC = gcc
-CFLAGS = -g
+CFLAGS = -Wall -Wextra -Werror
 TFLAGS = -ltermcap
 HEADERF = minishell.h processor.h structs.h
 CFILES = parser/minishell.c \
@@ -55,7 +55,7 @@ CFILES = parser/minishell.c \
 	processor/redirect/redirect1.c \
 	processor/redirect/redirect2.c
 
-BFILES = bonus_minishell.c
+BFILES = $(CFILES)
 OBJ := $(CFILES:.c=.o)
 BOBJ := $(BFILES:.c=.o)
 
@@ -77,7 +77,7 @@ bonus: $(LIBFT) $(BOBJ)
 
 clean:
 	/bin/rm -f $(OBJ) $(BOBJ)
-	$(MAKE) fclean -C libft
+	$(MAKE) clean -C libft
 
 fclean: clean
 	/bin/rm -f $(NAME)

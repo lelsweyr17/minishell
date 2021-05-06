@@ -86,8 +86,7 @@ void	pars_split_args(t_all *all, t_com *com)
 		pars_echo(com);
 }
 
-/* PRINTF int m */
-void	pars_get_args(t_all *all)
+void	pars_argsnproc(t_all *all)
 {
 	t_com	*com;
 	t_list	*begin;

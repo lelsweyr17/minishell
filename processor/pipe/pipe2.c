@@ -97,18 +97,18 @@ void	pid_child_command(t_pipe *pip, char **env, t_com *list, t_proc *com)
 {
 	if (pip->i == 0)
 	{
-		close_dup_first_command(pip->i, pip, com);
-		redirect_pipe_condition(env, list->args, com, list);
+		close_dup_first_command(pip->i, pip);
+		redirect_pipe_condition(env, com, list);
 	}
 	else if (pip->i == pip->pipe_num)
 	{
-		close_dup_last_command(pip->i, pip, com);
-		redirect_pipe_condition(env, list->args, com, list);
+		close_dup_last_command(pip->i, pip);
+		redirect_pipe_condition(env, com, list);
 	}
 	else
 	{
-		close_dup_middle_command(pip->i, pip, com);
-		redirect_pipe_condition(env, list->args, com, list);
+		close_dup_middle_command(pip->i, pip);
+		redirect_pipe_condition(env, com, list);
 	}
 	dup2(pip->std_in, 0);
 	dup2(pip->std_out, 1);

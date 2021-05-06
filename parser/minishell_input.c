@@ -24,7 +24,7 @@ void	hist_moving(t_all *all, char buf[1000], t_dlist **hist)
 	buf[0] = '\0';
 }
 
-char	*linemovingright(t_all *all, char buf[1000], int res)
+char	*linemovingright(t_all *all, char buf[1000])
 {
 	if (all->p->pos < all->p->len)
 	{
@@ -45,7 +45,7 @@ char	*linemovingright(t_all *all, char buf[1000], int res)
 	return (str_free(&all->end, ft_strdup(&all->hist->cont[all->p->pos])));
 }
 
-char	*linemovingleft(t_all *all, char buf[1000], int res)
+char	*linemovingleft(t_all *all, char buf[1000])
 {
 	if (all->p->pos > 0)
 	{
@@ -64,7 +64,7 @@ char	*linemovingleft(t_all *all, char buf[1000], int res)
 	return (str_free(&all->end, ft_strdup(&all->hist->cont[all->p->pos])));
 }
 
-char	*linemovebywords(t_all *all, char buf[1000], int res)
+char	*linemovebywords(t_all *all, char buf[1000])
 {
 	if (all->p->pos < all->p->len && !ft_strcmp(buf, "\ef"))
 	{
@@ -97,12 +97,12 @@ void	lineedit(t_all *all, char buf[1000], t_p *p, t_dlist *hist)
 		hist_moving(all, buf, &hist);
 	else if (!ft_strcmp(buf, "\e[C") || !ft_strncmp(buf, "\5", 1)
 		|| !ft_strcmp(buf, "\e[F"))
-		all->end = linemovingright(all, buf, p->res);
+		all->end = linemovingright(all, buf);
 	else if (!ft_strcmp(buf, "\e[D") || !ft_strncmp(buf, "\1", 1)
 		|| !ft_strcmp(buf, "\e[H"))
-		all->end = linemovingleft(all, buf, p->res);
+		all->end = linemovingleft(all, buf);
 	else if (!ft_strcmp(buf, "\ef") || !ft_strcmp(buf, "\eb"))
-		all->end = linemovebywords(all, buf, p->res);
+		all->end = linemovebywords(all, buf);
 	else if (break_n_cycle(all, buf, p->len))
 		p->nl = 1;
 	else if (!strcmp(buf, "\177") && p->len > 0 && p->pos > 0)

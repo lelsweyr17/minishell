@@ -35,7 +35,6 @@ int	build_in_check_error(char *build_in, char *arg, t_proc *com, t_com *list)
 int	check_build_in_with_slesh(char *arg, t_proc *com, t_com *list)
 {
 	int		i;
-	int		len;
 	char	*build_in[8];
 
 	i = -1;
