@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:40:02 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/06 15:19:43 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/06 22:11:11 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ int	redirect_input(t_proc *com, char **env, t_com *list, t_re *re)
 		close(com->bin_exec.fd[0]);
 		return (0);
 	}
+	if (errno)
+		write_error(re->fn, NULL, strerror(errno));
 	return (1);
 }
 
@@ -32,6 +34,8 @@ void	redirect_output(t_proc *com, char **env, t_com *list, t_re *re)
 		close(com->bin_exec.fd[1]);
 	com->bin_exec.fd[1] = open(re->fn, O_RDWR | O_RDONLY \
 	| O_CREAT | O_TRUNC, 0644);
+	if (errno)
+		write_error(re->fn, NULL, strerror(errno));
 }
 
 void	double_redirect_output(t_proc *com, char **env, \
@@ -41,6 +45,8 @@ void	double_redirect_output(t_proc *com, char **env, \
 		close(com->bin_exec.fd[1]);
 	com->bin_exec.fd[1] = open(re->fn, O_RDWR | O_RDONLY \
 	| O_CREAT | O_APPEND, 0644);
+	if (errno)
+		write_error(re->fn, NULL, strerror(errno));
 }
 
 int	redirect_iterator(t_proc *com, char **env, t_com *list)
@@ -49,8 +55,8 @@ int	redirect_iterator(t_proc *com, char **env, t_com *list)
 	t_list		*begin;
 
 	begin = list->re;
-	com->bin_exec.fd[0] = -1;
-	com->bin_exec.fd[1] = -1;
+	init_fds_for_redirect(com);
+	errno = 0;
 	while (list->re)
 	{
 		re = list->re->content;
@@ -63,10 +69,11 @@ int	redirect_iterator(t_proc *com, char **env, t_com *list)
 			redirect_output(com, env, list, re);
 		else if (re->type == 3)
 			double_redirect_output(com, env, list, re);
+		if (!check_errno())
+			return (0);
 		list->re = list->re->next;
 	}
-	dup2(com->bin_exec.fd[0], 0);
-	dup2(com->bin_exec.fd[1], 1);
+	return_input_output(com);
 	list->re = begin;
 	return (1);
 }
