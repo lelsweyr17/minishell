@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmarsha <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 17:40:09 by cmarsha           #+#    #+#             */
-/*   Updated: 2021/01/24 14:43:47 by cmarsha          ###   ########.fr       */
+/*   Updated: 2021/05/06 15:42:01 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,5 +30,5 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ft_memcpy(res, s2, l2);
 	res -= l1;
 	res[l1 + l2] = '\0';
-	return (char *)(res);
+	return ((char *)(res));
 }

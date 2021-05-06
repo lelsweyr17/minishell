@@ -1,56 +1,86 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   itoa.c                                             :+:      :+:    :+:   */
+/*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmarsha <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/07 16:35:53 by cmarsha           #+#    #+#             */
-/*   Updated: 2020/11/08 16:01:40 by cmarsha          ###   ########.fr       */
+/*   Updated: 2021/05/06 15:49:38 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static	int	n_len(int n)
+static void	ft_full(char *nbr, long int count, int nb, int count3)
 {
-	int	nb;
+	int	i;
+	int	n;
 
-	nb = 0;
-	if (n < 0)
-		nb++;
-	while (n)
+	i = 0;
+	n = nb;
+	while ((count / 10) >= 1)
 	{
-		n /= 10;
-		nb++;
+		count /= 10;
+		if (nb < 0)
+		{
+			if (nb == -2147483648)
+				nb = 2147483647;
+			else
+				nb = -nb;
+			nbr[i++] = '-';
+			count /= 10;
+		}
+		if (n == -2147483648 && i == (count3 - 1))
+			nbr[i++] = '8';
+		else
+			nbr[i++] = nb / count + 48;
+		nb %= count;
 	}
-	return (nb);
+	nbr[i] = 0;
+}
+
+static int	ft_count(int nb)
+{
+	int	count;
+
+	count = 1;
+	if (nb < 0)
+	{
+		if (nb == -2147483648)
+			nb = 2147483647;
+		else
+			nb = -nb;
+		count++;
+	}
+	while (nb >= 10)
+	{
+		nb /= 10;
+		count++;
+	}
+	return (count);
 }
 
 char	*ft_itoa(int n)
 {
-	char	*dest;
-	int		nb;
-	int		sign;
+	char		*nbr;
+	int			nb;
+	long int	count;
+	int			count2;
+	int			count3;
 
-	if (n == -2147483648)
-		return (ft_strdup("-2147483648"));
-	sign = 1;
-	(nb = n_len(n)) == 0 ? nb++ : nb;
-	dest = (char *)malloc(sizeof(char) * (nb + 1));
-	if (!dest)
-		return (0);
-	dest[nb] = '\0';
-	if (n < 0)
+	count = 1;
+	nb = n;
+	count2 = ft_count(n);
+	count3 = count2;
+	nbr = (char *)malloc((count2 + 1) * sizeof(char));
+	if (!nbr)
+		return (NULL);
+	while (count2 > 0)
 	{
-		dest[0] = '-';
-		sign = -1;
+		count *= 10;
+		count2--;
 	}
-	n *= sign;
-	while (((sign == 1) && (nb > 0)) || (nb > 1))
-	{
-		dest[--nb] = (n % 10) + 48;
-		n /= 10;
-	}
-	return (dest);
+	ft_full(nbr, count, nb, count3);
+	return (nbr);
 }

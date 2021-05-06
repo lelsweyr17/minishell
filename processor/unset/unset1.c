@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:40:24 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/05 22:03:48 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/06 15:35:55 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ char	**unset_dollar(char *arg, t_proc *com, char **envp, int flag)
 char	**unset_command(t_proc *com, char **envp, char **args)
 {
 	int	i;
-	int j;
+	int	j;
 	int	len;
 	int	num_str;
 

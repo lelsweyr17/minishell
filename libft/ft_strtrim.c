@@ -3,48 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strtrim.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmarsha <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/03 18:26:04 by cmarsha           #+#    #+#             */
-/*   Updated: 2020/11/04 20:47:48 by cmarsha          ###   ########.fr       */
+/*   Updated: 2021/05/06 15:50:39 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static	int	ft_findset(char *c, char *set)
+static int	found(char s, char const *set)
 {
-	while (*set)
-		if (*set++ == *c)
+	int	i;
+
+	i = 0;
+	while (set[i])
+	{
+		if (set[i] == s)
 			return (1);
+		i++;
+	}
 	return (0);
 }
 
-char		*ft_strtrim(char const *s1, char const *set)
+char	*ft_strtrim(char const *s1, char const *set)
 {
 	char	*res;
-	char	*tmp;
-	size_t	len;
+	int		st;
+	int		fin;
 	int		i;
 
+	st = 0;
 	i = 0;
-	tmp = (char *)s1;
 	if (!s1 || !set)
-		return (0);
-	while (ft_findset(tmp, (char *)set) == 1)
-		tmp++;
-	(len = ft_strlen(tmp)) == 0 ? 1 : (len -= 1);
-	tmp += len;
-	while (ft_findset(tmp, (char *)set) == 1)
-	{
-		tmp--;
-		i++;
-	}
-	tmp -= (len - i);
-	res = malloc((len - i + 2) * sizeof(char));
+		return (NULL);
+	fin = ft_strlen((char *)s1) - 1;
+	while (s1[st] && found(s1[st], set) == 1)
+		st++;
+	while (fin > st && found(s1[fin], set) == 1)
+		fin--;
+	res = (char *)malloc((fin - st + 2) * sizeof(char));
 	if (!res)
-		return (0);
-	ft_memcpy(res, tmp, len - i + 1);
-	res[len - i + 1] = '\0';
-	return ((char *)res);
+		return (NULL);
+	while (st <= fin)
+		res[i++] = s1[st++];
+	res[i] = '\0';
+	return (res);
 }

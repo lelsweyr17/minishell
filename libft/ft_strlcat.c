@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmarsha <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/10/31 14:27:19 by cmarsha           #+#    #+#             */
-/*   Updated: 2020/11/10 12:36:07 by cmarsha          ###   ########.fr       */
+/*   Updated: 2021/05/06 15:42:36 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,10 @@
 
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
-	int size;
-	int dsize;
-	int buf;
-	int buff;
+	int	size;
+	int	dsize;
+	int	buf;
+	int	buff;
 
 	buf = 0;
 	buf = ft_strlen(dst);
@@ -25,7 +25,8 @@ size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 	size = ft_strlen(src);
 	if (dstsize < (size_t)buf)
 		buff = dstsize;
-	if ((dsize = dstsize - buf - 1) < 0)
+	dsize = dstsize - buf - 1;
+	if (dsize < 0)
 		dsize = 0;
 	while ((dsize--) && (*src))
 		dst[buf++] = *src++;

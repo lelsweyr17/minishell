@@ -3,53 +3,66 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmarsha <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/01 19:44:31 by cmarsha           #+#    #+#             */
-/*   Updated: 2020/11/03 19:09:02 by cmarsha          ###   ########.fr       */
+/*   Updated: 2021/05/06 15:48:30 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-static	int	count(const char *str, int i)
+static long long	res(char *str, int i)
+{
+	long long	n;
+	int			count;
+
+	n = 0;
+	count = 1;
+	while (str[i] >= '0' && str[i] <= '9' && str[i] != '\0')
+	{
+		n = (n * count) + (str[i] - '0');
+		count = 10;
+		i++;
+	}
+	return (n);
+}
+
+static int	count(char *str, int i)
 {
 	int	n;
 
 	n = 0;
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		i++;
+	while (str[i + n] >= '0' && str[i + n] <= '9' && str[i + n] > 32)
 		n++;
-	}
-	if (n <= 19)
+	if ((str[i] < '0' || str[i] > '9') && (str[i] != '\0' \
+		|| str[i] != '+' || str[i] != '-' || str[i] == '\e'))
 		return (0);
+	if (n > 19)
+		return (-1);
 	return (1);
 }
 
-int	ft_atoi(const char *str)
+int	ft_atoi(char *str)
 {
-	int				i;
-	int				n;
-	int				s;
-	long long int	r;
+	int			i;
+	int			z;
+	long long	re;
 
-	n = 1;
 	i = 0;
-	r = 0;
-	while ((str[i] > 8 && str[i] <= 13) || str[i] == '\r' || str[i] == ' ')
+	re = 0;
+	z = 0;
+	while ((str[i] >= 8 && str[i] <= 13) || str[i] == 32)
 		i++;
-	if (str[i] == '+')
+	z = i;
+	if (str[i] == '-' || str[i] == '+')
 		i++;
-	else if (str[i] == '-')
-	{
-		n = -1;
-		i++;
-	}
-	if (str[i] >= '0' && str[i] <= '9')
-	{
-		if ((s = count(str, i)) == 1)
-			return (n == 1 ? -1 : 0);
-	}
-	while (str[i] >= '0' && str[i] <= '9')
-		r = r * 10 + str[i++] - '0';
-	return (r * n);
+	if (count(str, i) == 0)
+		return (0);
+	if (count(str, i) == -1 && str[z] == '-')
+		return (0);
+	else if (count(str, i) == -1)
+		return (-1);
+	re = res(str, i);
+	if (str[z] == '-')
+		re = -re;
+	return (re);
 }

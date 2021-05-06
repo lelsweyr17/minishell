@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:39:55 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/04 16:08:23 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/06 15:11:48 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,11 +34,17 @@ char	**change_pwd(char **envp, char *pwd, char *oldpwd)
 		envp = add_oldpwd(envp);
 	k = search_key(envp, "OLDPWD");
 	l = search_key(envp, "PWD");
-	tmp = envp[k];
-	envp[k] = ft_strjoin("OLDPWD=", oldpwd);
-	free(tmp);
-	tmp = envp[l];
-	envp[l] = ft_strjoin("PWD=", pwd);
-	free(tmp);
+	if (k != -1)
+	{
+		tmp = envp[k];
+		envp[k] = ft_strjoin("OLDPWD=", oldpwd);
+		free(tmp);
+	}
+	if (l != -1)
+	{
+		tmp = envp[l];
+		envp[l] = ft_strjoin("PWD=", pwd);
+		free(tmp);
+	}
 	return (envp);
 }

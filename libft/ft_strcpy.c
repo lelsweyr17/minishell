@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: cmarsha <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/24 14:27:13 by cmarsha           #+#    #+#             */
-/*   Updated: 2021/01/24 14:33:22 by cmarsha          ###   ########.fr       */
+/*   Updated: 2021/05/06 15:37:32 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_strcpy(char *dst, char *src)
 {
-	int i;
+	int	i;
 
 	i = -1;
 	if (!dst || !src)
