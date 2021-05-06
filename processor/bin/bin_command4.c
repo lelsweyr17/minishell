@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:38:25 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/05 22:14:05 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/06 19:07:04 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,10 +32,11 @@ int	write_no_such_file_or_dir(t_proc *com, char *command)
 	return (2);
 }
 
-void	write_command_not_found(t_proc *com)
+int	write_command_not_found(t_proc *com)
 {
 	write_error(com->com, NULL, "command not found");
 	init_error(127, &com->error);
+	return (1);
 }
 
 int	flag_check_file(t_proc *com, char *command_tmp, int *find, int *check)
@@ -65,9 +66,8 @@ int	check_file_before_exec(t_proc *com, char *command_tmp)
 	flag = flag_check_file(com, command_tmp, &find, &check);
 	if (!find && !check)
 	{
-		write_command_not_found(com);
+		flag = write_command_not_found(com);
 		init_error(127, &com->error);
-		flag = 1;
 	}
 	if (flag)
 	{

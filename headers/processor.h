@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:37:56 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/05 22:00:05 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/06 19:07:00 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int			find_bin_command(char **array, char *command, t_proc *com);
 char		*from_up_to_low(char *arg);
 int			check_file_before_exec(t_proc *com, char *command_tmp);
 int			check_type_of_file(t_proc *com, char *command);
-void		write_command_not_found(t_proc *com);
+int			write_command_not_found(t_proc *com);
 void		write_invalid_parameter_name(t_proc *com);
 void		write_not_a_valid_identifier(char *arg, t_proc *com);
 int			write_no_such_file_or_dir(t_proc *com, char *command);
