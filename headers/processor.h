@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:37:56 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/06 19:07:00 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/06 19:13:37 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,8 +18,6 @@
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <stdio.h>
-# include <termcap.h>
-# include <termios.h>
 # include <unistd.h>
 # include <string.h>
 # include <term.h>
