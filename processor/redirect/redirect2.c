@@ -12,8 +12,7 @@
 
 #include "../../headers/processor.h"
 
-void	redirect_pipe_condition(char **env, char **arg, t_proc *com, \
-	t_com *list)
+void	redirect_pipe_condition(char **env, t_proc *com, t_com *list)
 {
 	if (list->re)
 	{

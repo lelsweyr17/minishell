@@ -12,7 +12,7 @@
 
 #include "../../headers/processor.h"
 
-void	echo_command(t_proc *com, char **envp, t_com *list, char *arg)
+void	echo_command(t_proc *com, t_com *list, char *arg)
 {
 	if (arg)
 		write(1, arg, ft_strlen(arg));

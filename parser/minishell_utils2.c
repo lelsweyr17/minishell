@@ -23,26 +23,7 @@ int	get_read(t_all *all, char *buf, int res)
 		if (all->res < 0)
 			exit (0);
 		buf[all->res] = '\0';
-		// all->el = all->res;
 	}
-	// all->nl = 0;
-	// if (all->res > 1)
-	// {
-	// 	while (!all->nl && buf[all->el] != '\0')// && buf[all->el] != '\n') //all->el < 999 && 
-	// 	{
-	// 		if (buf[all->el] == '\n')
-	// 		{
-	// 			buf[all->el] = '\0';
-	// 			all->p->nl = 1;
-	// 			all->nl = &buf[all->el + 1];
-	// 			// break ;
-	// 		}
-	// 		all->el++;
-	// 	}
-	// 	// if (all->nl)
-	// 	// {
-	// 	// }
-	// }
 	return (all->res);
 }
 

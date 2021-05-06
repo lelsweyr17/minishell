@@ -74,7 +74,6 @@ int	change_dir(t_proc *com, char **envp)
 char	*pwd_not_found(t_proc *com)
 {
 	char	*pwd;
-	char	*tmp;
 
 	write(1, "cd: error retrieving current directory: getcwd: cannot ", 56);
 	write(1, "access parent directories: No such file or directory\n", 54);

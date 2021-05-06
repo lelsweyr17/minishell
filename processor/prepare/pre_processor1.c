@@ -22,28 +22,6 @@ void	null_flags(t_proc *com)
 	com->slesh = 0;
 }
 
-char	*arg_res(char **res, t_proc *com)
-{
-	int		i;
-	char	*arg;
-
-	i = 0;
-	arg = (char *)ft_calloc(1, sizeof(char));
-	arg[0] = 0;
-	while (res[++i])
-	{
-		arg = ft_strjoin(arg, res[i]);
-		if (res[i + 1])
-			arg = ft_strjoin(arg, " ");
-	}
-	if (!ft_strlen(arg))
-	{
-		free(arg);
-		arg = NULL;
-	}
-	return (arg);
-}
-
 char	**add_oldpwd(char **envp)
 {
 	int		i;
@@ -74,7 +52,7 @@ void	com_export(t_proc *com, char **envp)
 		com->ex_port[i] = envp[i];
 }
 
-void	prepare_function(t_proc *com, char **envp, char **res)
+void	prepare_function(t_proc *com, char **envp)
 {
 	null_flags(com);
 	com_export(com, envp);

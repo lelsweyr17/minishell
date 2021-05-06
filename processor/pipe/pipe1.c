@@ -26,19 +26,19 @@ void	close_fds(int **fd, int fd1, int fd2)
 	}
 }
 
-void	close_dup_last_command(int i, t_pipe *pip, t_proc *com)
+void	close_dup_last_command(int i, t_pipe *pip)
 {
 	close_fds(pip->fd, pip->fd[i - 1][0], -1);
 	dup2(pip->fd[i - 1][0], 0);
 }
 
-void	close_dup_first_command(int i, t_pipe *pip, t_proc *com)
+void	close_dup_first_command(int i, t_pipe *pip)
 {
 	close_fds(pip->fd, -1, pip->fd[i][1]);
 	dup2(pip->fd[i][1], 1);
 }
 
-void	close_dup_middle_command(int i, t_pipe *pip, t_proc *com)
+void	close_dup_middle_command(int i, t_pipe *pip)
 {
 	close_fds(pip->fd, pip->fd[i - 1][0], pip->fd[i][1]);
 	dup2(pip->fd[i - 1][0], 0);

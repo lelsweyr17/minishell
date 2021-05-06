@@ -15,7 +15,7 @@
 char	**build_in_commands(t_proc *com, char **envp, char **arg, t_com *list)
 {
 	if (list->type == 1)
-		echo_command(com, envp, list, arg[1]);
+		echo_command(com, list, arg[1]);
 	else if (list->type == 2)
 		envp = cd_command(com, envp, arg[1]);
 	else if (list->type == 4)
@@ -82,7 +82,7 @@ char	**processor(char **env, t_list *lst, t_proc *com)
 	t_com		*list;
 
 	list = lst->content;
-	prepare_function(com, env, list->args);
+	prepare_function(com, env);
 	if (list->pipsem == '|')
 	{
 		pipe_num = pipe_number(lst);

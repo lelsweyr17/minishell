@@ -46,7 +46,6 @@ char	**export_add_new_object(char **envp, char *str)
 {
 	int		i;
 	int		k;
-	int		arg_len;
 	int		len;
 	char	*tmp;
 

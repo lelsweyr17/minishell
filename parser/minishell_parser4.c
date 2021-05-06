@@ -44,7 +44,6 @@ void	pars_echo(t_com *com)
 	free(space);
 }
 
-/* PRINTF */
 void	pars_cmp_com(t_com *com, char **commands)
 {
 	int		i;

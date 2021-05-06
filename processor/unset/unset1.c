@@ -36,7 +36,6 @@ int	search_key(char **envp, char *arg)
 char	**unset_dollar(char *arg, t_proc *com, char **envp, int flag)
 {
 	int		i;
-	int		len;
 	int		num_str;
 	char	*str;
 	int		start;

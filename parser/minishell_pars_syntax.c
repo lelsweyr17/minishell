@@ -60,7 +60,7 @@ void	pars_check_command(t_all *all)
 	}
 }
 
-int	pars_check_redirects(t_all *all, char **line, char c, int i)
+int	pars_check_redirects(char **line, char c, int i)
 {
 	if (isprevempty(*line, 0, i) != 2)
 	{

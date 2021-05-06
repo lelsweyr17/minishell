@@ -12,7 +12,7 @@
 
 #include "../../headers/processor.h"
 
-int	redirect_input(t_proc *com, char **env, t_com *list, t_re *re)
+int	redirect_input(t_proc *com, t_re *re)
 {
 	if (com->bin_exec.fd[0] != -1)
 		close(com->bin_exec.fd[0]);
@@ -26,7 +26,7 @@ int	redirect_input(t_proc *com, char **env, t_com *list, t_re *re)
 	return (1);
 }
 
-void	redirect_output(t_proc *com, char **env, t_com *list, t_re *re)
+void	redirect_output(t_proc *com, t_re *re)
 {
 	if (com->bin_exec.fd[1] != -1)
 		close(com->bin_exec.fd[1]);
@@ -34,8 +34,7 @@ void	redirect_output(t_proc *com, char **env, t_com *list, t_re *re)
 	| O_CREAT | O_TRUNC, 0644);
 }
 
-void	double_redirect_output(t_proc *com, char **env, \
-	t_com *list, t_re *re)
+void	double_redirect_output(t_proc *com, t_re *re)
 {
 	if (com->bin_exec.fd[1] != -1)
 		close(com->bin_exec.fd[1]);
@@ -43,7 +42,7 @@ void	double_redirect_output(t_proc *com, char **env, \
 	| O_CREAT | O_APPEND, 0644);
 }
 
-int	redirect_iterator(t_proc *com, char **env, t_com *list)
+int	redirect_iterator(t_proc *com, t_com *list)
 {
 	t_re		*re;
 	t_list		*begin;
@@ -56,13 +55,13 @@ int	redirect_iterator(t_proc *com, char **env, t_com *list)
 		re = list->re->content;
 		if (re->type == 2)
 		{
-			if (!(redirect_input(com, env, list, re)))
+			if (!(redirect_input(com, re)))
 				return (0);
 		}
 		else if (re->type == 1)
-			redirect_output(com, env, list, re);
+			redirect_output(com, re);
 		else if (re->type == 3)
-			double_redirect_output(com, env, list, re);
+			double_redirect_output(com, re);
 		list->re = list->re->next;
 	}
 	dup2(com->bin_exec.fd[0], 0);
@@ -73,11 +72,9 @@ int	redirect_iterator(t_proc *com, char **env, t_com *list)
 
 char	**redirect_operator(t_proc *com, char **env, t_com *list)
 {
-	t_re		*re;
-
 	com->bin_exec.std_in = dup(0);
 	com->bin_exec.std_out = dup(1);
-	if (!(redirect_iterator(com, env, list)))
+	if (!(redirect_iterator(com, list)))
 		return (env);
 	if (list->pipsem == '|')
 		pipe_command(env, list->args, com, list);

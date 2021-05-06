@@ -9,7 +9,7 @@ void	executor(t_all *all)
 	all->delescape = 0;
 	pars_split_commands(all);
 	all->delescape = 1;
-	pars_get_args(all);
+	pars_argsnproc(all);
 	pars_free(all);
 }
 
@@ -25,7 +25,8 @@ int	break_n_cycle(t_all *all, char buf[1000], int len)
 	else if (!ft_strcmp(buf, "\4") && len == 0)
 	{
 		all->p->ctrld = 1;
-		write(1, "exit", 4);
+		termcap_on(all);
+		write(1, "exit\n", 5);
 		exit (all->proc->error);
 	}
 	else
@@ -76,7 +77,7 @@ void	d_cycle(t_all *all)
 		while (hist->next)
 			hist = hist->next;
 		all->hist = hist;
-		write(1, "::: ", 4);
+		write(1, "\x1b[32;48m\e[1mMINISHELL: \e[0m\x1b[0m", 32);
 		tputs(save_cursor, 1, ft_iputchar);
 		n_cycle(all);
 	}
