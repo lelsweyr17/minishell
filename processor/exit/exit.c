@@ -6,7 +6,7 @@
 /*   By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/02 17:39:15 by lelsweyr          #+#    #+#             */
-/*   Updated: 2021/05/05 22:09:52 by lelsweyr         ###   ########.fr       */
+/*   Updated: 2021/05/05 22:23:11 by lelsweyr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,13 +44,13 @@ void	exit_with_many_args(t_proc *com, char *arg)
 {
 	if (ft_is_number(arg) != -1)
 	{
-		write(2, "exit\n", 5);
+		write(1, "exit\n", 5);
 		write_error("exit", NULL, "too many arguments");
 		init_error(1, &com->error);
 	}
 	else
 	{
-		write(2, "exit\n", 5);
+		write(1, "exit\n", 5);
 		write_error("exit", arg, "numeric argument required");
 		init_error(255, &com->error);
 		exit(com->error);
