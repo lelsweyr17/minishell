@@ -6,7 +6,7 @@
 #    By: lelsweyr <lelsweyr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2020/10/28 13:42:48 by cmarsha           #+#    #+#              #
-#    Updated: 2021/05/04 14:56:34 by lelsweyr         ###   ########.fr        #
+#    Updated: 2021/04/29 14:41:49 by lelsweyr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ CFLAGS = -g
 TFLAGS = -ltermcap
 HEADERF = minishell.h processor.h structs.h
 CFILES = parser/minishell.c \
-	parser/minishell_executor.c \
+	parser/minishell_input_editor.c \
+	parser/minishell_input.c \
 	parser/minishell_history.c \
 	parser/minishell_termcap.c \
 	parser/minishell_parser1.c \

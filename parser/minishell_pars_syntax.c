@@ -102,4 +102,5 @@ void	pars_syntax_error(t_all *all)
 	else
 		write(1, "syntax error near unexpected token\n", 36);
 	init_error(258, &all->proc->error);
+	g_err = 258;
 }

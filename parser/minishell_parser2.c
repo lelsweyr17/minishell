@@ -20,10 +20,10 @@ void	pars_redirects(t_all *all, t_com *com, char **line, int *i)
 
 	re = ft_calloc(1, sizeof(t_re));
 	if (!re)
-		com->type = -1; /* SOME KIND OF STUPIDITY */
+		all->p->i = -1;
 	ft_lstadd_back(&com->re, ft_lstnew(re));
 	if (!com->re)
-		com->type = -1; /* SOME KIND OF STUPIDITY */
+		all->p->i = -1;
 	pars_redirects_type(re, *line, i);
 	begin = com->re;
 	while (com->re->next)
@@ -33,7 +33,8 @@ void	pars_redirects(t_all *all, t_com *com, char **line, int *i)
 	while ((*line)[*i] != '\0' && (*line)[*i] != ' ')
 		pars_line(all, line, i);
 	re->fn = ft_strndup(&(*line)[s], *i - s);
-	// write(1, re->fn, ft_strlen(re->fn));
+	if (!re->fn)
+		all->p->i = -1;
 	com->re = begin;
 }
 
@@ -99,9 +100,6 @@ void	pars_get_args(t_all *all)
 		com = all->lst->content;
 		com->args = (char **)ft_calloc(1, sizeof(char *));
 		pars_split_args(all, com);
-		// int	m = -1;
-		// while (com->args[++m])
-		// 	printf("args %d\t_%s_\n", m, com->args[m]);
 		if (com->pipsem == ';' || com->pipsem == 0)
 		{
 			all->env = processor(all->env, send, all->proc);

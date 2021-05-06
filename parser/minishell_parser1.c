@@ -50,7 +50,7 @@ void	pars_spec_sym(t_all *all, char *c)
 	else if (*c == '&')
 		all->p->i++;
 }
-		
+
 int	pars_split_commands(t_all *all)
 {
 	char	*c;

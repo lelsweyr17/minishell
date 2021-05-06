@@ -63,9 +63,6 @@ int	redirect_iterator(t_proc *com, char **env, t_com *list)
 			redirect_output(com, env, list, re);
 		else if (re->type == 3)
 			double_redirect_output(com, env, list, re);
-		free(re->fn);
-		free(re);
-		free(list->re);
 		list->re = list->re->next;
 	}
 	dup2(com->bin_exec.fd[0], 0);
